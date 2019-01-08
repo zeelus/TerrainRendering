@@ -5,8 +5,8 @@
 #ifndef TESTGLEW_CAMERA_H
 #define TESTGLEW_CAMERA_H
 
+#include <GL/glew.h>
 #include <glm/glm.hpp>
-#include <OpenGL/OpenGL.h>
 
 using namespace glm;
 

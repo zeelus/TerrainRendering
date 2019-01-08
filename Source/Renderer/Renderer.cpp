@@ -5,7 +5,7 @@
 #include "Renderer.h"
 
 #include <string>
-#include <OpenGL/gl3.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Shader.h"
@@ -35,14 +35,23 @@ int Renderer::setupWindow() {
         return -1;
     }
 
-    glfwMakeContextCurrent(window);
-
-    glfwInit();
+	glfwMakeContextCurrent(window);
 
     showOpenGLInformations();
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
+
+	GLenum err = glewInit();
+	if (GLEW_OK != err)
+	{
+		/* Problem: glewInit failed, something is seriously wrong. */
+		auto x = glewGetErrorString(err);
+		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+		return -1;
+	}
+
+	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 
     return 0;
 }

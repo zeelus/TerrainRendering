@@ -5,6 +5,7 @@
 #ifndef TESTGLEW_SHADERS_H
 #define TESTGLEW_SHADERS_H
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
 #include <exception>
@@ -14,11 +15,10 @@ enum ShaderType{ Vertex = GL_VERTEX_SHADER,
     Fragment = GL_FRAGMENT_SHADER };
 
 class ShadersLoadingException: public std::exception {
-    virtual char* what() const throw() {
-
-        std::string errorString = "Shader dont find";
-        return const_cast<char *>(errorString.c_str());
-    }
+    //virtual char* what() const throw() {
+    //    std::string errorString = "Shader dont find";
+    //    return const_cast<char *>(errorString.c_str());
+    //}
 };
 
 class Shader {
