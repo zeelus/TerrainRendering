@@ -10,6 +10,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Shader.h"
 
+
 Renderer::Renderer(float width, float height, std::string &name): width(width), height(height), name(name){
 
 }

@@ -14,11 +14,11 @@
 enum ShaderType{ Vertex = GL_VERTEX_SHADER,
     Fragment = GL_FRAGMENT_SHADER };
 
-class ShadersLoadingException: public std::exception {
-    //virtual char* what() const throw() {
-    //    std::string errorString = "Shader dont find";
-    //    return const_cast<char *>(errorString.c_str());
-    //}
+class ShadersLoadingException: public std::runtime_error {
+
+public:
+    ShadersLoadingException(): std::runtime_error("Shader file don't fund") {};
+
 };
 
 class Shader {
