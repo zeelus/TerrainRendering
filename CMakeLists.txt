@@ -6,7 +6,23 @@ set(CMAKE_CXX_STANDARD 17)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-add_executable(TerrenRenderingTarget Source/main.cpp Source/Renderer/Shader.cpp Source/Renderer/Shader.h Source/Renderer/Camera.cpp Source/Renderer/Camera.h Source/Renderer/Renderer.cpp Source/Renderer/Renderer.h)
+add_executable(TerrenRenderingTarget
+        Source/main.cpp
+        Source/Engine/Renderer/Shader.cpp
+        Source/Engine/Renderer/Shader.h
+        Source/Engine/Camera.cpp
+        Source/Engine/Camera.h
+        Source/Engine/Renderer/RendererSystem.cpp
+        Source/Engine/Renderer/RendererSystem.h
+        Source/Engine/EngineApplication.h
+        Source/Engine/EngineApplication.cpp
+        Source/Engine/AbstractScene.h
+        Source/Engine/AbstractScene.cpp
+        Source/Scene.h
+        Source/Scene.cpp
+        Source/Engine/GameElement.h
+        Source/Engine/GameElement.cpp
+        )
 
 target_link_libraries(TerrenRenderingTarget ${CONAN_LIBS})
 

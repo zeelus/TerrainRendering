@@ -3,20 +3,21 @@
 //
 
 #include <string>
-#include "Renderer/Renderer.h"
+#include "Engine/EngineApplication.h"
+#include "Scene.h"
+#include <entt/entt.hpp>
 
-int main() {
 
-    std::string windowName = "Terrain renderer";
-    Renderer renderer(800, 600, windowName);
+int main(int argc, char** argv) {
 
-    if (renderer.setupWindow() == -1) {
-        fprintf(stderr, "Setup window error! \n");
-        return 1;
-    }
 
-    renderer.drowing();
+    std::string windowName = "Terrain rendererSystem";
+    EngineApplication engineApplication(800, 600, windowName);
+    Scene scene;
+    engineApplication.setScene(scene);
 
-    return 0;
+    int exitCode = engineApplication.run(argc, argv);
+
+    return exitCode;
 }
 

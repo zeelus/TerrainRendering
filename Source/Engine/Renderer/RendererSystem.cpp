@@ -2,7 +2,7 @@
 // Created by Gilbert Gwizdala on 2018-12-25.
 //
 
-#include "Renderer.h"
+#include "RendererSystem.h"
 
 #include <string>
 #include <GL/glew.h>
@@ -11,64 +11,7 @@
 #include "Shader.h"
 
 
-Renderer::Renderer(float width, float height, std::string &name): width(width), height(height), name(name){
-
-}
-
-int Renderer::setupWindow() {
-
-
-    if (!glfwInit()) {
-        fprintf(stderr, "ERROR: could not start GLFW3\n");
-        return -1;
-    }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    window = glfwCreateWindow(800, 600, name.c_str(), NULL, NULL);
-
-    if (!window) {
-        fprintf(stderr, "ERROR: could not open window with GLFW3\n");
-        glfwTerminate();
-        return -1;
-    }
-
-	glfwMakeContextCurrent(window);
-
-    showOpenGLInformations();
-
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-
-	GLenum err = glewInit();
-	if (GLEW_OK != err)
-	{
-		/* Problem: glewInit failed, something is seriously wrong. */
-		auto x = glewGetErrorString(err);
-		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-		return -1;
-	}
-
-	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
-
-    return 0;
-}
-
-void Renderer::showOpenGLInformations() {
-    const GLubyte* renderer = glGetString(GL_RENDERER);
-    const GLubyte* version = glGetString(GL_VERSION);
-    printf("Renderer: %s\n", renderer);
-    printf("OpenGL version supported %s\n", version);
-}
-
-GLFWwindow *Renderer::getWindow() const {
-    return window;
-}
-
-void Renderer::drowing() {
+void RendererSystem::drowing() {
     float points[] = {
             -1.0f,-1.0f,-1.0f,
             -1.0f,-1.0f, 1.0f,
@@ -176,50 +119,38 @@ void Renderer::drowing() {
     glAttachShader(shader_programme, vertex.getHandler());
     glLinkProgram(shader_programme);
 
-    glfwSetWindowUserPointer(window, this);
-    glfwSetKeyCallback(window, &Renderer::key_callback_static);
+    glUseProgram(shader_programme);
 
-    while(!glfwWindowShouldClose(window)) {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    camera.update(shader_programme);
 
-        glUseProgram(shader_programme);
+    glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
 
-        camera.update(shader_programme);
-
-        glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
-
-        glfwPollEvents();
-
-        glfwSwapBuffers(window);
     }
 
 
-    glfwTerminate();
-}
-
-void Renderer::key_callback_static(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    auto renderer = reinterpret_cast<Renderer*>(glfwGetWindowUserPointer(window));
-    renderer->key_callback(window, key, scancode, action, mods);
-}
-
-void Renderer::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    auto pos = camera.getView();
-    mat4 newPos = pos;
-    switch (key) {
-        case GLFW_KEY_W:
-            newPos = glm::translate(pos, vec3(-0.2f, 0.0f, 0.0f));
-            break;
-        case GLFW_KEY_S:
-            newPos = glm::translate(pos, vec3(0.2f, 0.0f, 0.0));
-            break;
-        case GLFW_KEY_D:
-            newPos = glm::translate(pos, vec3(0.0f, 0.0f, -0.2f));
-            break;
-        case GLFW_KEY_A:
-            newPos = glm::translate(pos, vec3(0.0f, 0.0f, 0.2f));
-            break;
-    }
-
-    camera.setView(newPos);
-}
+//void RendererSystem::key_callback_static(GLFWwindow *window, int key, int scancode, int action, int mods) {
+//    auto rendererSystem = reinterpret_cast<RendererSystem*>(glfwGetWindowUserPointer(window));
+//    rendererSystem->key_callback(window, key, scancode, action, mods);
+//}
+//
+//void RendererSystem::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+//    auto pos = camera.getView();
+//    mat4 newPos = pos;
+//    switch (key) {
+//        case GLFW_KEY_W:
+//            newPos = glm::translate(pos, vec3(-0.2f, 0.0f, 0.0f));
+//            break;
+//        case GLFW_KEY_S:
+//            newPos = glm::translate(pos, vec3(0.2f, 0.0f, 0.0));
+//            break;
+//        case GLFW_KEY_D:
+//            newPos = glm::translate(pos, vec3(0.0f, 0.0f, -0.2f));
+//            break;
+//        case GLFW_KEY_A:
+//            newPos = glm::translate(pos, vec3(0.0f, 0.0f, 0.2f));
+//            break;
+//    }
+//
+//    camera.setView(newPos);
+//}
 
