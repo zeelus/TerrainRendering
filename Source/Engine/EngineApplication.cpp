@@ -4,7 +4,8 @@
 
 #include "EngineApplication.h"
 
-EngineApplication::EngineApplication(float width, float height, std::string &name): width(width), height(height), name(name) { }
+EngineApplication::EngineApplication(float width, float height, std::string &name): width(width), height(height), name(name), rendererSystem(&registryEntt) {
+}
 
 int EngineApplication::setupWindow() {
     if (!glfwInit()) {
@@ -76,6 +77,7 @@ int EngineApplication::run(int argc, char **argv) {
 
 void EngineApplication::setScene(AbstractScene& scene) {
     this->scene = &scene;
+    this->scene->setRegistryEntt(&registryEntt);
 }
 
 

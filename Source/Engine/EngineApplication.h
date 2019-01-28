@@ -24,6 +24,8 @@ class EngineApplication {
 
     AbstractScene* scene;
 
+    entt::registry<std::uint32_t> registryEntt;
+
 private:
     int setupWindow();
     void showOpenGLInformations();

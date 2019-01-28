@@ -4,6 +4,6 @@
 
 #include "GameElement.h"
 
-GameElement::GameElement(std::string name): name(name) {
-
+GameElement::GameElement(std::string name, entt::registry<>* registryEntt): name(name), registryEntt(registryEntt) {
+    entity = registryEntt->create();
 }

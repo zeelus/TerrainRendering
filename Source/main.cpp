@@ -5,7 +5,6 @@
 #include <string>
 #include "Engine/EngineApplication.h"
 #include "Scene.h"
-#include <entt/entt.hpp>
 
 
 int main(int argc, char** argv) {

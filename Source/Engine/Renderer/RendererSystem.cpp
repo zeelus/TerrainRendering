@@ -9,7 +9,11 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Shader.h"
+#include <entt/entt.hpp>
 
+RendererSystem::RendererSystem(entt::registry<> *registryEntt): registryEntt(registryEntt) {
+
+}
 
 void RendererSystem::drowing() {
     float points[] = {
@@ -121,11 +125,22 @@ void RendererSystem::drowing() {
 
     glUseProgram(shader_programme);
 
-    camera.update(shader_programme);
+    this->updateCamera(shader_programme);
 
     glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
 
     }
+
+void RendererSystem::updateCamera(GLuint shader_programme) {
+    auto view = registryEntt->view<Camera>();
+
+    for(auto entity: view) {
+        Camera &camera = view.get(entity);
+        camera.update(shader_programme);
+    }
+}
+
+
 
 
 //void RendererSystem::key_callback_static(GLFWwindow *window, int key, int scancode, int action, int mods) {

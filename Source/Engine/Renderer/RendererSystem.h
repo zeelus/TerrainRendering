@@ -8,15 +8,21 @@
 #include <string>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <entt/entt.hpp>
 #include "../Camera.h"
 
 class RendererSystem {
 private:
 
-    Camera camera;
+    //Camera camera;
+    entt::registry<>* registryEntt;
+
+    void updateCamera(GLuint shader_programme);
     
 public:
     void drowing();
+
+    RendererSystem(entt::registry<>* registryEntt);
 };
 
 

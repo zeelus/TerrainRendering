@@ -6,18 +6,25 @@
 #define TERRENRENDERING_ABSTACTSCENE_H
 
 #include "GameElement.h"
-#include <entt/entity/registry.hpp>
+
+#include <entt/entt.hpp>
 #include <string>
 #include <vector>
 
+
 class AbstractScene {
 
-    std::vector<GameElement> gameelements;
+    std::vector<GameElement> gameElements;
 
-
+private:
+    entt::registry<> *registryEntt;
 
 public:
     void virtual createScene() = 0;
+
+    entt::registry<> *getRegistryEntt() const;
+
+    void setRegistryEntt(entt::registry<> *registryEntt);
 
 protected:
     GameElement& createGameElement(const std::string& name);
