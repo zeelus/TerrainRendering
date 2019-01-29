@@ -132,10 +132,10 @@ void RendererSystem::drowing() {
     }
 
 void RendererSystem::updateCamera(GLuint shader_programme) {
-    auto view = registryEntt->view<Camera>();
+    auto view = registryEntt->view<CameraComponent>();
 
     for(auto entity: view) {
-        Camera &camera = view.get(entity);
+        CameraComponent &camera = view.get(entity);
         camera.update(shader_programme);
     }
 }

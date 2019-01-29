@@ -9,12 +9,12 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <entt/entt.hpp>
-#include "../Camera.h"
+#include "../Component/CameraComponent.h"
 
 class RendererSystem {
 private:
 
-    //Camera camera;
+    //CameraComponent camera;
     entt::registry<>* registryEntt;
 
     void updateCamera(GLuint shader_programme);

@@ -7,10 +7,12 @@
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+#include "Component.h"
+
 
 using namespace glm;
 
-class Camera {
+class CameraComponent: public Component {
 
     mat4 model;
     mat4 view;
@@ -20,7 +22,7 @@ class Camera {
 
 
 public:
-    Camera();
+    CameraComponent();
 
     void update(GLuint program);
 
