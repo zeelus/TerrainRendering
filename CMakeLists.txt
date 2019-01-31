@@ -10,20 +10,16 @@ add_executable(TerrenRenderingTarget
         Source/main.cpp
         Source/Engine/Renderer/Shader.cpp
         Source/Engine/Renderer/Shader.h
-        Source/Engine/Component/CameraComponent.cpp
-        Source/Engine/Component/CameraComponent.h
-        Source/Engine/Renderer/RendererSystem.cpp
-        Source/Engine/Renderer/RendererSystem.h
+        Source/Engine/Renderer/Camera.cpp
+        Source/Engine/Renderer/Camera.h
+        Source/Engine/Renderer/Renderer.cpp
+        Source/Engine/Renderer/Renderer.h
         Source/Engine/EngineApplication.h
         Source/Engine/EngineApplication.cpp
-        Source/Engine/AbstractScene.h
-        Source/Engine/AbstractScene.cpp
-        Source/Scene.h
-        Source/Scene.cpp
-        Source/Engine/GameElement.h
-        Source/Engine/GameElement.cpp
-        Source/Engine/Component/Component.h
-        Source/Engine/Component/Component.cpp
+        Source/Engine/ResorceManager.h
+        Source/Engine/ResorceManager.cpp
+        Source/Engine/Renderer/Technique.h
+        Source/Engine/Renderer/Technique.cpp
         )
 
 target_link_libraries(TerrenRenderingTarget ${CONAN_LIBS})

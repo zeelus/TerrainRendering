@@ -9,21 +9,33 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <entt/entt.hpp>
-#include "../Component/CameraComponent.h"
 
-class RendererSystem {
+#include "Camera.h"
+#include "Technique.h"
+#include "Shader.h"
+
+class Renderer {
 private:
 
-    //CameraComponent camera;
-    entt::registry<>* registryEntt;
+    Camera camera;
 
     void updateCamera(GLuint shader_programme);
-    
+
+    Technique *technique;
+
 public:
+
+    void init();
+
     void drowing();
 
-    RendererSystem(entt::registry<>* registryEntt);
+    Renderer();
+
+    ~Renderer();
+
 };
 
 
 #endif //TESTGLEW_RENDERER_H
+
+

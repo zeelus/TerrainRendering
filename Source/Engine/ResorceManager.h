@@ -1,0 +1,14 @@
+//
+// Created by Gilbert Gwizdala on 2019-01-31.
+//
+
+#ifndef TERRENRENDERING_RESORCEMANAGER_HPP
+#define TERRENRENDERING_RESORCEMANAGER_HPP
+
+
+class ResorceManager {
+
+};
+
+
+#endif //TERRENRENDERING_RESORCEMANAGER_HPP

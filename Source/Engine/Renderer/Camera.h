@@ -7,12 +7,11 @@
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
-#include "Component.h"
 
 
 using namespace glm;
 
-class CameraComponent: public Component {
+struct Camera {
 
     mat4 model;
     mat4 view;
@@ -22,7 +21,7 @@ class CameraComponent: public Component {
 
 
 public:
-    CameraComponent();
+    Camera();
 
     void update(GLuint program);
 
@@ -30,6 +29,7 @@ public:
     void setView(const mat4 &view);
 
     void updateMVP();
+    float x = 1.0f;
 };
 
 

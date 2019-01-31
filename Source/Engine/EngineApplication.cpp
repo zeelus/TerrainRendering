@@ -4,7 +4,7 @@
 
 #include "EngineApplication.h"
 
-EngineApplication::EngineApplication(float width, float height, std::string &name): width(width), height(height), name(name), rendererSystem(&registryEntt) {
+EngineApplication::EngineApplication(float width, float height, std::string &name): width(width), height(height), name(name) {
 }
 
 int EngineApplication::setupWindow() {
@@ -50,7 +50,7 @@ int EngineApplication::setupWindow() {
 void EngineApplication::showOpenGLInformations() {
     const GLubyte* renderer = glGetString(GL_RENDERER);
     const GLubyte* version = glGetString(GL_VERSION);
-    printf("RendererSystem: %s\n", renderer);
+    printf("Renderer: %s\n", renderer);
     printf("OpenGL version supported %s\n", version);
 }
 
@@ -61,12 +61,12 @@ int EngineApplication::run(int argc, char **argv) {
         return -1;
     }
 
-    this->scene->createScene();
+    renderer.init();
 
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        rendererSystem.drowing();
+        renderer.drowing();
 
         glfwPollEvents();
         glfwSwapBuffers(window);
@@ -74,10 +74,3 @@ int EngineApplication::run(int argc, char **argv) {
 
     return 0;
 }
-
-void EngineApplication::setScene(AbstractScene& scene) {
-    this->scene = &scene;
-    this->scene->setRegistryEntt(&registryEntt);
-}
-
-

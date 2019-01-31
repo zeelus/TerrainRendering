@@ -9,8 +9,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <memory>
-#include "Renderer/RendererSystem.h"
-#include "AbstractScene.h"
+#include "Renderer/Renderer.h"
 
 class EngineApplication {
 
@@ -18,13 +17,9 @@ class EngineApplication {
     float height;
     std::string name;
 
-    RendererSystem rendererSystem;
+    Renderer renderer;
 
     GLFWwindow* window;
-
-    AbstractScene* scene;
-
-    entt::registry<std::uint32_t> registryEntt;
 
 private:
     int setupWindow();
@@ -33,7 +28,6 @@ private:
 public:
     EngineApplication(float width, float height, std::string &name);
     int run(int argc,  char** argv);
-    void setScene(AbstractScene& scene);
 };
 
 
