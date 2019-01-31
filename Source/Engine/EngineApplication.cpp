@@ -5,6 +5,7 @@
 #include "EngineApplication.h"
 
 EngineApplication::EngineApplication(float width, float height, std::string &name): width(width), height(height), name(name) {
+    init();
 }
 
 int EngineApplication::setupWindow() {
@@ -73,4 +74,10 @@ int EngineApplication::run(int argc, char **argv) {
     }
 
     return 0;
+}
+
+void EngineApplication::init() {
+
+    resorceManager.loadOBJModel("Resources/Models/cube.obj");
+
 }

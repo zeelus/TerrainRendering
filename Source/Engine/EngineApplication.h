@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 #include <memory>
 #include "Renderer/Renderer.h"
+#include "ResorceManager.h"
 
 class EngineApplication {
 
@@ -18,12 +19,14 @@ class EngineApplication {
     std::string name;
 
     Renderer renderer;
+    ResorceManager resorceManager;
 
     GLFWwindow* window;
 
 private:
     int setupWindow();
     void showOpenGLInformations();
+    void init();
 
 public:
     EngineApplication(float width, float height, std::string &name);

@@ -5,8 +5,14 @@
 #ifndef TERRENRENDERING_RESORCEMANAGER_HPP
 #define TERRENRENDERING_RESORCEMANAGER_HPP
 
+#include <string>
 
 class ResorceManager {
+
+
+public:
+
+    void loadOBJModel(const std::string& path);
 
 };
 
