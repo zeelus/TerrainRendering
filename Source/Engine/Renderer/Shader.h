@@ -17,7 +17,7 @@ enum ShaderType{ Vertex = GL_VERTEX_SHADER,
 class ShadersLoadingException: public std::runtime_error {
 
 public:
-    ShadersLoadingException(): std::runtime_error("Shader file don't fund") {};
+    ShadersLoadingException(std::string& location): std::runtime_error("Shader file load " + location) {};
 
 };
 

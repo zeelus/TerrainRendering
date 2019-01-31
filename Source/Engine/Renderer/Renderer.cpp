@@ -22,15 +22,28 @@ void Renderer::init() {
     Shader fragment(Fragment, "Resources/Shaders/FragmentShader.frag");
     technique = new Technique(vertex, fragment);
 
-    float points[] = {
+    GLfloat points[] = {
+            // front
             -1.0f, -1.0f,  1.0f,
             1.0f, -1.0f,  1.0f,
-            1.0,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
             -1.0f,  1.0f,  1.0f,
+            // back
             -1.0f, -1.0f, -1.0f,
             1.0f, -1.0f, -1.0f,
             1.0f,  1.0f, -1.0f,
             -1.0f,  1.0f, -1.0f
+    };
+
+    GLfloat color_buffer[] = {
+            0.583f,  0.771f,  0.014f,
+            0.609f,  0.115f,  0.436f,
+            0.327f,  0.483f,  0.844f,
+            0.822f,  0.569f,  0.201f,
+            0.435f,  0.602f,  0.223f,
+            0.310f,  0.747f,  0.185f,
+            0.597f,  0.770f,  0.761f,
+            0.559f,  0.436f,  0.730f,
     };
 
     GLushort cube_elements[] = {
@@ -60,6 +73,11 @@ void Renderer::init() {
     glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    GLuint colorbuffer;
+    glGenBuffers(1, &colorbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer), color_buffer, GL_STATIC_DRAW);
+
     GLuint index_buffer_handle = 0;
     glGenBuffers(1, &index_buffer_handle);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer_handle);
@@ -69,11 +87,17 @@ void Renderer::init() {
     GLuint vao = 0;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
+
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer_handle);
-    glBindVertexArray(0);
+    glBindVertexArray(0u);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -91,7 +115,7 @@ void Renderer::drowing() {
     this->updateCamera(shader_programme);
 
     //glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0);
+    glDrawElements(GL_TRIANGLES, 12 * 3 * sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
 
 }
 

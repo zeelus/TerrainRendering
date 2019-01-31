@@ -29,7 +29,7 @@ void Shader::loadShaders(std::string &path) {
             shaderCode += "\n";
         }
     } else {
-        throw ShadersLoadingException();
+        throw ShadersLoadingException(path);
     }
 
     file.close();
@@ -47,7 +47,8 @@ void Shader::compilateShader() {
     glGetShaderiv(handler, GL_COMPILE_STATUS, &isCompiled);
     if(isCompiled == GL_FALSE)
     {
-        throw ShadersLoadingException();
+        std::string name("Compied error");
+        throw ShadersLoadingException(name);
     }
 
 }
