@@ -10,16 +10,16 @@
 #include <GLFW/glfw3.h>
 #include <memory>
 #include "Renderer/Renderer.h"
-#include "ResorceManager.h"
+#include "ResourceManager.h"
 
 class EngineApplication {
 
-    float width;
-    float height;
+    int width;
+    int height;
     std::string name;
 
     Renderer renderer;
-    ResorceManager resorceManager;
+    ResourceManager resourceManager;
 
     GLFWwindow* window;
 

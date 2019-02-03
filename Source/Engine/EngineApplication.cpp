@@ -5,7 +5,6 @@
 #include "EngineApplication.h"
 
 EngineApplication::EngineApplication(float width, float height, std::string &name): width(width), height(height), name(name) {
-    init();
 }
 
 int EngineApplication::setupWindow() {
@@ -61,7 +60,7 @@ int EngineApplication::run(int argc, char **argv) {
         fprintf(stderr, "Setup window error! \n");
         return -1;
     }
-
+    this->init();
     renderer.init();
 
     while(!glfwWindowShouldClose(window)) {
@@ -78,6 +77,7 @@ int EngineApplication::run(int argc, char **argv) {
 
 void EngineApplication::init() {
 
-    resorceManager.loadOBJModel("Resources/Models/cube.obj");
+    auto model = resourceManager.loadModel("Resources/Models/cube.obj");
+    renderer.models.push_back(model);
 
 }

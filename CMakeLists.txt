@@ -16,10 +16,14 @@ add_executable(TerrenRenderingTarget
         Source/Engine/Renderer/Renderer.h
         Source/Engine/EngineApplication.h
         Source/Engine/EngineApplication.cpp
-        Source/Engine/ResorceManager.h
-        Source/Engine/ResorceManager.cpp
+        Source/Engine/ResourceManager.h
+        Source/Engine/ResourceManager.cpp
         Source/Engine/Renderer/Technique.h
         Source/Engine/Renderer/Technique.cpp
+        Source/Engine/Renderer/MashPtr.h
+        Source/Engine/Renderer/MashPtr.cpp
+        Source/Engine/Renderer/StaticModel.h
+        Source/Engine/Renderer/StaticModel.cpp
         )
 
 target_link_libraries(TerrenRenderingTarget ${CONAN_LIBS})

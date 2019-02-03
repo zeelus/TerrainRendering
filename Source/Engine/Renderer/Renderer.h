@@ -13,6 +13,7 @@
 #include "Camera.h"
 #include "Technique.h"
 #include "Shader.h"
+#include "StaticModel.h"
 
 class Renderer {
 private:
@@ -26,6 +27,8 @@ private:
 public:
 
     void init();
+
+    std::vector<StaticModel> models;
 
     void drowing();
 
