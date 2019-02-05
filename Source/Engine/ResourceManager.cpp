@@ -53,7 +53,6 @@ MashPtr* ResourceManager::loadOBJModel(const std::string& path) {
                 elements.push_back(x);
             }
 
-
         }
     }
 

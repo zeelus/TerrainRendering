@@ -13,6 +13,7 @@ using namespace glm;
 
 struct Camera {
 
+public:
     mat4 model;
     mat4 view;
     mat4 project;
@@ -20,7 +21,7 @@ struct Camera {
     mat4 mvp;
 
 
-public:
+
     Camera();
 
     void update(GLuint program);

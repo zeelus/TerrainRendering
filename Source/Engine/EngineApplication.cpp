@@ -66,7 +66,7 @@ int EngineApplication::run(int argc, char **argv) {
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        renderer.drowing();
+        renderer.draw();
 
         glfwPollEvents();
         glfwSwapBuffers(window);
@@ -78,6 +78,6 @@ int EngineApplication::run(int argc, char **argv) {
 void EngineApplication::init() {
 
     auto model = resourceManager.loadModel("Resources/Models/cube.obj");
-    renderer.models.push_back(model);
+    renderer.staticModels.push_back(model);
 
 }

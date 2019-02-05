@@ -24,18 +24,25 @@ private:
 
     Technique *technique;
 
+    GLuint vao = 0;
+    GLuint ubo_matrix_handle;
+
+    const GLuint vertex_position_loction = 0u;
+    const GLuint vertex_normal_loction = 1u;
+
 public:
 
     void init();
 
-    std::vector<StaticModel> models;
+    std::vector<StaticModel> staticModels;
 
-    void drowing();
+    void draw();
 
     Renderer();
 
     ~Renderer();
 
+    void drawStaticModels();
 };
 
 
