@@ -10,6 +10,7 @@ layout (std140) uniform Matrices
     mat4 projection;
 };
 
+
 layout (std140) uniform PointLight
 {
     vec3 position_ws;
@@ -18,9 +19,6 @@ layout (std140) uniform PointLight
 };
 
 
-out vec3 fragmet_color;
-
 void main() {
     gl_Position = projection * view * model * vec4(vp, 1.0);
-    fragmet_color = color;
 }

@@ -25,6 +25,7 @@ private:
 
     GLuint vao = 0;
     GLuint ubo_matrix_handle;
+    GLuint ubo_light_handle;
 
     const GLuint vertex_position_loction = 0u;
     const GLuint vertex_normal_loction = 1u;

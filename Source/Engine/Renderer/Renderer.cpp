@@ -22,9 +22,17 @@ void Renderer::init() {
 
     glGenBuffers(1, &ubo_matrix_handle);
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
-    glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4) + 2 * sizeof(glm::vec3) + sizeof(GLfloat), nullptr, GL_DYNAMIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo_matrix_handle, 0, 3 * sizeof(glm::mat4) + 7 * sizeof(GLfloat));
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo_matrix_handle, 0, 3 * sizeof(glm::mat4));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    glGenBuffers(1, &ubo_light_handle);
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
+    glBufferData(GL_UNIFORM_BUFFER, 7 * sizeof(GLfloat), nullptr, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo_light_handle, 0, 7 * sizeof(GLfloat));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 
     Shader vertex(Vertex, "Resources/Shaders/VertexShader.vert");
@@ -45,8 +53,17 @@ void Renderer::drawStaticModels() {
     unsigned int uniformMatricesBlockIndex = glGetUniformBlockIndex(shader_programme, "Matrices");
     unsigned int uniformPointLightIndex = glGetUniformBlockIndex(shader_programme, "PointLight");
 
-    for(auto& model: staticModels) {
+    glBindBufferBase(GL_UNIFORM_BUFFER, uniformMatricesBlockIndex, ubo_matrix_handle);
+    glBindBufferBase(GL_UNIFORM_BUFFER, uniformPointLightIndex, ubo_light_handle);
 
+    auto errCode = glGetError();
+    if (errCode != GL_NO_ERROR)
+    {
+        auto errString = glewGetErrorString(errCode);
+        printf("0%s\n", errString);
+    }
+
+    for(auto& model: staticModels) {
 
         glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
         glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, 0);
@@ -57,14 +74,28 @@ void Renderer::drawStaticModels() {
         }
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-//        glUniformBlockBinding(shader_programme, uniformPointLightIndex, 1);
-//        std::array<GLfloat , 7u> light = {0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 3.0f};
-//        if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
-//            std::memcpy(result, light.data(), sizeof(GLfloat) * 7);
-//            glUnmapBuffer(GL_UNIFORM_BUFFER);
-//        }
+        auto errCode = glGetError();
+        if (errCode != GL_NO_ERROR)
+        {
+            auto errString = glewGetErrorString(errCode);
+            printf("%s\n", errString);
+        }
 
+        glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
+        glUniformBlockBinding(shader_programme, uniformPointLightIndex, 0);
+        std::array<GLfloat , 7u> light = {0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 3.0f};
+        if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
+            std::memcpy(result, matrices.data(), sizeof(GLfloat) * 7);
+            glUnmapBuffer(GL_UNIFORM_BUFFER);
+        }
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+        errCode = glGetError();
+        if (errCode != GL_NO_ERROR)
+        {
+            auto errString = glewGetErrorString(errCode);
+            printf("%s\n", errString);
+        }
 
         glBindVertexArray(vao);
         glEnableVertexAttribArray(vertex_position_loction);
