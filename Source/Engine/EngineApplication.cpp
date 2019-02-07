@@ -5,6 +5,7 @@
 #include "EngineApplication.h"
 
 EngineApplication::EngineApplication(float width, float height, std::string &name): width(width), height(height), name(name) {
+    resourceManager = ResourceManager::getInstance();
 }
 
 int EngineApplication::setupWindow() {
@@ -77,7 +78,11 @@ int EngineApplication::run(int argc, char **argv) {
 
 void EngineApplication::init() {
 
-    auto model = resourceManager.loadModel("Resources/Models/cube.obj");
+    auto model = resourceManager->loadModel("Resources/Models/cube.obj");
     renderer.staticModels.push_back(model);
+
+    auto model2 = resourceManager->loadModel("Resources/Models/cube.obj");
+    model2.setPosition(glm::vec3(0, 0, -2));
+    renderer.staticModels.push_back(model2);
 
 }

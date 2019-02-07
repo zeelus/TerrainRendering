@@ -17,6 +17,14 @@ public:
     MashPtr *getMashPtr() const;
 
     StaticModel(MashPtr* mashPtr);
+
+    const glm::mat4 &getTransform() const;
+
+    void setTransform(const glm::mat4 &transform);
+
+    void setPosition(const glm::vec3);
+    const glm::vec3 getPosition() const;
+
 };
 
 

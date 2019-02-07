@@ -12,14 +12,19 @@
 
 class ResourceManager {
 
+    static ResourceManager* instance;
+
     std::map<std::string, MashPtr*> loadsModel;
 
     MashPtr* loadOBJModel(const std::string& path);
 
+    ResourceManager();
+
 public:
 
-    StaticModel loadModel(const std::string& path);
+    static ResourceManager* getInstance();
 
+    StaticModel loadModel(const std::string& path);
 
     ~ResourceManager();
 

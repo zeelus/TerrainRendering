@@ -118,3 +118,15 @@ ResourceManager::~ResourceManager() {
     }
 
 }
+
+ResourceManager* ResourceManager::instance = nullptr;
+
+ResourceManager *ResourceManager::getInstance() {
+    if(ResourceManager::instance == nullptr) {
+        ResourceManager::instance = new ResourceManager();
+    }
+
+    return ResourceManager::instance;
+}
+
+ResourceManager::ResourceManager() { }

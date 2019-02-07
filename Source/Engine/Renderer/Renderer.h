@@ -20,7 +20,6 @@ private:
 
     Camera camera;
 
-    void updateCamera(GLuint shader_programme);
 
     Technique *technique;
 

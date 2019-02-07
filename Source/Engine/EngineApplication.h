@@ -19,7 +19,7 @@ class EngineApplication {
     std::string name;
 
     Renderer renderer;
-    ResourceManager resourceManager;
+    ResourceManager* resourceManager;
 
     GLFWwindow* window;
 

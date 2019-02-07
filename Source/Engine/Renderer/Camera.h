@@ -14,23 +14,12 @@ using namespace glm;
 struct Camera {
 
 public:
-    mat4 model;
     mat4 view;
     mat4 project;
-
-    mat4 mvp;
-
 
 
     Camera();
 
-    void update(GLuint program);
-
-    mat4 getView();
-    void setView(const mat4 &view);
-
-    void updateMVP();
-    float x = 1.0f;
 };
 
 

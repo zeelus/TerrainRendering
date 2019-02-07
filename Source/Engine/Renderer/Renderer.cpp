@@ -17,13 +17,15 @@ Renderer::Renderer() {
 
 void Renderer::init() {
 
+
     glGenVertexArrays(1, &vao);
 
     glGenBuffers(1, &ubo_matrix_handle);
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
-    std::array<glm::mat4x4, 3u> matrices = { camera.model, camera.view, camera.project};
-    glBufferData(GL_UNIFORM_BUFFER, matrices.size() * sizeof(glm::mat4), matrices.data(), GL_DYNAMIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4) + 2 * sizeof(glm::vec3) + sizeof(GLfloat), nullptr, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo_matrix_handle, 0, 3 * sizeof(glm::mat4) + 7 * sizeof(GLfloat));
+
 
     Shader vertex(Vertex, "Resources/Shaders/VertexShader.vert");
     Shader fragment(Fragment, "Resources/Shaders/FragmentShader.frag");
@@ -40,9 +42,30 @@ void Renderer::drawStaticModels() {
 
     glUseProgram(shader_programme);
 
-    updateCamera(shader_programme);
+    unsigned int uniformMatricesBlockIndex = glGetUniformBlockIndex(shader_programme, "Matrices");
+    unsigned int uniformPointLightIndex = glGetUniformBlockIndex(shader_programme, "PointLight");
 
     for(auto& model: staticModels) {
+
+
+        glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
+        glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, 0);
+        std::array<glm::mat4, 3u> matrices = { model.getTransform(), camera.view, camera.project};
+        if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
+            std::memcpy(result, matrices.data(), sizeof(glm::mat4) * 3);
+            glUnmapBuffer(GL_UNIFORM_BUFFER);
+        }
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+//        glUniformBlockBinding(shader_programme, uniformPointLightIndex, 1);
+//        std::array<GLfloat , 7u> light = {0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 3.0f};
+//        if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
+//            std::memcpy(result, light.data(), sizeof(GLfloat) * 7);
+//            glUnmapBuffer(GL_UNIFORM_BUFFER);
+//        }
+
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
         glBindVertexArray(vao);
         glEnableVertexAttribArray(vertex_position_loction);
         glBindBuffer(GL_ARRAY_BUFFER, model.getMashPtr()->vbo);
@@ -64,9 +87,6 @@ void Renderer::drawStaticModels() {
     }
 }
 
-void Renderer::updateCamera(GLuint shader_programme) {
-    this->camera.update(shader_programme);
-}
 
 Renderer::~Renderer() {
     delete technique;
