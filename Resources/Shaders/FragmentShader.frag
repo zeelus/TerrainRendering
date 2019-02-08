@@ -1,7 +1,13 @@
 #version 410
 
-out vec4 color;
+out vec4 color_out;
+
+layout (std140) uniform PointLight
+{
+    vec3 position;
+    vec3 color;
+} pointLight;
 
 void main() {
-    color = vec4(1.0,0.0,0.0, 1.0);
+    color_out = vec4(pointLight.color, 1.0);
 }

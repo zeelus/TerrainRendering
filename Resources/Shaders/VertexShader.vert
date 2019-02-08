@@ -8,17 +8,9 @@ layout (std140) uniform Matrices
     mat4 model;
     mat4 view;
     mat4 projection;
-};
-
-
-layout (std140) uniform PointLight
-{
-    vec3 position_ws;
-    vec3 color;
-    float r;
-};
+} matrices;
 
 
 void main() {
-    gl_Position = projection * view * model * vec4(vp, 1.0);
+    gl_Position = matrices.projection * matrices.view * matrices.model * vec4(vp, 1.0);
 }

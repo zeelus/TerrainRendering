@@ -24,16 +24,11 @@ void Renderer::init() {
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
     glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo_matrix_handle, 0, 3 * sizeof(glm::mat4));
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     glGenBuffers(1, &ubo_light_handle);
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
-    glBufferData(GL_UNIFORM_BUFFER, 7 * sizeof(GLfloat), nullptr, GL_DYNAMIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::f32vec3), nullptr, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo_light_handle, 0, 7 * sizeof(GLfloat));
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
 
     Shader vertex(Vertex, "Resources/Shaders/VertexShader.vert");
     Shader fragment(Fragment, "Resources/Shaders/FragmentShader.frag");
@@ -53,20 +48,14 @@ void Renderer::drawStaticModels() {
     unsigned int uniformMatricesBlockIndex = glGetUniformBlockIndex(shader_programme, "Matrices");
     unsigned int uniformPointLightIndex = glGetUniformBlockIndex(shader_programme, "PointLight");
 
-    glBindBufferBase(GL_UNIFORM_BUFFER, uniformMatricesBlockIndex, ubo_matrix_handle);
-    glBindBufferBase(GL_UNIFORM_BUFFER, uniformPointLightIndex, ubo_light_handle);
-
-    auto errCode = glGetError();
-    if (errCode != GL_NO_ERROR)
-    {
-        auto errString = glewGetErrorString(errCode);
-        printf("0%s\n", errString);
-    }
+    unsigned int matricesBlockBinding = 0u;
+    unsigned int pointLight = 1u;
 
     for(auto& model: staticModels) {
 
+        glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, matricesBlockBinding);
+        glBindBufferBase(GL_UNIFORM_BUFFER, matricesBlockBinding, ubo_matrix_handle);
         glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
-        glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, 0);
         std::array<glm::mat4, 3u> matrices = { model.getTransform(), camera.view, camera.project};
         if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
             std::memcpy(result, matrices.data(), sizeof(glm::mat4) * 3);
@@ -81,11 +70,12 @@ void Renderer::drawStaticModels() {
             printf("%s\n", errString);
         }
 
+        glUniformBlockBinding(shader_programme, uniformPointLightIndex, pointLight);
+        glBindBufferBase(GL_UNIFORM_BUFFER, pointLight, ubo_light_handle);
         glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
-        glUniformBlockBinding(shader_programme, uniformPointLightIndex, 0);
-        std::array<GLfloat , 7u> light = {0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 3.0f};
+        std::array<glm::f32vec3, 2u> light = {glm::f32vec3(0, 0, 0), glm::f32vec3(0, 1, 1)};
         if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
-            std::memcpy(result, matrices.data(), sizeof(GLfloat) * 7);
+            std::memcpy(result, light.data(), 2 * sizeof(glm::f32vec3));
             glUnmapBuffer(GL_UNIFORM_BUFFER);
         }
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -94,7 +84,7 @@ void Renderer::drawStaticModels() {
         if (errCode != GL_NO_ERROR)
         {
             auto errString = glewGetErrorString(errCode);
-            printf("%s\n", errString);
+            printf("%s %d\n", errString, errCode);
         }
 
         glBindVertexArray(vao);
