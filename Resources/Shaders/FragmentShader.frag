@@ -4,8 +4,9 @@ out vec4 color_out;
 
 layout (std140) uniform PointLight
 {
-    vec3 position;
+    vec4 position;
     vec3 color;
+    float r;
 } pointLight;
 
 void main() {

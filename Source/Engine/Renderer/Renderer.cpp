@@ -27,7 +27,7 @@ void Renderer::init() {
 
     glGenBuffers(1, &ubo_light_handle);
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
-    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::f32vec3), nullptr, GL_DYNAMIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), nullptr, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     Shader vertex(Vertex, "Resources/Shaders/VertexShader.vert");
@@ -48,8 +48,15 @@ void Renderer::drawStaticModels() {
     unsigned int uniformMatricesBlockIndex = glGetUniformBlockIndex(shader_programme, "Matrices");
     unsigned int uniformPointLightIndex = glGetUniformBlockIndex(shader_programme, "PointLight");
 
-    unsigned int matricesBlockBinding = 0u;
-    unsigned int pointLight = 1u;
+    glUniformBlockBinding(shader_programme, uniformPointLightIndex, pointLight);
+    glBindBufferBase(GL_UNIFORM_BUFFER, pointLight, ubo_light_handle);
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
+    std::array<glm::vec4, 2u> light = {glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 1.0f, 0.5f)};
+    if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
+        std::memcpy(result, light.data(), 2 * sizeof(glm::vec4));
+        glUnmapBuffer(GL_UNIFORM_BUFFER);
+    }
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     for(auto& model: staticModels) {
 
@@ -62,30 +69,6 @@ void Renderer::drawStaticModels() {
             glUnmapBuffer(GL_UNIFORM_BUFFER);
         }
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-        auto errCode = glGetError();
-        if (errCode != GL_NO_ERROR)
-        {
-            auto errString = glewGetErrorString(errCode);
-            printf("%s\n", errString);
-        }
-
-        glUniformBlockBinding(shader_programme, uniformPointLightIndex, pointLight);
-        glBindBufferBase(GL_UNIFORM_BUFFER, pointLight, ubo_light_handle);
-        glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
-        std::array<glm::f32vec3, 2u> light = {glm::f32vec3(0, 0, 0), glm::f32vec3(0, 1, 1)};
-        if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
-            std::memcpy(result, light.data(), 2 * sizeof(glm::f32vec3));
-            glUnmapBuffer(GL_UNIFORM_BUFFER);
-        }
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-        errCode = glGetError();
-        if (errCode != GL_NO_ERROR)
-        {
-            auto errString = glewGetErrorString(errCode);
-            printf("%s %d\n", errString, errCode);
-        }
 
         glBindVertexArray(vao);
         glEnableVertexAttribArray(vertex_position_loction);

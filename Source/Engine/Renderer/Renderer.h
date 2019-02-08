@@ -30,6 +30,9 @@ private:
     const GLuint vertex_position_loction = 0u;
     const GLuint vertex_normal_loction = 1u;
 
+    const GLuint matricesBlockBinding = 0u;
+    const GLuint pointLight = 1u;
+
 public:
 
     void init();
