@@ -17,7 +17,8 @@ layout (std140) uniform Matrices
 };
 
 in vec3 Normal;
-in vec3 VertexPosition;
+in vec3 FragPos;
+
 
 const float shininess = 8.0;
 
@@ -25,9 +26,8 @@ void main() {
 
         mat3 normalMatrix = transpose(inverse(mat3(model)));
         vec3 normal = normalize(normalMatrix * Normal);
-        vec3 fragPosition = vec3(model * vec4(VertexPosition, 1));
 
-        vec3 lightDir = vec3(light.position) - fragPosition;
+        vec3 lightDir = vec3(light.position) - FragPos;
 
         float brightness = dot(normal, lightDir) / (length(lightDir) * length(normal));
         brightness = clamp(brightness, 0, 1);
@@ -36,7 +36,7 @@ void main() {
         vec3 diffuse = (brightness * light.r) * light.lightColor;
         vec3 modelColor = vec3(1.0);
 
-        vec3 viewDir = normalize(-fragPosition);
+        vec3 viewDir = normalize(-FragPos);
         vec3 halfDir = normalize(lightDir + viewDir);
         float specAngle = max(dot(halfDir, normal), 0.0);
         float specular = pow(specAngle, shininess);
