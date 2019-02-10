@@ -78,11 +78,11 @@ int EngineApplication::run(int argc, char **argv) {
 
 void EngineApplication::init() {
 
-    auto model = resourceManager->loadModel("Resources/Models/cube.obj");
-    renderer.staticModels.push_back(model);
+//    auto model = resourceManager->loadModel("Resources/Models/cube.obj");
+//    renderer.staticModels.push_back(model);
 
     auto model2 = resourceManager->loadModel("Resources/Models/cube.obj");
-    model2.setPosition(glm::vec3(0, 0, -2));
+    model2.setPosition(glm::vec3(0, 0, 0));
     renderer.staticModels.push_back(model2);
 
 }

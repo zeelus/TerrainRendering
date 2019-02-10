@@ -51,7 +51,7 @@ void Renderer::drawStaticModels() {
     glUniformBlockBinding(shader_programme, uniformPointLightIndex, pointLight);
     glBindBufferBase(GL_UNIFORM_BUFFER, pointLight, ubo_light_handle);
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
-    std::array<glm::vec4, 2u> light = {glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 1.0f, 0.5f)};
+    std::array<glm::vec4, 2u> light = {glm::vec4(5.0f, 5.0f, 0.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.5f)};
     if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
         std::memcpy(result, light.data(), 2 * sizeof(glm::vec4));
         glUnmapBuffer(GL_UNIFORM_BUFFER);

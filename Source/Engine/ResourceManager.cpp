@@ -2,6 +2,9 @@
 // Created by Gilbert Gwizdala on 2019-01-31.
 //
 #include <GL/glew.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -18,7 +21,9 @@ MashPtr* ResourceManager::loadOBJModel(const std::string& path) {
 
     vector<glm::vec3> vertices;
     vector<glm::vec3> normals;
+    vector<glm::vec3> faceNormals;
     vector<GLushort> elements;
+    vector<GLushort> elementsNormals;
 
     ifstream file(path);
 
@@ -29,44 +34,62 @@ MashPtr* ResourceManager::loadOBJModel(const std::string& path) {
     string line;
     while (getline(file, line)) {
         if (line.substr(0, 2) == "v ") {
+
             istringstream lineString(line.substr(2));
             glm::vec3 v;
-
             lineString >> v.x;
             lineString >> v.y;
             lineString >> v.z;
-
             vertices.push_back(v);
+
+        } else if(line.substr(0, 3) == "vn " ) {
+
+            istringstream lineString(line.substr(3));
+            glm::vec3 n;
+            lineString >> n.x;
+            lineString >> n.y;
+            lineString >> n.z;
+            faceNormals.push_back(n);
+
         } else if (line.substr(0, 2) == "f ") {
+
             auto newLine = line.substr(2);
             vector<string> strs;
-            std::vector<std::string> tokens;
-            boost::algorithm::split(tokens, newLine, boost::is_any_of(" "));
+            std::vector<std::string> elementsString;
+            boost::algorithm::split(elementsString, newLine, boost::is_any_of(" "));
 
-            for (auto &element: tokens) {
+            for (auto &element: elementsString) {
                 if (element.empty()) continue;
-                boost::algorithm::replace_all(element, "/", " ");
-                istringstream elementLine(element);
-                GLshort x;
-                elementLine >> x;
-                x--;
-                elements.push_back(x);
+
+                std::vector<std::string> partString;
+                boost::algorithm::split(partString, element, boost::is_any_of("/"));
+
+                GLshort e, p, n = 0;
+
+                if(!partString[0].empty()) {
+                    e = std::stoi(partString[0]);
+                }
+
+                if(!partString[1].empty()) {
+                    p = std::stoi(partString[1]);
+                }
+
+                if(!partString[2].empty()) {
+                    n = std::stoi(partString[2]);
+                }
+
+                elements.push_back(--e);
+                elementsNormals.push_back(--n);
             }
 
         }
     }
 
-    normals.resize(vertices.size(), glm::vec3(0.0, 0.0, 0.0));
-    for (int i = 0; i < elements.size(); i+=3) {
-            GLushort ia = elements[i];
-            GLushort ib = elements[i+1];
-            GLushort ic = elements[i+2];
-            glm::vec3 normal = glm::normalize(glm::cross(
-                    glm::vec3(vertices[ib]) - glm::vec3(vertices[ia]),
-                    glm::vec3(vertices[ic]) - glm::vec3(vertices[ia])));
-            normals[ia] = normals[ib] = normals[ic] = normal;
-    }
+    normals.resize(vertices.size());
 
+    for(int i = 0; i < elements.size(); i++) {
+        normals[elements[i]] = faceNormals[elementsNormals[i]];
+    }
 
     file.close();
 
