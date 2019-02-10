@@ -20,7 +20,6 @@ private:
 
     Camera camera;
 
-
     Technique *technique;
 
     GLuint vao = 0;
@@ -32,6 +31,8 @@ private:
 
     const GLuint matricesBlockBinding = 0u;
     const GLuint pointLight = 1u;
+
+    glm::vec3 lightPos;
 
 public:
 
@@ -46,6 +47,9 @@ public:
     ~Renderer();
 
     void drawStaticModels();
+
+    void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
+    static void key_callback_static(GLFWwindow *window, int key, int scancode, int action, int mods);
 };
 
 

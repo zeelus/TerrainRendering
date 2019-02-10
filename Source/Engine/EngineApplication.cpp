@@ -64,6 +64,9 @@ int EngineApplication::run(int argc, char **argv) {
     this->init();
     renderer.init();
 
+    glfwSetWindowUserPointer(window, &renderer);
+    glfwSetKeyCallback(window, Renderer::key_callback_static);
+
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -78,11 +81,14 @@ int EngineApplication::run(int argc, char **argv) {
 
 void EngineApplication::init() {
 
-//    auto model = resourceManager->loadModel("Resources/Models/cube.obj");
-//    renderer.staticModels.push_back(model);
+    auto model = resourceManager->loadModel("Resources/Models/tetrahedron.obj");
+    model.setPosition(glm::vec3(0, 0, 1));
+    model.rotate(30.0f, glm::vec3(0.0f, 1.0f, 0.0));
+    renderer.staticModels.push_back(model);
 
     auto model2 = resourceManager->loadModel("Resources/Models/cube.obj");
-    model2.setPosition(glm::vec3(0, 0, 0));
+    model2.setPosition(glm::vec3(0, 0, -2));
     renderer.staticModels.push_back(model2);
+
 
 }

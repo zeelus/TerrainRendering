@@ -14,7 +14,6 @@ layout (std140) uniform Matrices
 out vec3 VertexPosition;
 out vec3 Normal;
 
-
 void main() {
     gl_Position = matrices.projection * matrices.view * matrices.model * vec4(vp, 1.0);
     VertexPosition = vp;

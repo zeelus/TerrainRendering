@@ -19,11 +19,12 @@ public:
     StaticModel(MashPtr* mashPtr);
 
     const glm::mat4 &getTransform() const;
-
     void setTransform(const glm::mat4 &transform);
 
-    void setPosition(const glm::vec3);
+    void setPosition(const glm::vec3 &position);
     const glm::vec3 getPosition() const;
+
+    void rotate(GLfloat angle, glm::vec3 vector);
 
 };
 

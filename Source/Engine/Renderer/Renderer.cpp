@@ -11,7 +11,7 @@
 #include "Shader.h"
 #include <entt/entt.hpp>
 
-Renderer::Renderer() {
+Renderer::Renderer(): lightPos(0.0f) {
 
 }
 
@@ -51,7 +51,7 @@ void Renderer::drawStaticModels() {
     glUniformBlockBinding(shader_programme, uniformPointLightIndex, pointLight);
     glBindBufferBase(GL_UNIFORM_BUFFER, pointLight, ubo_light_handle);
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
-    std::array<glm::vec4, 2u> light = {glm::vec4(5.0f, 5.0f, 0.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.5f)};
+    std::array<glm::vec4, 2u> light = {glm::vec4(lightPos.x, lightPos.y, lightPos.z, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.7f)};
     if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
         std::memcpy(result, light.data(), 2 * sizeof(glm::vec4));
         glUnmapBuffer(GL_UNIFORM_BUFFER);
@@ -96,13 +96,13 @@ Renderer::~Renderer() {
     delete technique;
 }
 
-//void Renderer::key_callback_static(GLFWwindow *window, int key, int scancode, int action, int mods) {
-//    auto rendererSystem = reinterpret_cast<Renderer*>(glfwGetWindowUserPointer(window));
-//    rendererSystem->key_callback(window, key, scancode, action, mods);
-//}
-//
-//void Renderer::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-//    auto pos = camera.getView();
+void Renderer::key_callback_static(GLFWwindow *window, int key, int scancode, int action, int mods) {
+    auto rendererSystem = reinterpret_cast<Renderer*>(glfwGetWindowUserPointer(window));
+    rendererSystem->key_callback(window, key, scancode, action, mods);
+}
+
+void Renderer::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+//    auto pos = camera.view;
 //    mat4 newPos = pos;
 //    switch (key) {
 //        case GLFW_KEY_W:
@@ -119,6 +119,33 @@ Renderer::~Renderer() {
 //            break;
 //    }
 //
-//    camera.setView(newPos);
-//}
+//    camera.view = newPos;
+
+    switch (key) {
+        case GLFW_KEY_W:
+            lightPos += vec3(0.2f, 0.0f, 0.0f);
+            break;
+        case GLFW_KEY_S:
+            lightPos += vec3(-0.2f, 0.0f, 0.0);
+            break;
+        case GLFW_KEY_D:
+            lightPos += vec3(0.0f, 0.0f, 0.2f);
+            break;
+        case GLFW_KEY_A:
+            lightPos += vec3(0.0f, 0.0f, -0.2f);
+            break;
+        case GLFW_KEY_R:
+            lightPos += vec3(0.0f, 0.2f, 0.0f);
+            break;
+        case GLFW_KEY_F:
+            lightPos += vec3(0.0f, -0.2f, 0.0f);
+            break;
+        default:
+            break;
+    }
+
+    printf("%f, %f, %f\n", lightPos.x, lightPos.y, lightPos.z);
+
+
+}
 
