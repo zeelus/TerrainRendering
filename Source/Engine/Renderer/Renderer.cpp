@@ -11,7 +11,7 @@
 #include "Shader.h"
 #include <entt/entt.hpp>
 
-Renderer::Renderer(): lightPos(0.0f) {
+Renderer::Renderer(): lightPos(-8.0f, 4.0f, 0.0f) {
 
 }
 
@@ -51,7 +51,7 @@ void Renderer::drawStaticModels() {
     glUniformBlockBinding(shader_programme, uniformPointLightIndex, pointLight);
     glBindBufferBase(GL_UNIFORM_BUFFER, pointLight, ubo_light_handle);
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
-    std::array<glm::vec4, 2u> light = {glm::vec4(lightPos.x, lightPos.y, lightPos.z, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.7f)};
+    std::array<glm::vec4, 2u> light = {glm::vec4(lightPos.x, lightPos.y, lightPos.z, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)};
     if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
         std::memcpy(result, light.data(), 2 * sizeof(glm::vec4));
         glUnmapBuffer(GL_UNIFORM_BUFFER);

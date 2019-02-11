@@ -82,13 +82,22 @@ int EngineApplication::run(int argc, char **argv) {
 void EngineApplication::init() {
 
     auto model = resourceManager->loadModel("Resources/Models/tetrahedron.obj");
-    model.setPosition(glm::vec3(0, 0, 1));
+    model.setPosition(glm::vec3(2, 0, 2));
     model.rotate(30.0f, glm::vec3(0.0f, 1.0f, 0.0));
     renderer.staticModels.push_back(model);
 
     auto model2 = resourceManager->loadModel("Resources/Models/cube.obj");
     model2.setPosition(glm::vec3(0, 0, -2));
     renderer.staticModels.push_back(model2);
+
+    auto model3 = resourceManager->loadModel("Resources/Models/Suzanne.obj");
+    model3.rotate(-90.0f, glm::vec3(0.0f, 1.0f, 0.0));
+    renderer.staticModels.push_back(model3);
+
+    auto deerModel = resourceManager->loadModel("Resources/Models/deer.obj");
+    deerModel.setPosition(glm::vec3(-3, 0, 2));
+    deerModel.rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0));
+    renderer.staticModels.push_back(deerModel);
 
 
 }

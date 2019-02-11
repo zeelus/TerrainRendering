@@ -33,4 +33,8 @@ void StaticModel::rotate(GLfloat angle, glm::vec3 vector) {
     this->transform = this->transform * rotationMatrix;
 }
 
+void StaticModel::scale(const glm::vec3 &scale) {
+    this->transform = glm::scale(this->transform, scale);
+}
+
 

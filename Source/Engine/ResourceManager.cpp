@@ -88,7 +88,7 @@ MashPtr* ResourceManager::loadOBJModel(const std::string& path) {
     normals.resize(vertices.size());
 
     for(int i = 0; i < elements.size(); i++) {
-        normals[elements[i]] = faceNormals[elementsNormals[i]];
+        normals[elements[i]] += faceNormals[elementsNormals[i]];
     }
 
     file.close();

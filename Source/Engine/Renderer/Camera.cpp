@@ -14,7 +14,7 @@ using namespace glm;
 Camera::Camera() {
 
     view = lookAt(
-            vec3(-4.0f, 2.0f, 0.0f),
+            vec3(-8.0f, 4.0f, 0.0f),
             vec3(0.0f, 0.0f, 0.0f),
             vec3(0.0f, 1.0f, 0.0f)
             );

@@ -25,6 +25,7 @@ public:
     const glm::vec3 getPosition() const;
 
     void rotate(GLfloat angle, glm::vec3 vector);
+    void scale(const glm::vec3 &scale);
 
 };
 
