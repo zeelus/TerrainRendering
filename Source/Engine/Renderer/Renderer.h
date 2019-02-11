@@ -20,8 +20,6 @@ private:
 
     Camera camera;
 
-    Technique *technique;
-
     GLuint vao = 0;
     GLuint ubo_matrix_handle;
     GLuint ubo_light_handle;

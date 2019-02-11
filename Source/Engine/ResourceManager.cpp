@@ -14,8 +14,11 @@
 #include <exception>
 
 #include "ResourceManager.h"
+#include "Renderer/Shader.h"
 
 using namespace std;
+
+ResourceManager::ResourceManager() { }
 
 MashPtr* ResourceManager::loadOBJModel(const std::string& path) {
 
@@ -64,7 +67,7 @@ MashPtr* ResourceManager::loadOBJModel(const std::string& path) {
                 std::vector<std::string> partString;
                 boost::algorithm::split(partString, element, boost::is_any_of("/"));
 
-                GLshort e, p, n = 0;
+                GLushort e, p, n = 0;
 
                 if(!partString[0].empty()) {
                     e = std::stoi(partString[0]);
@@ -113,7 +116,7 @@ MashPtr* ResourceManager::loadOBJModel(const std::string& path) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(GLushort), elements.data(), GL_STATIC_DRAW);
 
-    MashPtr * mashPtr = new MashPtr(vbo, index_buffer, elements.size());
+    MashPtr * mashPtr = new MashPtr(vbo, index_buffer, elements.size(), "phongBline");
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -136,8 +139,12 @@ StaticModel ResourceManager::loadModel(const std::string &path) {
 
 ResourceManager::~ResourceManager() {
 
-    for(auto modelMash: loadsModel) {
+    for(auto& modelMash: loadsModel) {
         delete modelMash.second;
+    }
+
+    for(auto& technices: loadsTechnique) {
+        delete technices.second;
     }
 
 }
@@ -147,9 +154,21 @@ ResourceManager* ResourceManager::instance = nullptr;
 ResourceManager *ResourceManager::getInstance() {
     if(ResourceManager::instance == nullptr) {
         ResourceManager::instance = new ResourceManager();
+        ResourceManager::instance->loadTechniques();
     }
 
     return ResourceManager::instance;
 }
 
-ResourceManager::ResourceManager() { }
+void ResourceManager::loadTechniques() {
+
+    Shader vertex(Vertex, "Resources/Shaders/VertexShader.vert");
+    Shader fragment(Fragment, "Resources/Shaders/FragmentShader.frag");
+    auto technique = new Technique(vertex, fragment);
+    this->loadsTechnique["phongBline"] = technique;
+
+}
+
+Technique *ResourceManager::loadTechnique(const std::string &name) {
+    return this->loadsTechnique[name];
+}

@@ -4,6 +4,6 @@
 
 #include "MashPtr.h"
 
-MashPtr::MashPtr(GLuint vbo, GLuint elements, int elementsSize): vbo(vbo), elements(elements), elementsSize(elementsSize) {
+MashPtr::MashPtr(GLuint vbo, GLuint elements, unsigned int elementsSize, std::string technique): vbo(vbo), elements(elements), elementsSize(elementsSize), technique(technique) {
 
 }

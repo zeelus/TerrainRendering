@@ -9,7 +9,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Shader.h"
-#include <entt/entt.hpp>
+#include "../ResourceManager.h"
 
 Renderer::Renderer(): lightPos(-8.0f, 4.0f, 0.0f) {
 
@@ -30,10 +30,6 @@ void Renderer::init() {
     glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), nullptr, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-    Shader vertex(Vertex, "Resources/Shaders/VertexShader.vert");
-    Shader fragment(Fragment, "Resources/Shaders/FragmentShader.frag");
-    technique = new Technique(vertex, fragment);
-
 }
 
 void Renderer::draw() {
@@ -41,6 +37,7 @@ void Renderer::draw() {
 }
 
 void Renderer::drawStaticModels() {
+    auto* technique = ResourceManager::getInstance()->loadTechnique("phongBline");
     auto shader_programme = technique->getShader_programme();
 
     glUseProgram(shader_programme);
@@ -92,9 +89,7 @@ void Renderer::drawStaticModels() {
 }
 
 
-Renderer::~Renderer() {
-    delete technique;
-}
+Renderer::~Renderer() { }
 
 void Renderer::key_callback_static(GLFWwindow *window, int key, int scancode, int action, int mods) {
     auto rendererSystem = reinterpret_cast<Renderer*>(glfwGetWindowUserPointer(window));
@@ -117,8 +112,14 @@ void Renderer::key_callback(GLFWwindow *window, int key, int scancode, int actio
 //        case GLFW_KEY_A:
 //            newPos = glm::translate(pos, vec3(0.0f, 0.0f, 0.2f));
 //            break;
+//        case GLFW_KEY_R:
+//            newPos = glm::translate(pos, vec3(0.0f, -0.2f, 0.0f));
+//            break;
+//        case GLFW_KEY_F:
+//            newPos = glm::translate(pos, vec3(0.0f, 0.2f, 0.0f));
+//            break;
 //    }
-//
+
 //    camera.view = newPos;
 
     switch (key) {
@@ -143,9 +144,6 @@ void Renderer::key_callback(GLFWwindow *window, int key, int scancode, int actio
         default:
             break;
     }
-
-    printf("%f, %f, %f\n", lightPos.x, lightPos.y, lightPos.z);
-
 
 }
 

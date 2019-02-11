@@ -5,7 +5,7 @@
 #include "EngineApplication.h"
 
 EngineApplication::EngineApplication(float width, float height, std::string &name): width(width), height(height), name(name) {
-    resourceManager = ResourceManager::getInstance();
+
 }
 
 int EngineApplication::setupWindow() {
@@ -45,6 +45,8 @@ int EngineApplication::setupWindow() {
 
     fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 
+    resourceManager = ResourceManager::getInstance();
+
     return 0;
 }
 
@@ -61,6 +63,7 @@ int EngineApplication::run(int argc, char **argv) {
         fprintf(stderr, "Setup window error! \n");
         return -1;
     }
+
     this->init();
     renderer.init();
 

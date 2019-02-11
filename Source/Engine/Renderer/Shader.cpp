@@ -3,6 +3,7 @@
 //
 
 #include "Shader.h"
+#include <GL/glew.h>
 #include <fstream>
 
 Shader::Shader(ShaderType type, std::string path) {
