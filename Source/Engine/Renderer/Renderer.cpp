@@ -17,7 +17,6 @@ Renderer::Renderer(): lightPos(-8.0f, 4.0f, 0.0f) {
 
 void Renderer::init() {
 
-
     glGenVertexArrays(1, &vao);
 
     glGenBuffers(1, &ubo_matrix_handle);
@@ -30,6 +29,7 @@ void Renderer::init() {
     glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), nullptr, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
+    resourceManager = ResourceManager::getInstance();
 }
 
 void Renderer::draw() {
@@ -57,6 +57,10 @@ void Renderer::drawStaticModels() {
 
     for(auto& model: staticModels) {
 
+        int index = model.getIndexMashPtr();
+        if(index < 0) continue;
+        auto& geometry = resourceManager->getGeometry(index);
+
         glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, matricesBlockBinding);
         glBindBufferBase(GL_UNIFORM_BUFFER, matricesBlockBinding, ubo_matrix_handle);
         glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
@@ -65,24 +69,11 @@ void Renderer::drawStaticModels() {
             std::memcpy(result, matrices.data(), sizeof(glm::mat4) * 3);
             glUnmapBuffer(GL_UNIFORM_BUFFER);
         }
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        glBindBuffer(GL_UNIFORM_BUFFER, 0u);
 
-        glBindVertexArray(vao);
-        glEnableVertexAttribArray(vertex_position_loction);
-        glBindBuffer(GL_ARRAY_BUFFER, model.getMashPtr()->vbo);
-        glVertexAttribPointer(vertex_position_loction, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), nullptr);
+        glBindVertexArray(geometry.vao);
 
-        glEnableVertexAttribArray(vertex_normal_loction);
-        glVertexAttribPointer(vertex_normal_loction, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(3*sizeof(GLfloat)));
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.getMashPtr()->elements);
-        glBindVertexArray(0u);
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0u);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
-
-        glBindVertexArray(vao);
-
-        glDrawElements(GL_TRIANGLES, model.getMashPtr()->elementsSize * sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
+        glDrawElements(GL_TRIANGLES, geometry.elementsSize * sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
 
         glBindVertexArray(0u);
     }

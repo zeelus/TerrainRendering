@@ -11,12 +11,12 @@
 class StaticModel {
 
     glm::mat4 transform = glm::mat4(1.0f);
-    MashPtr* mashPtr;
+    int indexMashPtr;
 
 public:
-    MashPtr *getMashPtr() const;
+    int getIndexMashPtr() const;
 
-    StaticModel(MashPtr* mashPtr);
+    explicit StaticModel(unsigned int indexMashPtr);
 
     const glm::mat4 &getTransform() const;
     void setTransform(const glm::mat4 &transform);

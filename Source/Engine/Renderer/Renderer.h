@@ -14,6 +14,7 @@
 #include "Technique.h"
 #include "Shader.h"
 #include "StaticModel.h"
+#include "../ResourceManager.h"
 
 class Renderer {
 private:
@@ -24,13 +25,12 @@ private:
     GLuint ubo_matrix_handle;
     GLuint ubo_light_handle;
 
-    const GLuint vertex_position_loction = 0u;
-    const GLuint vertex_normal_loction = 1u;
-
     const GLuint matricesBlockBinding = 0u;
     const GLuint pointLight = 1u;
 
     glm::vec3 lightPos;
+
+    ResourceManager* resourceManager;
 
 public:
 

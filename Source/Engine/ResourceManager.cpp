@@ -12,6 +12,7 @@
 #include <glm/glm.hpp>
 #include <boost/algorithm/string.hpp>
 #include <exception>
+#include <optional>
 
 #include "ResourceManager.h"
 #include "Renderer/Shader.h"
@@ -20,7 +21,7 @@ using namespace std;
 
 ResourceManager::ResourceManager() { }
 
-MashPtr* ResourceManager::loadOBJModel(const std::string& path) {
+optional<MashPtr> ResourceManager::loadOBJModel(const std::string& path) {
 
     vector<glm::vec3> vertices;
     vector<glm::vec3> normals;
@@ -31,7 +32,7 @@ MashPtr* ResourceManager::loadOBJModel(const std::string& path) {
     ifstream file(path);
 
     if(!file.is_open()) {
-        return nullptr;
+        return {};
     }
 
     string line;
@@ -116,32 +117,51 @@ MashPtr* ResourceManager::loadOBJModel(const std::string& path) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(GLushort), elements.data(), GL_STATIC_DRAW);
 
-    MashPtr * mashPtr = new MashPtr(vbo, index_buffer, elements.size(), "phongBline");
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    return mashPtr;
+    GLuint vao = 0;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    glEnableVertexAttribArray(vertex_position_loction);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glVertexAttribPointer(vertex_position_loction, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), nullptr);
+
+    glEnableVertexAttribArray(vertex_normal_loction);
+    glVertexAttribPointer(vertex_normal_loction, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(3*sizeof(GLfloat)));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
+    glBindVertexArray(0u);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0u);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
+
+
+    return MashPtr(vao, vbo, index_buffer, elements.size(), "phongBline");
 }
 
 StaticModel ResourceManager::loadModel(const std::string &path) {
-    MashPtr* mash = nullptr;
-    auto modelElement = loadsModel.find(path);
-    if(modelElement == loadsModel.end()) {
-        mash = loadOBJModel(path);
-        loadsModel[path] = mash;
+    int index = -1;
+    auto modelIndexInVector = modelIndexs.find(path);
+    if(modelIndexInVector == modelIndexs.end()) {
+
+        optional<MashPtr> modelMashOpt = loadOBJModel(path);
+        if(modelMashOpt) {
+            MashPtr modelMash = *modelMashOpt;
+            loadsModel.push_back(std::move(modelMash));
+            index = loadsModel.size() - 1;
+            modelIndexs[path] = index;
+
+        }
     } else {
-        mash = modelElement->second;
+        index = modelIndexInVector->second;
     }
 
-    return StaticModel(mash);
+    return StaticModel(index);
 }
 
 ResourceManager::~ResourceManager() {
 
-    for(auto& modelMash: loadsModel) {
-        delete modelMash.second;
-    }
 
     for(auto& technices: loadsTechnique) {
         delete technices.second;
@@ -169,6 +189,10 @@ void ResourceManager::loadTechniques() {
 
 }
 
-Technique *ResourceManager::loadTechnique(const std::string &name) {
+Technique* ResourceManager::loadTechnique(const std::string &name) {
     return this->loadsTechnique[name];
+}
+
+MashPtr& ResourceManager::getGeometry(unsigned int index) {
+    return loadsModel[index];
 }

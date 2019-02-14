@@ -12,12 +12,13 @@ class MashPtr {
 
 public:
 
+    GLuint vao;
     GLuint vbo;
     GLuint elements;
-    int elementsSize;
+    unsigned int elementsSize;
     std::string technique;
 
-    MashPtr(GLuint vbo, GLuint elements, unsigned int elementsSize, std::string technique);
+    MashPtr(GLuint vao, GLuint vbo, GLuint elements, unsigned int elementsSize, std::string technique);
 
 };
 

@@ -10,15 +10,21 @@
 #include "Renderer/MashPtr.h"
 #include "Renderer/StaticModel.h"
 #include "Renderer/Technique.h"
+#include <optional>
 
 class ResourceManager {
 
+    const GLuint vertex_position_loction = 0u;
+    const GLuint vertex_normal_loction = 1u;
+
     static ResourceManager* instance;
 
-    std::map<std::string, MashPtr*> loadsModel;
+    std::vector<MashPtr> loadsModel;
+    std::map<std::string, unsigned int> modelIndexs;
+
     std::map<std::string, Technique*> loadsTechnique;
 
-    MashPtr* loadOBJModel(const std::string& path);
+    std::optional<MashPtr> loadOBJModel(const std::string& path);
 
     void loadTechniques();
 
@@ -26,11 +32,14 @@ class ResourceManager {
 
 public:
 
+
     static ResourceManager* getInstance();
 
     StaticModel loadModel(const std::string& path);
 
     Technique* loadTechnique(const std::string& name);
+
+    MashPtr& getGeometry(unsigned int index);
 
     ~ResourceManager();
 

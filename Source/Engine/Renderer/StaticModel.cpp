@@ -5,11 +5,7 @@
 #include "StaticModel.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-StaticModel::StaticModel(MashPtr *mashPtr): mashPtr(mashPtr) {
-}
-
-MashPtr *StaticModel::getMashPtr() const {
-    return mashPtr;
+StaticModel::StaticModel(unsigned int indexMashPtr): indexMashPtr(indexMashPtr) {
 }
 
 const glm::mat4 &StaticModel::getTransform() const {
@@ -35,6 +31,10 @@ void StaticModel::rotate(GLfloat angle, glm::vec3 vector) {
 
 void StaticModel::scale(const glm::vec3 &scale) {
     this->transform = glm::scale(this->transform, scale);
+}
+
+int StaticModel::getIndexMashPtr() const {
+    return indexMashPtr;
 }
 
 
