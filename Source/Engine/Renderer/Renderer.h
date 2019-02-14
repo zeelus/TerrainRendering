@@ -25,9 +25,6 @@ private:
     GLuint ubo_matrix_handle;
     GLuint ubo_light_handle;
 
-    const GLuint matricesBlockBinding = 0u;
-    const GLuint pointLight = 1u;
-
     glm::vec3 lightPos;
 
     ResourceManager* resourceManager;
@@ -47,7 +44,12 @@ public:
     void drawStaticModels();
 
     void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
+
     static void key_callback_static(GLFWwindow *window, int key, int scancode, int action, int mods);
+
+    void updateLightPosition() const;
+
+    void updateMatrices(const StaticModel &model) const;
 };
 
 

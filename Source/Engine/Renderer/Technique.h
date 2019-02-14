@@ -8,6 +8,8 @@
 #include <GL/glew.h>
 #include "Shader.h"
 
+const GLuint matricesBlockBinding = 0u;
+const GLuint pointLightBinding = 1u;
 
 class Technique {
 

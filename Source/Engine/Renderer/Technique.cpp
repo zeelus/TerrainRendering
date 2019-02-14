@@ -11,6 +11,12 @@ Technique::Technique(Shader vertex, Shader fragment) {
     glAttachShader(shader_programme, vertex.getHandler());
     glLinkProgram(shader_programme);
 
+    unsigned int uniformMatricesBlockIndex = glGetUniformBlockIndex(shader_programme, "Matrices");
+    unsigned int uniformPointLightIndex = glGetUniformBlockIndex(shader_programme, "PointLight");
+
+    glUniformBlockBinding(shader_programme, uniformPointLightIndex, pointLightBinding);
+    glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, matricesBlockBinding);
+
 }
 
 GLuint Technique::getShader_programme() const {

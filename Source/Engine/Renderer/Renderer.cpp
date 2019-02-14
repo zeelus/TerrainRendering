@@ -9,6 +9,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Shader.h"
+#include "Technique.h"
 #include "../ResourceManager.h"
 
 Renderer::Renderer(): lightPos(-8.0f, 4.0f, 0.0f) {
@@ -21,12 +22,14 @@ void Renderer::init() {
 
     glGenBuffers(1, &ubo_matrix_handle);
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
-    glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+    std::array<glm::mat4, 3u> matrices = { mat4(1.0), camera.view, camera.project};
+    glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), matrices.data(), GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     glGenBuffers(1, &ubo_light_handle);
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
-    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), nullptr, GL_DYNAMIC_DRAW);
+    std::array<glm::vec4, 2u> light = {glm::vec4(lightPos.x, lightPos.y, lightPos.z, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)};
+    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), light.data(), GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     resourceManager = ResourceManager::getInstance();
@@ -37,23 +40,14 @@ void Renderer::draw() {
 }
 
 void Renderer::drawStaticModels() {
-    auto* technique = ResourceManager::getInstance()->loadTechnique("phongBline");
+    auto* technique = this->resourceManager->loadTechnique("phongBline");
     auto shader_programme = technique->getShader_programme();
 
     glUseProgram(shader_programme);
+    glBindBufferBase(GL_UNIFORM_BUFFER, matricesBlockBinding, ubo_matrix_handle);
+    glBindBufferBase(GL_UNIFORM_BUFFER, pointLightBinding, ubo_light_handle);
 
-    unsigned int uniformMatricesBlockIndex = glGetUniformBlockIndex(shader_programme, "Matrices");
-    unsigned int uniformPointLightIndex = glGetUniformBlockIndex(shader_programme, "PointLight");
-
-    glUniformBlockBinding(shader_programme, uniformPointLightIndex, pointLight);
-    glBindBufferBase(GL_UNIFORM_BUFFER, pointLight, ubo_light_handle);
-    glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
-    std::array<glm::vec4, 2u> light = {glm::vec4(lightPos.x, lightPos.y, lightPos.z, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)};
-    if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
-        std::memcpy(result, light.data(), 2 * sizeof(glm::vec4));
-        glUnmapBuffer(GL_UNIFORM_BUFFER);
-    }
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    this->updateLightPosition();
 
     for(auto& model: staticModels) {
 
@@ -61,15 +55,7 @@ void Renderer::drawStaticModels() {
         if(index < 0) continue;
         auto& geometry = resourceManager->getGeometry(index);
 
-        glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, matricesBlockBinding);
-        glBindBufferBase(GL_UNIFORM_BUFFER, matricesBlockBinding, ubo_matrix_handle);
-        glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
-        std::array<glm::mat4, 3u> matrices = { model.getTransform(), camera.view, camera.project};
-        if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
-            std::memcpy(result, matrices.data(), sizeof(glm::mat4) * 3);
-            glUnmapBuffer(GL_UNIFORM_BUFFER);
-        }
-        glBindBuffer(GL_UNIFORM_BUFFER, 0u);
+        this->updateMatrices(model);
 
         glBindVertexArray(geometry.vao);
 
@@ -77,6 +63,28 @@ void Renderer::drawStaticModels() {
 
         glBindVertexArray(0u);
     }
+}
+
+void Renderer::updateMatrices(const StaticModel &model) const {
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
+    glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+    std::array<mat4, 3u> matrices = {model.getTransform(), camera.view, camera.project};
+    if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
+            memcpy(result, matrices.data(), sizeof(mat4) * 3);
+            glUnmapBuffer(GL_UNIFORM_BUFFER);
+        }
+    glBindBuffer(GL_UNIFORM_BUFFER, 0u);
+}
+
+void Renderer::updateLightPosition() const {
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
+    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(vec4), nullptr, GL_DYNAMIC_DRAW);
+    std::array<vec4, 2u> light = {vec4(lightPos.x, lightPos.y, lightPos.z, 0.0f), vec4(1.0f, 1.0f, 1.0f, 1.0f)};
+    if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
+        memcpy(result, light.data(), 2 * sizeof(vec4));
+        glUnmapBuffer(GL_UNIFORM_BUFFER);
+    }
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 
