@@ -40,8 +40,8 @@ void Renderer::draw() {
 }
 
 void Renderer::drawStaticModels() {
-    auto* technique = this->resourceManager->loadTechnique("phongBline");
-    auto shader_programme = technique->getShader_programme();
+    auto& technique = this->resourceManager->loadTechnique(0u);
+    auto shader_programme = technique.getShader_programme();
 
     glUseProgram(shader_programme);
     glBindBufferBase(GL_UNIFORM_BUFFER, matricesBlockBinding, ubo_matrix_handle);

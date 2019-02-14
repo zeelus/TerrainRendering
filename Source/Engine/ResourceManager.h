@@ -22,7 +22,7 @@ class ResourceManager {
     std::vector<MashPtr> loadsModel;
     std::map<std::string, unsigned int> modelIndexs;
 
-    std::map<std::string, Technique*> loadsTechnique;
+    std::vector<Technique> loadsTechnique;
 
     std::optional<MashPtr> loadOBJModel(const std::string& path);
 
@@ -32,14 +32,13 @@ class ResourceManager {
 
 public:
 
-
     static ResourceManager* getInstance();
 
     StaticModel loadModel(const std::string& path);
 
-    Technique* loadTechnique(const std::string& name);
+    Technique& loadTechnique(const unsigned int index);
 
-    MashPtr& getGeometry(unsigned int index);
+    MashPtr& getGeometry(const unsigned int index);
 
     ~ResourceManager();
 

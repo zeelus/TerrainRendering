@@ -151,7 +151,6 @@ StaticModel ResourceManager::loadModel(const std::string &path) {
             loadsModel.push_back(std::move(modelMash));
             index = loadsModel.size() - 1;
             modelIndexs[path] = index;
-
         }
     } else {
         index = modelIndexInVector->second;
@@ -160,14 +159,7 @@ StaticModel ResourceManager::loadModel(const std::string &path) {
     return StaticModel(index);
 }
 
-ResourceManager::~ResourceManager() {
-
-
-    for(auto& technices: loadsTechnique) {
-        delete technices.second;
-    }
-
-}
+ResourceManager::~ResourceManager() { }
 
 ResourceManager* ResourceManager::instance = nullptr;
 
@@ -184,15 +176,14 @@ void ResourceManager::loadTechniques() {
 
     Shader vertex(Vertex, "Resources/Shaders/VertexShader.vert");
     Shader fragment(Fragment, "Resources/Shaders/FragmentShader.frag");
-    auto technique = new Technique(vertex, fragment);
-    this->loadsTechnique["phongBline"] = technique;
+    this->loadsTechnique.push_back(Technique(vertex, fragment));
 
 }
 
-Technique* ResourceManager::loadTechnique(const std::string &name) {
-    return this->loadsTechnique[name];
+Technique& ResourceManager::loadTechnique(const unsigned int index) {
+    return this->loadsTechnique[index];
 }
 
-MashPtr& ResourceManager::getGeometry(unsigned int index) {
+MashPtr& ResourceManager::getGeometry(const unsigned int index) {
     return loadsModel[index];
 }
