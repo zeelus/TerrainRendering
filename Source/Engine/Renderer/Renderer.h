@@ -5,16 +5,18 @@
 #ifndef TESTGLEW_RENDERER_H
 #define TESTGLEW_RENDERER_H
 
-#include <string>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <entt/entt.hpp>
+#define GLFW_INCLUDE_NONE
 
+#include <GLFW/glfw3.h>
+#include <string>
+#include <glbinding/gl/gl.h>
 #include "Camera.h"
 #include "Technique.h"
 #include "Shader.h"
 #include "StaticModel.h"
 #include "../ResourceManager.h"
+
+using namespace gl;
 
 class Renderer {
 private:

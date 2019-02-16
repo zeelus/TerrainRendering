@@ -3,6 +3,13 @@ project(TerrenRendering)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+
+find_package(glbinding REQUIRED)
+include_directories(${glbinding_INCLUDE_DIRS})
+set(${PROJECT_NAME}_LIBS ${${PROJECT_NAME}_LIBS} ${glbinding_LIBRARIES})
+
+
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
@@ -26,7 +33,7 @@ add_executable(TerrenRenderingTarget
         Source/Engine/Renderer/StaticModel.cpp
         )
 
-target_link_libraries(TerrenRenderingTarget ${CONAN_LIBS})
+target_link_libraries(TerrenRenderingTarget ${${PROJECT_NAME}_LIBS} ${${PROJECT_NAME}_LIBS_DEBUG} ${LINKER_FLAGS} ${CONAN_LIBS} )
 
 file( COPY Resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin )
 

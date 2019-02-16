@@ -5,8 +5,10 @@
 #ifndef TERRENRENDERING_MASHPTR_H
 #define TERRENRENDERING_MASHPTR_H
 
-#include <GL/glew.h>
+#include <glbinding/gl/gl.h>
 #include <string>
+
+using namespace gl;
 
 class MashPtr {
 

@@ -3,19 +3,21 @@
 //
 
 #include "Technique.h"
+#include <glbinding/gl/gl.h>
+
 
 Technique::Technique(Shader vertex, Shader fragment) {
 
-    shader_programme = glCreateProgram();
-    glAttachShader(shader_programme, fragment.getHandler());
-    glAttachShader(shader_programme, vertex.getHandler());
-    glLinkProgram(shader_programme);
+    shader_programme = gl::glCreateProgram();
+    gl::glAttachShader(shader_programme, fragment.getHandler());
+    gl::glAttachShader(shader_programme, vertex.getHandler());
+    gl::glLinkProgram(shader_programme);
 
-    unsigned int uniformMatricesBlockIndex = glGetUniformBlockIndex(shader_programme, "Matrices");
-    unsigned int uniformPointLightIndex = glGetUniformBlockIndex(shader_programme, "PointLight");
+    unsigned int uniformMatricesBlockIndex = gl::glGetUniformBlockIndex(shader_programme, "Matrices");
+    unsigned int uniformPointLightIndex = gl::glGetUniformBlockIndex(shader_programme, "PointLight");
 
-    glUniformBlockBinding(shader_programme, uniformPointLightIndex, pointLightBinding);
-    glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, matricesBlockBinding);
+    gl::glUniformBlockBinding(shader_programme, uniformPointLightIndex, pointLightBinding);
+    gl::glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, matricesBlockBinding);
 
 }
 

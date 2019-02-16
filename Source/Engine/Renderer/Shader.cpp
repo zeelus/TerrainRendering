@@ -3,8 +3,10 @@
 //
 
 #include "Shader.h"
-#include <GL/glew.h>
+#include <glbinding/gl/gl.h>
 #include <fstream>
+
+using namespace gl;
 
 Shader::Shader(ShaderType type, std::string path) {
     this->type = type;
@@ -38,15 +40,22 @@ void Shader::loadShaders(std::string &path) {
 }
 
 void Shader::compilateShader() {
-
-    handler = glCreateShader(type);
+    switch(type) {
+        case Vertex:
+            handler = glCreateShader(gl::GL_VERTEX_SHADER);
+            break;
+        case Fragment:
+            handler = glCreateShader(gl::GL_FRAGMENT_SHADER);
+            break;
+    }
+//    handler = glCreateShader(type);
     char* shaderSource = const_cast<char*>(shaderCode.c_str());
-    glShaderSource(handler, 1, &shaderSource, NULL);
-    glCompileShader(handler);
+    gl::glShaderSource(handler, 1, &shaderSource, NULL);
+    gl::glCompileShader(handler);
 
     GLint isCompiled = 0;
     glGetShaderiv(handler, GL_COMPILE_STATUS, &isCompiled);
-    if(isCompiled == GL_FALSE)
+    if(!isCompiled)
     {
         std::string name("Compied error");
         throw ShadersLoadingException(name);

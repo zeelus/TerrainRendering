@@ -3,14 +3,15 @@
 //
 
 #include "Renderer.h"
-
+#define GLFW_INCLUDE_NONE
+#include <glbinding/gl/gl.h>
 #include <string>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Shader.h"
 #include "Technique.h"
 #include "../ResourceManager.h"
+
+using namespace gl;
 
 Renderer::Renderer(): lightPos(-8.0f, 4.0f, 0.0f) {
 
@@ -20,16 +21,16 @@ void Renderer::init() {
 
     glGenVertexArrays(1, &vao);
 
-    glGenBuffers(1, &ubo_matrix_handle);
+    gl::glGenBuffers(1, &ubo_matrix_handle);
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
     std::array<glm::mat4, 3u> matrices = { mat4(1.0), camera.view, camera.project};
-    glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), matrices.data(), GL_DYNAMIC_DRAW);
+    gl::glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), matrices.data(), gl::GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-    glGenBuffers(1, &ubo_light_handle);
+    gl::glGenBuffers(1, &ubo_light_handle);
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
     std::array<glm::vec4, 2u> light = {glm::vec4(lightPos.x, lightPos.y, lightPos.z, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)};
-    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), light.data(), GL_DYNAMIC_DRAW);
+    gl::glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), light.data(), gl::GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     resourceManager = ResourceManager::getInstance();
@@ -43,7 +44,7 @@ void Renderer::drawStaticModels() {
     auto& technique = this->resourceManager->loadTechnique(0u);
     auto shader_programme = technique.getShader_programme();
 
-    glUseProgram(shader_programme);
+    gl::glUseProgram(shader_programme);
     glBindBufferBase(GL_UNIFORM_BUFFER, matricesBlockBinding, ubo_matrix_handle);
     glBindBufferBase(GL_UNIFORM_BUFFER, pointLightBinding, ubo_light_handle);
 
@@ -59,7 +60,7 @@ void Renderer::drawStaticModels() {
 
         glBindVertexArray(geometry.vao);
 
-        glDrawElements(GL_TRIANGLES, geometry.elementsSize * sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
+        glDrawElements(GL_TRIANGLES, geometry.elementsSize * sizeof(GLushort), gl::GL_UNSIGNED_SHORT, nullptr);
 
         glBindVertexArray(0u);
     }
@@ -67,9 +68,9 @@ void Renderer::drawStaticModels() {
 
 void Renderer::updateMatrices(const StaticModel &model) const {
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
-    glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+    gl::glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), nullptr, gl::GL_DYNAMIC_DRAW);
     std::array<mat4, 3u> matrices = {model.getTransform(), camera.view, camera.project};
-    if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
+    if(void *result = gl::glMapBuffer(GL_UNIFORM_BUFFER, gl::GL_WRITE_ONLY)) {
             memcpy(result, matrices.data(), sizeof(mat4) * 3);
             glUnmapBuffer(GL_UNIFORM_BUFFER);
         }
@@ -78,9 +79,9 @@ void Renderer::updateMatrices(const StaticModel &model) const {
 
 void Renderer::updateLightPosition() const {
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_light_handle);
-    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(vec4), nullptr, GL_DYNAMIC_DRAW);
+    gl::glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(vec4), nullptr, gl::GL_DYNAMIC_DRAW);
     std::array<vec4, 2u> light = {vec4(lightPos.x, lightPos.y, lightPos.z, 0.0f), vec4(1.0f, 1.0f, 1.0f, 1.0f)};
-    if(void *result = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY)) {
+    if(void *result = gl::glMapBuffer(GL_UNIFORM_BUFFER, gl::GL_WRITE_ONLY)) {
         memcpy(result, light.data(), 2 * sizeof(vec4));
         glUnmapBuffer(GL_UNIFORM_BUFFER);
     }

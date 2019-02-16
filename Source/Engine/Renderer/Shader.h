@@ -5,14 +5,16 @@
 #ifndef TESTGLEW_SHADERS_H
 #define TESTGLEW_SHADERS_H
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include <glbinding/gl/gl.h>
+#define GLFW_INCLUDE_NONE
 #include <string>
 #include <exception>
 
+using namespace gl;
 
-enum ShaderType{ Vertex = GL_VERTEX_SHADER,
-    Fragment = GL_FRAGMENT_SHADER };
+
+enum ShaderType { Vertex,
+    Fragment };
 
 class ShadersLoadingException: public std::runtime_error {
 

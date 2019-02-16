@@ -1,7 +1,7 @@
 //
 // Created by Gilbert Gwizdala on 2019-01-31.
 //
-#include <GL/glew.h>
+#include <glbinding/gl/gl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,6 +18,8 @@
 #include "Renderer/Shader.h"
 
 using namespace std;
+
+using namespace gl;
 
 ResourceManager::ResourceManager() { }
 

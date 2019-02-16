@@ -11,6 +11,7 @@
 #include "Renderer/StaticModel.h"
 #include "Renderer/Technique.h"
 #include <optional>
+#include <vector>
 
 class ResourceManager {
 

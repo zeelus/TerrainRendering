@@ -3,6 +3,18 @@
 //
 
 #include "EngineApplication.h"
+#include <glbinding/Version.h>
+#include <glbinding/Binding.h>
+#include <glbinding/FunctionCall.h>
+#include <glbinding/CallbackMask.h>
+#include <glbinding/gl/gl.h>
+#include <glbinding/gl/extension.h>
+#include <glbinding/glbinding.h>
+#include <glbinding-aux/types_to_string.h>
+#include <iostream>
+
+
+using namespace gl;
 
 EngineApplication::EngineApplication(float width, float height, std::string &name): width(width), height(height), name(name) {
 
@@ -16,7 +28,7 @@ int EngineApplication::setupWindow() {
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     window = glfwCreateWindow(width, height, name.c_str(), NULL, NULL);
@@ -29,25 +41,44 @@ int EngineApplication::setupWindow() {
 
     glfwMakeContextCurrent(window);
 
+    glbinding::initialize(glfwGetProcAddress);
+
     showOpenGLInformations();
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    GLenum err = glewInit();
-    if (GLEW_OK != err)
-    {
-        /* Problem: glewInit failed, something is seriously wrong. */
-        auto x = glewGetErrorString(err);
-        fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-        return -1;
-    }
-
-    fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+    setupErrorCallback();
 
     resourceManager = ResourceManager::getInstance();
 
     return 0;
+}
+
+void EngineApplication::setupErrorCallback() const {
+    glbinding::setCallbackMaskExcept(glbinding::CallbackMask::After | glbinding::CallbackMask::ParametersAndReturnValue, {"glGetError" });
+    glbinding::setAfterCallback([](const glbinding::FunctionCall &call)
+                                {
+                                    const auto error = glGetError();
+                                    if(error != gl::GL_NO_ERROR)
+                                    {
+                                        std::cerr << "OpenGL error in function call:" << std::endl;
+                                        std::cerr << call.function->name() << "(";
+                                        for(size_t i = 0u; i < call.parameters.size(); ++i)
+                                        {
+                                            std::cerr << call.parameters[i].get();
+                                            if(i < call.parameters.size() - 1)
+                                                std::cerr << ", ";
+                                        }
+                                        std::cerr << ");";
+
+                                        if(call.returnValue)
+                                            std::cerr << " -> " << call.returnValue.get();
+                                        std::cerr << std::__1::endl;
+                                        std::cerr << "Error: " << error << std::endl;
+                                        throw error;
+                                    }
+                                });
 }
 
 void EngineApplication::showOpenGLInformations() {

@@ -6,11 +6,14 @@
 #define TERRENRENDERING_ENGINEAPPLICATION_H
 
 #include <string>
-#include <GL/glew.h>
+#include <glbinding/gl/gl.h>
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <memory>
 #include "Renderer/Renderer.h"
 #include "ResourceManager.h"
+
+using namespace gl;
 
 class EngineApplication {
 
@@ -31,6 +34,8 @@ private:
 public:
     EngineApplication(float width, float height, std::string &name);
     int run(int argc,  char** argv);
+
+    void setupErrorCallback() const;
 };
 
 

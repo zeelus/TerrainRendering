@@ -1,9 +1,8 @@
  [requires]
 glm/0.9.9.1@g-truc/stable
 glfw/3.2.1@bincrafters/stable
-glew/2.1.0@bincrafters/stable
-entt/3.x.y-WIP@skypjack/stable
 boost/1.69.0@conan/stable
+
 
  [generators]
  cmake

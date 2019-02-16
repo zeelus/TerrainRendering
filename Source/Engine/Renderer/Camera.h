@@ -5,7 +5,7 @@
 #ifndef TESTGLEW_CAMERA_H
 #define TESTGLEW_CAMERA_H
 
-#include <GL/glew.h>
+#include <glbinding/gl/gl.h>
 #include <glm/glm.hpp>
 
 

@@ -5,8 +5,9 @@
 #ifndef TERRENRENDERING_TECHNIQUE_HPP
 #define TERRENRENDERING_TECHNIQUE_HPP
 
-#include <GL/glew.h>
+#include <glbinding/gl/gl.h>
 #include "Shader.h"
+using namespace gl;
 
 const GLuint matricesBlockBinding = 0u;
 const GLuint pointLightBinding = 1u;
