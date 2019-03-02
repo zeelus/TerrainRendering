@@ -16,8 +16,24 @@ Technique::Technique(Shader vertex, Shader fragment) {
     unsigned int uniformMatricesBlockIndex = gl::glGetUniformBlockIndex(shader_programme, "Matrices");
     unsigned int uniformPointLightIndex = gl::glGetUniformBlockIndex(shader_programme, "PointLight");
 
-    gl::glUniformBlockBinding(shader_programme, uniformPointLightIndex, pointLightBinding);
-    gl::glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, matricesBlockBinding);
+	if (uniformMatricesBlockIndex != GL_INVALID_INDEX)
+	{
+		glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, matricesBlockBinding);
+	}
+	else
+	{
+		printf("Error: the uniform block \"%s\" doesn't exist in program\n", "Matrices");
+	}
+
+	if (uniformPointLightIndex != GL_INVALID_INDEX)
+	{
+		glUniformBlockBinding(shader_programme, uniformPointLightIndex, pointLightBinding);
+	}
+	else
+	{
+		printf("Error: the uniform block \"%s\" doesn't exist in program\n", "PointLight");
+	}
+
 
 }
 

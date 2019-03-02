@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
+set(CONFIGURATION_TYPE "Debug")
+
 find_package(glbinding REQUIRED)
 include_directories(${glbinding_INCLUDE_DIRS})
 set(${PROJECT_NAME}_LIBS ${${PROJECT_NAME}_LIBS} ${glbinding_LIBRARIES})

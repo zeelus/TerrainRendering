@@ -3,10 +3,10 @@ set(glbinding_INCLUDE_DIRS "NOTFOUND")
 set(glbinding_LIBRARIES "NOTFOUND")
 
 if(WIN32 AND NOT UNIX)
-    set(glbinding_LIBRARIES_OPT optimized "${TerrenRendering_SOURCE_DIR}/../Libs/glbinding/lib/Win/${CONFIGURATION_TYPE}/x64/glbinding.lib" optimized "${TerrenRendering_SOURCE_DIR}/../Libs/glbinding/lib/Win/${CONFIGURATION_TYPE}/x64/glbinding-aux.lib")
-    set(glbinding_LIBRARIES_DEBUG debug "${TerrenRendering_SOURCE_DIR}/../Libs/glbinding/lib/Win/${CONFIGURATION_TYPE}/x64/glbindingd.lib" debug "${TerrenRendering_SOURCE_DIR}/../Libs/glbinding/lib/Win/${CONFIGURATION_TYPE}/x64/glbinding-auxd.lib")
+    set(glbinding_LIBRARIES_OPT optimized "${TerrenRendering_SOURCE_DIR}/Libs/glbinding/lib/Win/${CONFIGURATION_TYPE}/x64/glbinding.lib" optimized "${TerrenRendering_SOURCE_DIR}/Libs/glbinding/lib/Win/${CONFIGURATION_TYPE}/x64/glbinding-aux.lib")
+    set(glbinding_LIBRARIES_DEBUG debug "${TerrenRendering_SOURCE_DIR}/Libs/glbinding/lib/Win/${CONFIGURATION_TYPE}/x64/glbindingd.lib" debug "${TerrenRendering_SOURCE_DIR}/Libs/glbinding/lib/Win/${CONFIGURATION_TYPE}/x64/glbinding-auxd.lib")
 
-    set(glbinding_INCLUDE_DIRS "${TerrenRendering_SOURCE_DIR}/../Libs/glbinding/include")
+    set(glbinding_INCLUDE_DIRS "${TerrenRendering_SOURCE_DIR}/Libs/glbinding/include")
 
     set(glbinding_FOUND "YES")
 else()

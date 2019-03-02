@@ -74,7 +74,7 @@ void EngineApplication::setupErrorCallback() const {
 
                                         if(call.returnValue)
                                             std::cerr << " -> " << call.returnValue.get();
-                                        std::cerr << std::__1::endl;
+                                        std::cerr << std::endl;
                                         std::cerr << "Error: " << error << std::endl;
                                         throw error;
                                     }
