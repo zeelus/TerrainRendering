@@ -14,7 +14,7 @@ layout (std140) uniform Matrices
     mat4 model;
     mat4 view;
     mat4 projection;
-};
+} matrices;
 
 in vec3 Normal;
 in vec3 FragPos;
@@ -24,7 +24,7 @@ const float shininess = 8.0;
 
 void main() {
 
-        mat3 normalMatrix = transpose(inverse(mat3(model)));
+        mat3 normalMatrix = transpose(inverse(mat3(matrices.model)));
         vec3 normal = normalize(normalMatrix * Normal);
 
         vec3 lightDir = vec3(light.position) - FragPos;

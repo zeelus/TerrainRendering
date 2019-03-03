@@ -13,6 +13,22 @@ Technique::Technique(Shader vertex, Shader fragment) {
     gl::glAttachShader(shader_programme, vertex.getHandler());
     gl::glLinkProgram(shader_programme);
 
+	gl::GLint isLinked = 0;
+	gl::glGetProgramiv(shader_programme, GL_LINK_STATUS, &isLinked);
+	if (!isLinked)
+	{
+		GLint maxLength = 0;
+		glGetProgramiv(shader_programme, GL_INFO_LOG_LENGTH, &maxLength);
+
+		std::vector<GLchar> infoLog(maxLength);
+		glGetProgramInfoLog(shader_programme, maxLength, &maxLength, &infoLog[0]);
+		printf("Error: %s\n", infoLog.data());
+
+		glDeleteProgram(shader_programme);
+
+		return;
+	}
+
     unsigned int uniformMatricesBlockIndex = gl::glGetUniformBlockIndex(shader_programme, "Matrices");
     unsigned int uniformPointLightIndex = gl::glGetUniformBlockIndex(shader_programme, "PointLight");
 
@@ -33,7 +49,6 @@ Technique::Technique(Shader vertex, Shader fragment) {
 	{
 		printf("Error: the uniform block \"%s\" doesn't exist in program\n", "PointLight");
 	}
-
 
 }
 

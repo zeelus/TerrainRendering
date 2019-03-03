@@ -19,8 +19,6 @@
 
 using namespace std;
 
-using namespace gl;
-
 ResourceManager::ResourceManager() { }
 
 optional<MashPtr> ResourceManager::loadOBJModel(const std::string& path) {
@@ -109,35 +107,33 @@ optional<MashPtr> ResourceManager::loadOBJModel(const std::string& path) {
         vboData.push_back(normals[i].z);
     }
 
-    GLuint vbo = 0;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, vboData.size() * sizeof(glm::vec3), vboData.data(), GL_STATIC_DRAW);
+    gl::GLuint vbo = 0;
+	gl::glGenBuffers(1, &vbo);
+	gl::glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	gl::glBufferData(GL_ARRAY_BUFFER, vboData.size() * sizeof(glm::vec3), vboData.data(), GL_STATIC_DRAW);
 
-    GLuint index_buffer = 0;
-    glGenBuffers(1, &index_buffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(GLushort), elements.data(), GL_STATIC_DRAW);
+    gl::GLuint index_buffer = 0;
+	gl::glGenBuffers(1, &index_buffer);
+	gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
+	gl::glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(GLushort), elements.data(), GL_STATIC_DRAW);
 
+	gl::glBindBuffer(GL_ARRAY_BUFFER, 0);
+	gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    gl::GLuint vao = 0;
+	gl::glGenVertexArrays(1, &vao);
+	gl::glBindVertexArray(vao);
+	gl::glEnableVertexAttribArray(vertex_position_loction);
+	gl::glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	gl::glVertexAttribPointer(vertex_position_loction, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), nullptr);
 
-    GLuint vao = 0;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    glEnableVertexAttribArray(vertex_position_loction);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(vertex_position_loction, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), nullptr);
+	gl::glEnableVertexAttribArray(vertex_normal_loction);
+	gl::glVertexAttribPointer(vertex_normal_loction, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(3*sizeof(GLfloat)));
+	gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
+	gl::glBindVertexArray(0u);
 
-    glEnableVertexAttribArray(vertex_normal_loction);
-    glVertexAttribPointer(vertex_normal_loction, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(3*sizeof(GLfloat)));
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
-    glBindVertexArray(0u);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0u);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
-
+	gl::glBindBuffer(GL_ARRAY_BUFFER, 0u);
+	gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
 
     return MashPtr(vao, vbo, index_buffer, elements.size(), "phongBline");
 }
