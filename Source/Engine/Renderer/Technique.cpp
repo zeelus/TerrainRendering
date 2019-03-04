@@ -4,6 +4,7 @@
 
 #include "Technique.h"
 #include <glbinding/gl/gl.h>
+#include <vector>
 
 
 Technique::Technique(Shader vertex, Shader fragment) {
