@@ -7,7 +7,7 @@
 
 #include <string>
 #include <map>
-#include "Renderer/MashPtr.h"
+#include "Renderer/Geometry.h"
 #include "Renderer/StaticModel.h"
 #include "Renderer/Technique.h"
 #include <optional>
@@ -20,12 +20,14 @@ class ResourceManager {
 
     static ResourceManager* instance;
 
-    std::vector<MashPtr> loadsModel;
+    std::vector<Geometry> loadsModel;
     std::map<std::string, unsigned int> modelIndexs;
 
     std::vector<Technique> loadsTechnique;
 
-    std::optional<MashPtr> loadOBJModel(const std::string& path);
+    std::optional<Geometry> loadOBJModel(const std::string& path);
+
+    constexpr short getIndexTechnique(TechniqueType techniqueType);
 
     void loadTechniques();
 
@@ -39,7 +41,7 @@ public:
 
     Technique& loadTechnique(const unsigned int index);
 
-    MashPtr& getGeometry(const unsigned int index);
+    Geometry& getGeometry(const unsigned int index);
 
     ~ResourceManager();
 

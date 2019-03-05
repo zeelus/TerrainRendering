@@ -33,7 +33,7 @@ void StaticModel::scale(const glm::vec3 &scale) {
     this->transform = glm::scale(this->transform, scale);
 }
 
-int StaticModel::getIndexMashPtr() const {
+int StaticModel::getIndexGeometryIndex() const {
     return indexMashPtr;
 }
 

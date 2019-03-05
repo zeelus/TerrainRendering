@@ -41,29 +41,46 @@ void Renderer::draw() {
 }
 
 void Renderer::drawStaticModels() {
-    auto& technique = this->resourceManager->loadTechnique(0u);
-    auto shader_programme = technique.getShader_programme();
+    static short lastUsedTechnique = -2;
+    static int lastUsedModelIndex = -2;
 
-    gl::glUseProgram(shader_programme);
-    glBindBufferBase(GL_UNIFORM_BUFFER, matricesBlockBinding, ubo_matrix_handle);
-    glBindBufferBase(GL_UNIFORM_BUFFER, pointLightBinding, ubo_light_handle);
-
-    this->updateLightPosition();
+    Geometry* geometry;
 
     for(auto& model: staticModels) {
 
-        int index = model.getIndexMashPtr();
-        if(index < 0) continue;
-        auto& geometry = resourceManager->getGeometry(index);
+        int geometryIndex = model.getIndexGeometryIndex();
 
+        if(geometryIndex < 0) continue;
+
+        if(geometryIndex != lastUsedModelIndex) {
+            lastUsedModelIndex = geometryIndex;
+            geometry = &resourceManager->getGeometry(geometryIndex);
+
+            short techniqueIndex = geometry->getTechniqueIndex();
+            if(lastUsedTechnique != techniqueIndex) {
+                lastUsedTechnique = techniqueIndex;
+                auto& technique = this->resourceManager->loadTechnique(techniqueIndex);
+                auto shader_programme = technique.getShader_programme();
+                this->setShaderProgram(shader_programme);
+            }
+
+            glBindVertexArray(0u);
+            glBindVertexArray(geometry->getVao());
+
+        }
+
+        this->updateLightPosition();
         this->updateMatrices(model);
 
-        glBindVertexArray(geometry.vao);
+        glDrawElements(GL_TRIANGLES, geometry->getElementsSize() * sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
 
-        glDrawElements(GL_TRIANGLES, geometry.elementsSize * sizeof(GLushort), gl::GL_UNSIGNED_SHORT, nullptr);
-
-        glBindVertexArray(0u);
     }
+}
+
+void Renderer::setShaderProgram(GLuint shader_programme) const {
+    glUseProgram(shader_programme);
+    glBindBufferBase(GL_UNIFORM_BUFFER, matricesBlockBinding, ubo_matrix_handle);
+    glBindBufferBase(GL_UNIFORM_BUFFER, pointLightBinding, ubo_light_handle);
 }
 
 void Renderer::updateMatrices(const StaticModel &model) const {
@@ -97,53 +114,53 @@ void Renderer::key_callback_static(GLFWwindow *window, int key, int scancode, in
 }
 
 void Renderer::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-//    auto pos = camera.view;
-//    mat4 newPos = pos;
-//    switch (key) {
-//        case GLFW_KEY_W:
-//            newPos = glm::translate(pos, vec3(-0.2f, 0.0f, 0.0f));
-//            break;
-//        case GLFW_KEY_S:
-//            newPos = glm::translate(pos, vec3(0.2f, 0.0f, 0.0));
-//            break;
-//        case GLFW_KEY_D:
-//            newPos = glm::translate(pos, vec3(0.0f, 0.0f, -0.2f));
-//            break;
-//        case GLFW_KEY_A:
-//            newPos = glm::translate(pos, vec3(0.0f, 0.0f, 0.2f));
-//            break;
-//        case GLFW_KEY_R:
-//            newPos = glm::translate(pos, vec3(0.0f, -0.2f, 0.0f));
-//            break;
-//        case GLFW_KEY_F:
-//            newPos = glm::translate(pos, vec3(0.0f, 0.2f, 0.0f));
-//            break;
-//    }
-
-//    camera.view = newPos;
-
+    auto pos = camera.view;
+    mat4 newPos = pos;
     switch (key) {
         case GLFW_KEY_W:
-            lightPos += vec3(0.2f, 0.0f, 0.0f);
+            newPos = glm::translate(pos, vec3(-0.2f, 0.0f, 0.0f));
             break;
         case GLFW_KEY_S:
-            lightPos += vec3(-0.2f, 0.0f, 0.0);
+            newPos = glm::translate(pos, vec3(0.2f, 0.0f, 0.0));
             break;
         case GLFW_KEY_D:
-            lightPos += vec3(0.0f, 0.0f, 0.2f);
+            newPos = glm::translate(pos, vec3(0.0f, 0.0f, -0.2f));
             break;
         case GLFW_KEY_A:
-            lightPos += vec3(0.0f, 0.0f, -0.2f);
+            newPos = glm::translate(pos, vec3(0.0f, 0.0f, 0.2f));
             break;
         case GLFW_KEY_R:
-            lightPos += vec3(0.0f, 0.2f, 0.0f);
+            newPos = glm::translate(pos, vec3(0.0f, -0.2f, 0.0f));
             break;
         case GLFW_KEY_F:
-            lightPos += vec3(0.0f, -0.2f, 0.0f);
-            break;
-        default:
+            newPos = glm::translate(pos, vec3(0.0f, 0.2f, 0.0f));
             break;
     }
+
+    camera.view = newPos;
+//
+//    switch (key) {
+//        case GLFW_KEY_W:
+//            lightPos += vec3(0.2f, 0.0f, 0.0f);
+//            break;
+//        case GLFW_KEY_S:
+//            lightPos += vec3(-0.2f, 0.0f, 0.0);
+//            break;
+//        case GLFW_KEY_D:
+//            lightPos += vec3(0.0f, 0.0f, 0.2f);
+//            break;
+//        case GLFW_KEY_A:
+//            lightPos += vec3(0.0f, 0.0f, -0.2f);
+//            break;
+//        case GLFW_KEY_R:
+//            lightPos += vec3(0.0f, 0.2f, 0.0f);
+//            break;
+//        case GLFW_KEY_F:
+//            lightPos += vec3(0.0f, -0.2f, 0.0f);
+//            break;
+//        default:
+//            break;
+//    }
 
 }
 

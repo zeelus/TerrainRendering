@@ -35,13 +35,13 @@ add_executable(TerrenRenderingTarget
         Source/Engine/ResourceManager.cpp
         Source/Engine/Renderer/Technique.h
         Source/Engine/Renderer/Technique.cpp
-        Source/Engine/Renderer/MashPtr.h
-        Source/Engine/Renderer/MashPtr.cpp
+        Source/Engine/Renderer/Geometry.h
+        Source/Engine/Renderer/Geometry.cpp
         Source/Engine/Renderer/StaticModel.h
         Source/Engine/Renderer/StaticModel.cpp
         )
 
-target_link_libraries(TerrenRenderingTarget ${${PROJECT_NAME}_LIBS} ${${PROJECT_NAME}_LIBS_DEBUG} ${LINKER_FLAGS} ${CONAN_LIBS} )
+target_link_libraries(TerrenRenderingTarget ${${PROJECT_NAME}_LIBS} ${${PROJECT_NAME}_LIBS_DEBUG} ${LINKER_FLAGS} ${CONAN_LIBS})
 
 file( COPY Resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin )
 

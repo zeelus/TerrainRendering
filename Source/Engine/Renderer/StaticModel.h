@@ -6,7 +6,7 @@
 #define TERRENRENDERING_STATICMODEL_H
 
 #include <glm/glm.hpp>
-#include "MashPtr.h"
+#include "Geometry.h"
 
 class StaticModel {
 
@@ -14,7 +14,7 @@ class StaticModel {
     int indexMashPtr;
 
 public:
-    int getIndexMashPtr() const;
+    int getIndexGeometryIndex() const;
 
     explicit StaticModel(unsigned int indexMashPtr);
 

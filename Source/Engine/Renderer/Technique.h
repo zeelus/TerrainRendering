@@ -12,6 +12,10 @@ using namespace gl;
 const GLuint matricesBlockBinding = 0u;
 const GLuint pointLightBinding = 1u;
 
+enum class TechniqueType {
+    PhongBline
+};
+
 class Technique {
 
     GLuint shader_programme;

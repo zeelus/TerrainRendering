@@ -21,7 +21,7 @@ using namespace std;
 
 ResourceManager::ResourceManager() { }
 
-optional<MashPtr> ResourceManager::loadOBJModel(const std::string& path) {
+optional<Geometry> ResourceManager::loadOBJModel(const std::string& path) {
 
     vector<glm::vec3> vertices;
     vector<glm::vec3> normals;
@@ -135,7 +135,7 @@ optional<MashPtr> ResourceManager::loadOBJModel(const std::string& path) {
 	gl::glBindBuffer(GL_ARRAY_BUFFER, 0u);
 	gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
 
-    return MashPtr(vao, vbo, index_buffer, elements.size(), "phongBline");
+    return Geometry(vao, vbo, index_buffer, elements.size(), getIndexTechnique(TechniqueType::PhongBline));
 }
 
 StaticModel ResourceManager::loadModel(const std::string &path) {
@@ -143,9 +143,9 @@ StaticModel ResourceManager::loadModel(const std::string &path) {
     auto modelIndexInVector = modelIndexs.find(path);
     if(modelIndexInVector == modelIndexs.end()) {
 
-        optional<MashPtr> modelMashOpt = loadOBJModel(path);
+        optional<Geometry> modelMashOpt = loadOBJModel(path);
         if(modelMashOpt) {
-            MashPtr modelMash = *modelMashOpt;
+            Geometry modelMash = *modelMashOpt;
             loadsModel.push_back(std::move(modelMash));
             index = loadsModel.size() - 1;
             modelIndexs[path] = index;
@@ -182,6 +182,15 @@ Technique& ResourceManager::loadTechnique(const unsigned int index) {
     return this->loadsTechnique[index];
 }
 
-MashPtr& ResourceManager::getGeometry(const unsigned int index) {
+Geometry& ResourceManager::getGeometry(const unsigned int index) {
     return loadsModel[index];
+}
+
+constexpr short ResourceManager::getIndexTechnique(TechniqueType techniqueType) {
+    switch (techniqueType) {
+        case TechniqueType::PhongBline:
+            return 0;
+        default:
+            return -1;
+    }
 }
