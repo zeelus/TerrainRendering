@@ -14,12 +14,17 @@ private:
 
     glm::mat4 transform = glm::mat4(1.0f);
 
-    const int indexMashPtr;
+    int indexMashPtr;
 
 public:
+
     const int getIndexGeometryIndex() const;
 
     explicit StaticModel(const int indexMashPtr);
+
+    StaticModel(const StaticModel&& staticModel) noexcept;
+
+    StaticModel(const StaticModel& staticModel) noexcept;
 
     const glm::mat4 &getTransform() const;
     void setTransform(const glm::mat4 &transform);
@@ -31,6 +36,9 @@ public:
 
     void scale(const glm::vec3 &scale);
 
+    StaticModel& operator = (const StaticModel&& staticModel) noexcept;
+
+    StaticModel& operator = (const StaticModel& staticModel) noexcept;
 };
 
 

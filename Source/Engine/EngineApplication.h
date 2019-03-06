@@ -9,11 +9,10 @@
 #include <glbinding/gl/gl.h>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
-#include <memory>
 #include "Renderer/Renderer.h"
+#include "Renderer/RenderingQueue.h"
 #include "ResourceManager.h"
 
-using namespace gl;
 
 class EngineApplication {
 
@@ -21,7 +20,7 @@ class EngineApplication {
     int height;
     std::string name;
 
-    std::vector<StaticModel> staticModels;
+    RenderingQueue renderingQueue;
 
     Renderer renderer;
     ResourceManager* resourceManager;
