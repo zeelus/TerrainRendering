@@ -10,13 +10,16 @@
 
 class StaticModel {
 
+private:
+
     glm::mat4 transform = glm::mat4(1.0f);
-    int indexMashPtr;
+
+    const int indexMashPtr;
 
 public:
-    int getIndexGeometryIndex() const;
+    const int getIndexGeometryIndex() const;
 
-    explicit StaticModel(unsigned int indexMashPtr);
+    explicit StaticModel(const int indexMashPtr);
 
     const glm::mat4 &getTransform() const;
     void setTransform(const glm::mat4 &transform);
@@ -25,6 +28,7 @@ public:
     const glm::vec3 getPosition() const;
 
     void rotate(GLfloat angle, glm::vec3 vector);
+
     void scale(const glm::vec3 &scale);
 
 };

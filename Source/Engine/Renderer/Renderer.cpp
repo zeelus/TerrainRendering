@@ -7,6 +7,7 @@
 #include <glbinding/gl/gl.h>
 #include <string>
 #include <glm/gtc/matrix_transform.hpp>
+#include <vector>
 #include "Shader.h"
 #include "Technique.h"
 #include "../ResourceManager.h"
@@ -36,19 +37,14 @@ void Renderer::init() {
     resourceManager = ResourceManager::getInstance();
 }
 
-void Renderer::draw() {
-    drawStaticModels();
-}
-
-void Renderer::drawStaticModels() {
+void Renderer::drawStaticModels(const std::vector<StaticModel> &staticModels) const {
     static short lastUsedTechnique = -2;
     static int lastUsedModelIndex = -2;
+    static const Geometry* geometry;
 
-    Geometry* geometry;
+    for(const auto& model: staticModels) {
 
-    for(auto& model: staticModels) {
-
-        int geometryIndex = model.getIndexGeometryIndex();
+        const unsigned int geometryIndex = model.getIndexGeometryIndex();
 
         if(geometryIndex < 0) continue;
 
@@ -56,11 +52,11 @@ void Renderer::drawStaticModels() {
             lastUsedModelIndex = geometryIndex;
             geometry = &resourceManager->getGeometry(geometryIndex);
 
-            short techniqueIndex = geometry->getTechniqueIndex();
+            const short techniqueIndex = geometry->getTechniqueIndex();
             if(lastUsedTechnique != techniqueIndex) {
                 lastUsedTechnique = techniqueIndex;
-                auto& technique = this->resourceManager->loadTechnique(techniqueIndex);
-                auto shader_programme = technique.getShader_programme();
+                const auto& technique = this->resourceManager->loadTechnique(techniqueIndex);
+                const auto shader_programme = technique.getShader_programme();
                 this->setShaderProgram(shader_programme);
             }
 
@@ -105,16 +101,13 @@ void Renderer::updateLightPosition() const {
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-
-Renderer::~Renderer() { }
-
 void Renderer::key_callback_static(GLFWwindow *window, int key, int scancode, int action, int mods) {
     auto rendererSystem = reinterpret_cast<Renderer*>(glfwGetWindowUserPointer(window));
     rendererSystem->key_callback(window, key, scancode, action, mods);
 }
 
 void Renderer::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    auto pos = camera.view;
+    auto pos = this->camera.view;
     mat4 newPos = pos;
     switch (key) {
         case GLFW_KEY_W:
@@ -137,7 +130,7 @@ void Renderer::key_callback(GLFWwindow *window, int key, int scancode, int actio
             break;
     }
 
-    camera.view = newPos;
+    this->camera.view = newPos;
 //
 //    switch (key) {
 //        case GLFW_KEY_W:

@@ -33,6 +33,7 @@ public:
 
     short getTechniqueIndex() const;
 
+
 };
 
 

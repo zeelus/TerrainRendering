@@ -21,6 +21,8 @@ class EngineApplication {
     int height;
     std::string name;
 
+    std::vector<StaticModel> staticModels;
+
     Renderer renderer;
     ResourceManager* resourceManager;
 
@@ -28,11 +30,11 @@ class EngineApplication {
 
 private:
     int setupWindow();
-    void showOpenGLInformations();
+    void showOpenGLInformation() const;
     void init();
 
 public:
-    EngineApplication(float width, float height, std::string &name);
+    EngineApplication(int width, int height, std::string &name);
     int run(int argc,  char** argv);
 
     void setupErrorCallback() const;

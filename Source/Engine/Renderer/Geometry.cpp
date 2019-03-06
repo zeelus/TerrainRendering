@@ -4,12 +4,18 @@
 
 #include "Geometry.h"
 
-Geometry::Geometry(GLuint vao, GLuint vbo, GLuint elements, unsigned int elementsSize, short techniqueIndex): vao(vao),
-                                                                                                                vbo(vbo),
-                                                                                                                elements(elements),
-                                                                                                                elementsSize(elementsSize),
-                                                                                                                techniqueIndex(techniqueIndex)
-                                                                                                                {}
+Geometry::Geometry(
+        GLuint vao,
+        GLuint vbo,
+        GLuint elements,
+        unsigned int elementsSize,
+        short techniqueIndex):
+            vao(vao),
+            vbo(vbo),
+            elements(elements),
+            elementsSize(elementsSize),
+            techniqueIndex(techniqueIndex)
+            {}
 
 GLuint Geometry::getVao() const {
     return vao;
@@ -30,3 +36,5 @@ unsigned int Geometry::getElementsSize() const {
 short Geometry::getTechniqueIndex() const {
     return techniqueIndex;
 }
+
+

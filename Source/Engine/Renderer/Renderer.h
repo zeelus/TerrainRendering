@@ -35,8 +35,6 @@ private:
 
     void updateLightPosition() const;
 
-    void drawStaticModels();
-
     void updateMatrices(const StaticModel &model) const;
 
     inline void setShaderProgram(GLuint shader_programme) const;
@@ -45,18 +43,15 @@ public:
 
     void init();
 
-    std::vector<StaticModel> staticModels;
-
-    void draw();
+    void drawStaticModels(const std::vector<StaticModel> &staticModels) const;
 
     Renderer();
 
-    ~Renderer();
+    ~Renderer() = default;
 
     void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 
     static void key_callback_static(GLFWwindow *window, int key, int scancode, int action, int mods);
-
 
 };
 

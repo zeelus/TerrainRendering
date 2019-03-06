@@ -16,7 +16,7 @@
 
 using namespace gl;
 
-EngineApplication::EngineApplication(float width, float height, std::string &name): width(width), height(height), name(name) {
+EngineApplication::EngineApplication(int width, int height, std::string &name): width(width), height(height), name(name) {
 
 }
 
@@ -43,7 +43,7 @@ int EngineApplication::setupWindow() {
 
     glbinding::initialize(glfwGetProcAddress);
 
-    showOpenGLInformations();
+    showOpenGLInformation();
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -81,7 +81,7 @@ void EngineApplication::setupErrorCallback() const {
                                 });
 }
 
-void EngineApplication::showOpenGLInformations() {
+void EngineApplication::showOpenGLInformation() const {
     const GLubyte* renderer = glGetString(GL_RENDERER);
     const GLubyte* version = glGetString(GL_VERSION);
     printf("Renderer: %s\n", renderer);
@@ -104,7 +104,7 @@ int EngineApplication::run(int argc, char **argv) {
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        renderer.draw();
+        renderer.drawStaticModels(staticModels);
 
         glfwPollEvents();
         glfwSwapBuffers(window);
@@ -118,20 +118,19 @@ void EngineApplication::init() {
     auto model = resourceManager->loadModel("Resources/Models/tetrahedron.obj");
     model.setPosition(glm::vec3(2, 0, 2));
     model.rotate(30.0f, glm::vec3(0.0f, 1.0f, 0.0));
-    renderer.staticModels.push_back(model);
+    this->staticModels.push_back(model);
 
     auto model2 = resourceManager->loadModel("Resources/Models/cube.obj");
     model2.setPosition(glm::vec3(0, 0, -2));
-    renderer.staticModels.push_back(model2);
+    this->staticModels.push_back(model2);
 
     auto model3 = resourceManager->loadModel("Resources/Models/Suzanne.obj");
     model3.rotate(-90.0f, glm::vec3(0.0f, 1.0f, 0.0));
-    renderer.staticModels.push_back(model3);
+    this->staticModels.push_back(model3);
 
     auto deerModel = resourceManager->loadModel("Resources/Models/deer.obj");
     deerModel.setPosition(glm::vec3(-3, 0, 2));
     deerModel.rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0));
-    renderer.staticModels.push_back(deerModel);
-
+    this->staticModels.push_back(deerModel);
 
 }

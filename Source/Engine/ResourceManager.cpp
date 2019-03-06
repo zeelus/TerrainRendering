@@ -123,19 +123,19 @@ optional<Geometry> ResourceManager::loadOBJModel(const std::string& path) {
     gl::GLuint vao = 0;
 	gl::glGenVertexArrays(1, &vao);
 	gl::glBindVertexArray(vao);
-	gl::glEnableVertexAttribArray(vertex_position_loction);
+	gl::glEnableVertexAttribArray(vertex_position_location);
 	gl::glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	gl::glVertexAttribPointer(vertex_position_loction, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), nullptr);
+	gl::glVertexAttribPointer(vertex_position_location, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), nullptr);
 
-	gl::glEnableVertexAttribArray(vertex_normal_loction);
-	gl::glVertexAttribPointer(vertex_normal_loction, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(3*sizeof(GLfloat)));
+	gl::glEnableVertexAttribArray(vertex_normal_location);
+	gl::glVertexAttribPointer(vertex_normal_location, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(3*sizeof(GLfloat)));
 	gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
 	gl::glBindVertexArray(0u);
 
 	gl::glBindBuffer(GL_ARRAY_BUFFER, 0u);
 	gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
 
-    return Geometry(vao, vbo, index_buffer, elements.size(), getIndexTechnique(TechniqueType::PhongBline));
+    return Geometry(vao, vbo, index_buffer, static_cast<unsigned int>(elements.size()), getIndexTechnique(TechniqueType::PhongBline));
 }
 
 StaticModel ResourceManager::loadModel(const std::string &path) {
@@ -146,10 +146,11 @@ StaticModel ResourceManager::loadModel(const std::string &path) {
         optional<Geometry> modelMashOpt = loadOBJModel(path);
         if(modelMashOpt) {
             Geometry modelMash = *modelMashOpt;
-            loadsModel.push_back(std::move(modelMash));
-            index = loadsModel.size() - 1;
+            loadsModel.push_back(modelMash);
+            index = static_cast<int>(loadsModel.size() - 1);
             modelIndexs[path] = index;
         }
+
     } else {
         index = modelIndexInVector->second;
     }
@@ -157,7 +158,6 @@ StaticModel ResourceManager::loadModel(const std::string &path) {
     return StaticModel(index);
 }
 
-ResourceManager::~ResourceManager() { }
 
 ResourceManager* ResourceManager::instance = nullptr;
 
@@ -174,15 +174,15 @@ void ResourceManager::loadTechniques() {
 
     Shader vertex(Vertex, "Resources/Shaders/VertexShader.vert");
     Shader fragment(Fragment, "Resources/Shaders/FragmentShader.frag");
-    this->loadsTechnique.push_back(Technique(vertex, fragment));
+    this->loadsTechnique.emplace_back(vertex, fragment);
 
 }
 
-Technique& ResourceManager::loadTechnique(const unsigned int index) {
+const Technique& ResourceManager::loadTechnique(const unsigned int index) const {
     return this->loadsTechnique[index];
 }
 
-Geometry& ResourceManager::getGeometry(const unsigned int index) {
+const Geometry& ResourceManager::getGeometry(const unsigned int index) const {
     return loadsModel[index];
 }
 
@@ -194,3 +194,5 @@ constexpr short ResourceManager::getIndexTechnique(TechniqueType techniqueType) 
             return -1;
     }
 }
+
+

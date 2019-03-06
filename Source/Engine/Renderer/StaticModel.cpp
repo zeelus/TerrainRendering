@@ -5,7 +5,7 @@
 #include "StaticModel.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-StaticModel::StaticModel(unsigned int indexMashPtr): indexMashPtr(indexMashPtr) {
+StaticModel::StaticModel(const int indexMashPtr): indexMashPtr(indexMashPtr) {
 }
 
 const glm::mat4 &StaticModel::getTransform() const {
@@ -33,7 +33,7 @@ void StaticModel::scale(const glm::vec3 &scale) {
     this->transform = glm::scale(this->transform, scale);
 }
 
-int StaticModel::getIndexGeometryIndex() const {
+const int StaticModel::getIndexGeometryIndex() const {
     return indexMashPtr;
 }
 
