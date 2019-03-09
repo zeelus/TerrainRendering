@@ -13,6 +13,8 @@
 #include <glbinding-aux/types_to_string.h>
 #include <iostream>
 
+#include "Renderer/Terrain/TerrainTreeManager.h"
+
 
 using namespace gl;
 
@@ -128,5 +130,7 @@ void EngineApplication::init() {
     auto& deerModel = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/deer.obj"));
     deerModel.setPosition(glm::vec3(-3, 0, 2));
     deerModel.rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0));
+
+    TerrainTreeManager terrainTreeManager(3);
 
 }

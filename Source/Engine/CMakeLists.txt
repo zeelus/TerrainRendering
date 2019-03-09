@@ -35,5 +35,5 @@ add_library(TerrenRenderingEngine
         Renderer/Geometry.cpp
         Renderer/StaticModel.h
         Renderer/StaticModel.cpp
-        Renderer/RenderingQueue.cpp Renderer/RenderingQueue.h)
+        Renderer/RenderingQueue.cpp Renderer/RenderingQueue.h Renderer/Terrain/TerrainTreeManager.cpp Renderer/Terrain/TerrainTreeManager.h Renderer/Terrain/TerrainTreeNode.cpp Renderer/Terrain/TerrainTreeNode.h)
 
