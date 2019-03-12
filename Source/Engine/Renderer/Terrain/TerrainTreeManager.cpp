@@ -6,9 +6,11 @@
 #include "TerrainTreeNode.h"
 
 #include <vector>
+#include <glm/glm.hpp>
 
-TerrainTreeManager::TerrainTreeManager(const short levels): levels(levels) {
+TerrainTreeManager::TerrainTreeManager(const short levels, const short maxSize): levels(levels), maxSize(maxSize) {
     nodes = buildNodes(levels);
+    setNodesPositionAndSizes();
 }
 
 std::vector<TerrainTreeNode> TerrainTreeManager::buildNodes(const short levels) {
@@ -50,4 +52,50 @@ std::vector<TerrainTreeNode> TerrainTreeManager::buildNodes(const short levels) 
 
 
     return nodes;
+}
+
+void TerrainTreeManager::setNodesPositionAndSizes() {
+
+    if(this->nodes.empty()) {
+        return;
+    }
+
+    const unsigned int rootNodeIndex = this->nodes.size() - 1;
+
+    glm::vec3 rootPosition(0.0f, 0.0f, 0.0f);
+
+    setNodesPositionAndSizes(rootNodeIndex, rootPosition);
+
+}
+
+void TerrainTreeManager::setNodesPositionAndSizes(const unsigned int nodeIndex, const glm::vec3 position) {
+
+    auto& node = this->nodes[nodeIndex];
+
+    const int sizeFactor = this->maxSize / (pow(2,node.level));
+    const int childSizeFactor = sizeFactor / 2;
+
+    node.setPosition(position);
+
+    if(node.childIndexs[0] != -1) {
+        const glm::vec3 childPosition = position + glm::vec3(-childSizeFactor, 0.0f, -childSizeFactor);
+        setNodesPositionAndSizes(node.childIndexs[0], childPosition);
+    }
+
+    if(node.childIndexs[1] != -1) {
+        const glm::vec3 childPosition = position + glm::vec3(childSizeFactor, 0.0f, -childSizeFactor);
+        setNodesPositionAndSizes(node.childIndexs[1], childPosition);
+    }
+
+    if(node.childIndexs[2] != -1) {
+        const glm::vec3 childPosition = position + glm::vec3(-childSizeFactor, 0.0f, childSizeFactor);
+        setNodesPositionAndSizes(node.childIndexs[2], childPosition);
+    }
+
+    if(node.childIndexs[3] != -1) {
+        const glm::vec3 childPosition = position + glm::vec3(childSizeFactor, 0.0f, childSizeFactor);
+        setNodesPositionAndSizes(node.childIndexs[3], childPosition);
+    }
+
+
 }

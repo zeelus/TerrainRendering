@@ -22,6 +22,8 @@ public:
 
     glm::mat4 transform = glm::mat4(1.0f);
 
+    void setPosition(const glm::vec3 position);
+
 };
 
 

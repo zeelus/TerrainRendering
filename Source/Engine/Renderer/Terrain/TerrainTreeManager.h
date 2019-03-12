@@ -6,19 +6,26 @@
 #define TERRENRENDERING_TERRAINTREEMANAGER_H
 
 #include <vector>
+#include <glm/glm.hpp>
+
 #include "TerrainTreeNode.h"
 
 class TerrainTreeManager {
 
     const short levels;
+    const short maxSize;
 
-    std::vector<TerrainTreeNode> nodes;
+
 
     std::vector<TerrainTreeNode> buildNodes(const short levels);
 
-public:
+    void setNodesPositionAndSizes();
+    void setNodesPositionAndSizes(const unsigned int nodeIndex, const glm::vec3 position);
 
-    TerrainTreeManager(const short levels);
+public:
+    std::vector<TerrainTreeNode> nodes;
+
+    TerrainTreeManager(const short levels, const short maxSize);
 
 };
 

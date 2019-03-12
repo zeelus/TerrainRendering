@@ -131,6 +131,7 @@ void Renderer::key_callback(GLFWwindow *window, int key, int scancode, int actio
     }
 
     this->camera.view = newPos;
+
 //
 //    switch (key) {
 //        case GLFW_KEY_W:
