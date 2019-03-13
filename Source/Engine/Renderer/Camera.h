@@ -5,9 +5,7 @@
 #ifndef TESTGLEW_CAMERA_H
 #define TESTGLEW_CAMERA_H
 
-#include <glbinding/gl/gl.h>
-#include <glm/glm.hpp>
-
+#include "../libs.h"
 
 using namespace glm;
 

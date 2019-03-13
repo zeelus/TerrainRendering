@@ -7,9 +7,9 @@
 
 #define GLFW_INCLUDE_NONE
 
-#include <GLFW/glfw3.h>
+#include "../libs.h"
 #include <string>
-#include <glbinding/gl/gl.h>
+
 #include "Camera.h"
 #include "Technique.h"
 #include "Shader.h"

@@ -3,11 +3,11 @@
 //
 
 #include "Renderer.h"
-#define GLFW_INCLUDE_NONE
-#include <glbinding/gl/gl.h>
+
+#include "../libs.h"
 #include <string>
-#include <glm/gtc/matrix_transform.hpp>
 #include <vector>
+
 #include "Shader.h"
 #include "Technique.h"
 #include "../ResourceManager.h"

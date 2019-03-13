@@ -6,12 +6,11 @@
 #define TERRENRENDERING_ENGINEAPPLICATION_H
 
 #include <string>
-#include <glbinding/gl/gl.h>
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
+#include "libs.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/RenderingQueue.h"
 #include "ResourceManager.h"
+#include "Renderer/Terrain/TerrainTreeManager.h"
 
 
 class EngineApplication {
@@ -22,7 +21,10 @@ class EngineApplication {
 
     RenderingQueue renderingQueue;
 
+    TerrainTreeManager terrainTreeManager;
+
     Renderer renderer;
+
     ResourceManager* resourceManager;
 
     GLFWwindow* window;

@@ -5,7 +5,8 @@
 #ifndef TERRENRENDERING_MASHPTR_H
 #define TERRENRENDERING_MASHPTR_H
 
-#include <glbinding/gl/gl.h>
+#include "../libs.h"
+
 #include <string>
 
 using namespace gl;

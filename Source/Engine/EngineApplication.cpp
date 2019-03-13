@@ -3,22 +3,14 @@
 //
 
 #include "EngineApplication.h"
-#include <glbinding/Version.h>
-#include <glbinding/Binding.h>
-#include <glbinding/FunctionCall.h>
-#include <glbinding/CallbackMask.h>
-#include <glbinding/gl/gl.h>
-#include <glbinding/gl/extension.h>
-#include <glbinding/glbinding.h>
-#include <glbinding-aux/types_to_string.h>
 #include <iostream>
+#include "libs.h"
 
 #include "Renderer/Terrain/TerrainTreeManager.h"
 
-
 using namespace gl;
 
-EngineApplication::EngineApplication(int width, int height, std::string &name): width(width), height(height), name(name) {
+EngineApplication::EngineApplication(int width, int height, std::string &name): width(width), height(height), name(name), terrainTreeManager(3, 20) {
 
 }
 
@@ -41,9 +33,15 @@ int EngineApplication::setupWindow() {
         return -1;
     }
 
+    int widthBufferSize, heightBufferSize;
+
+    glfwGetFramebufferSize(window, &widthBufferSize, &heightBufferSize);
+
     glfwMakeContextCurrent(window);
 
     glbinding::initialize(glfwGetProcAddress);
+
+    gl::glViewport(0, 0, widthBufferSize, heightBufferSize);
 
     showOpenGLInformation();
 
@@ -54,6 +52,9 @@ int EngineApplication::setupWindow() {
 
     resourceManager = ResourceManager::getInstance();
 
+    glfwSetWindowUserPointer(window, &renderer);
+    glfwSetKeyCallback(window, Renderer::key_callback_static);
+
     return 0;
 }
 
@@ -61,7 +62,7 @@ void EngineApplication::setupErrorCallback() const {
     glbinding::setCallbackMaskExcept(glbinding::CallbackMask::After | glbinding::CallbackMask::ParametersAndReturnValue, {"glGetError" });
     glbinding::setAfterCallback([](const glbinding::FunctionCall &call)
                                 {
-                                    const auto error = glGetError();
+                                    const auto error = gl::glGetError();
                                     if(error != gl::GL_NO_ERROR)
                                     {
                                         std::cerr << "OpenGL error in function call:" << std::endl;
@@ -99,9 +100,6 @@ int EngineApplication::run(int argc, char **argv) {
 
     this->init();
     renderer.init();
-
-    glfwSetWindowUserPointer(window, &renderer);
-    glfwSetKeyCallback(window, Renderer::key_callback_static);
 
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

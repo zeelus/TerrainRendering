@@ -4,8 +4,7 @@
 
 #include "TerrainTreeNode.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "../../libs.h"
 
 TerrainTreeNode::TerrainTreeNode(const short level, const int parentIndex): level(level), parentIndex(parentIndex) {
 

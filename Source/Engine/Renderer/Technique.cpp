@@ -12,8 +12,8 @@ Technique::Technique(Shader vertex, Shader fragment) {
     shader_programme = gl::glCreateProgram();
     gl::glAttachShader(shader_programme, fragment.getHandler());
     gl::glAttachShader(shader_programme, vertex.getHandler());
-    gl::glLinkProgram(shader_programme);
 
+    gl::glLinkProgram(shader_programme);
 	gl::GLint isLinked = 0;
 	gl::glGetProgramiv(shader_programme, GL_LINK_STATUS, &isLinked);
 	if (!isLinked)
@@ -29,6 +29,7 @@ Technique::Technique(Shader vertex, Shader fragment) {
 
 		return;
 	}
+
 
     unsigned int uniformMatricesBlockIndex = gl::glGetUniformBlockIndex(shader_programme, "Matrices");
     unsigned int uniformPointLightIndex = gl::glGetUniformBlockIndex(shader_programme, "PointLight");

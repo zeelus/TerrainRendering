@@ -3,10 +3,7 @@
 //
 
 #include "Camera.h"
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/constants.hpp>
-#include <cstdio>
+#include "../libs.h"
 
 using namespace glm;
 
