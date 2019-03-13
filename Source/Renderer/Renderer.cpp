@@ -4,13 +4,13 @@
 
 #include "Renderer.h"
 
-#include "../libs.h"
+#include "../Engine/libs.h"
 #include <string>
 #include <vector>
 
 #include "Shader.h"
 #include "Technique.h"
-#include "../ResourceManager.h"
+#include "../Engine/ResourceManager.h"
 
 using namespace gl;
 

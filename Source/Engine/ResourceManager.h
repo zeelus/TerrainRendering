@@ -7,9 +7,9 @@
 
 #include <string>
 #include <map>
-#include "Renderer/Geometry.h"
-#include "Renderer/StaticModel.h"
-#include "Renderer/Technique.h"
+#include "../Renderer/Geometry.h"
+#include "../Renderer/StaticModel.h"
+#include "../Renderer/Technique.h"
 #include <optional>
 #include <vector>
 

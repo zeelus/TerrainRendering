@@ -7,8 +7,8 @@
 
 
 #include "ResourceManager.h"
-#include "Renderer/Terrain/TerrainTreeManager.h"
-#include "Renderer/RenderingQueue.h"
+#include "../Renderer/Terrain/TerrainTreeManager.h"
+#include "../Renderer/RenderingQueue.h"
 
 class Scene {
 

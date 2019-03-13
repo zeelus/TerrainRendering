@@ -5,7 +5,7 @@
 #ifndef TERRENRENDERING_MASHPTR_H
 #define TERRENRENDERING_MASHPTR_H
 
-#include "../libs.h"
+#include "../Engine/libs.h"
 
 #include <string>
 

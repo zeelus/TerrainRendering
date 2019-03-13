@@ -5,7 +5,7 @@
 #ifndef TESTGLEW_CAMERA_H
 #define TESTGLEW_CAMERA_H
 
-#include "../libs.h"
+#include "../Engine/libs.h"
 
 using namespace glm;
 

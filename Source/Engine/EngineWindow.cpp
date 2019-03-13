@@ -6,7 +6,7 @@
 #include <iostream>
 #include "libs.h"
 
-#include "Renderer/Terrain/TerrainTreeManager.h"
+#include "../Renderer/Terrain/TerrainTreeManager.h"
 
 using namespace gl;
 

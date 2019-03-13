@@ -7,10 +7,10 @@
 
 #include <string>
 #include "libs.h"
-#include "Renderer/Renderer.h"
-#include "Renderer/RenderingQueue.h"
+#include "../Renderer/Renderer.h"
+#include "../Renderer/RenderingQueue.h"
 #include "ResourceManager.h"
-#include "Renderer/Terrain/TerrainTreeManager.h"
+#include "../Renderer/Terrain/TerrainTreeManager.h"
 #include "Scene.h"
 
 

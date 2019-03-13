@@ -7,14 +7,14 @@
 
 #define GLFW_INCLUDE_NONE
 
-#include "../libs.h"
+#include "../Engine/libs.h"
 #include <string>
 
 #include "Camera.h"
 #include "Technique.h"
 #include "Shader.h"
 #include "StaticModel.h"
-#include "../ResourceManager.h"
+#include "../Engine/ResourceManager.h"
 
 using namespace gl;
 

@@ -21,11 +21,12 @@ else()
     set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
 endif()
 
-add_executable(TerrenRenderingTarget Source/main.cpp)
+add_executable(TerrenRendering Source/main.cpp)
 
 add_subdirectory(Source/Engine)
+add_subdirectory(Source/Renderer)
 
-target_link_libraries(TerrenRenderingTarget TerrenRenderingEngine ${${PROJECT_NAME}_LIBS} ${${PROJECT_NAME}_LIBS_DEBUG} ${LINKER_FLAGS} ${CONAN_LIBS})
+target_link_libraries(TerrenRendering TerrenRenderingEngine TerrenRenderingRenderer ${${PROJECT_NAME}_LIBS} ${${PROJECT_NAME}_LIBS_DEBUG} ${LINKER_FLAGS} ${CONAN_LIBS})
 
 file( COPY Resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin )
 
