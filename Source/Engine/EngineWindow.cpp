@@ -2,7 +2,7 @@
 // Created by Gilbert Gwizdala on 2019-01-26.
 //
 
-#include "EngineApplication.h"
+#include "EngineWindow.h"
 #include <iostream>
 #include "libs.h"
 
@@ -10,11 +10,11 @@
 
 using namespace gl;
 
-EngineApplication::EngineApplication(int width, int height, std::string &name): width(width), height(height), name(name), terrainTreeManager(3, 20) {
+EngineWindow::EngineWindow(int width, int height, std::string &name, Scene& scene): width(width), height(height), name(name), scene(scene) {
 
 }
 
-int EngineApplication::setupWindow() {
+int EngineWindow::setupWindow() {
     if (!glfwInit()) {
         fprintf(stderr, "ERROR: could not start GLFW3\n");
         return -1;
@@ -50,15 +50,13 @@ int EngineApplication::setupWindow() {
 
     setupErrorCallback();
 
-    resourceManager = ResourceManager::getInstance();
-
     glfwSetWindowUserPointer(window, &renderer);
     glfwSetKeyCallback(window, Renderer::key_callback_static);
 
     return 0;
 }
 
-void EngineApplication::setupErrorCallback() const {
+void EngineWindow::setupErrorCallback() const {
     glbinding::setCallbackMaskExcept(glbinding::CallbackMask::After | glbinding::CallbackMask::ParametersAndReturnValue, {"glGetError" });
     glbinding::setAfterCallback([](const glbinding::FunctionCall &call)
                                 {
@@ -84,27 +82,27 @@ void EngineApplication::setupErrorCallback() const {
                                 });
 }
 
-void EngineApplication::showOpenGLInformation() const {
+void EngineWindow::showOpenGLInformation() const {
     const GLubyte* renderer = glGetString(GL_RENDERER);
     const GLubyte* version = glGetString(GL_VERSION);
     printf("Renderer: %s\n", renderer);
     printf("OpenGL version supported %s\n", version);
 }
 
-int EngineApplication::run(int argc, char **argv) {
+int EngineWindow::run(int argc, char **argv) {
 
     if (this->setupWindow() == -1) {
         fprintf(stderr, "Setup window error! \n");
         return -1;
     }
 
-    this->init();
+    scene.init();
     renderer.init();
 
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        renderer.drawStaticModels(this->renderingQueue.getStaticModels());
+        renderer.drawStaticModels(scene.renderingQueue.getStaticModels());
 
         glfwPollEvents();
         glfwSwapBuffers(window);
@@ -113,20 +111,3 @@ int EngineApplication::run(int argc, char **argv) {
     return 0;
 }
 
-void EngineApplication::init() {
-
-    auto& model = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/tetrahedron.obj"));
-    model.setPosition(glm::vec3(2, 0, 2));
-    model.rotate(30.0f, glm::vec3(0.0f, 1.0f, 0.0));
-
-    auto& model2 = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/cube.obj"));
-    model2.setPosition(glm::vec3(0, 0, -2));
-
-    auto& model3 = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/Suzanne.obj"));
-    model3.rotate(-90.0f, glm::vec3(0.0f, 1.0f, 0.0));
-
-    auto& deerModel = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/deer.obj"));
-    deerModel.setPosition(glm::vec3(-3, 0, 2));
-    deerModel.rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0));
-
-}

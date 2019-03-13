@@ -11,31 +11,27 @@
 #include "Renderer/RenderingQueue.h"
 #include "ResourceManager.h"
 #include "Renderer/Terrain/TerrainTreeManager.h"
+#include "Scene.h"
 
 
-class EngineApplication {
+class EngineWindow {
+
+    Scene& scene;
 
     int width;
     int height;
     std::string name;
 
-    RenderingQueue renderingQueue;
-
-    TerrainTreeManager terrainTreeManager;
-
     Renderer renderer;
-
-    ResourceManager* resourceManager;
 
     GLFWwindow* window;
 
 private:
     int setupWindow();
     void showOpenGLInformation() const;
-    void init();
 
 public:
-    EngineApplication(int width, int height, std::string &name);
+    EngineWindow(int width, int height, std::string &name, Scene& scene);
     int run(int argc,  char** argv);
 
     void setupErrorCallback() const;

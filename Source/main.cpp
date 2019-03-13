@@ -3,13 +3,14 @@
 //
 
 #include <string>
-#include "Engine/EngineApplication.h"
+#include "Engine/EngineWindow.h"
 
 int main(int argc, char** argv) {
 
 
     std::string windowName = "Terrain rendererSystem";
-    EngineApplication engineApplication(800, 600, windowName);
+    Scene scene;
+    EngineWindow engineApplication(800, 600, windowName, scene);
 
     int exitCode = engineApplication.run(argc, argv);
 
