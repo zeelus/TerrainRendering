@@ -23,6 +23,7 @@ class EngineWindow {
     std::string name;
 
     Renderer renderer;
+	Camera camera;
 
     GLFWwindow* window;
 

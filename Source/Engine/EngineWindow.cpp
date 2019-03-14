@@ -7,6 +7,7 @@
 #include "libs.h"
 
 #include "../Renderer/Terrain/TerrainTreeManager.h"
+#include "Input.h"
 
 using namespace gl;
 
@@ -50,8 +51,8 @@ int EngineWindow::setupWindow() {
 
     setupErrorCallback();
 
-    glfwSetWindowUserPointer(window, &renderer);
-    glfwSetKeyCallback(window, Renderer::key_callback_static);
+    glfwSetWindowUserPointer(window, Input::getInstance());
+    glfwSetKeyCallback(window, Input::key_callback_static);
 
     return 0;
 }
@@ -97,6 +98,7 @@ int EngineWindow::run(int argc, char **argv) {
     }
 
     scene.init();
+	renderer.setCamera(&camera);
     renderer.init();
 
     while(!glfwWindowShouldClose(window)) {
@@ -105,6 +107,9 @@ int EngineWindow::run(int argc, char **argv) {
         renderer.drawStaticModels(scene.renderingQueue.getStaticModels());
 
         glfwPollEvents();
+
+		scene.update();
+
         glfwSwapBuffers(window);
     }
 

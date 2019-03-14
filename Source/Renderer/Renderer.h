@@ -21,13 +21,13 @@ using namespace gl;
 class Renderer {
 private:
 
-    Camera camera;
-
     GLuint vao = 0;
     GLuint ubo_matrix_handle;
     GLuint ubo_light_handle;
 
     glm::vec3 lightPos;
+
+	Camera* camera = nullptr;
 
     ResourceManager* resourceManager;
 
@@ -49,9 +49,8 @@ public:
 
     ~Renderer() = default;
 
-    void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
+	void setCamera(Camera* camera);
 
-    static void key_callback_static(GLFWwindow *window, int key, int scancode, int action, int mods);
 
 };
 

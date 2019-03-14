@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 #include "ResourceManager.h"
+#include "Input.h"
 
 Scene::Scene(): terrainTreeManager(3, 20) {
 
@@ -25,6 +26,17 @@ void Scene::init() {
     auto& deerModel = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/deer.obj"));
     deerModel.setPosition(glm::vec3(-3, 0, 2));
     deerModel.rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0));
+
+    Input::getInstance()->addFunction([this](int key, int scancode, int action, int mods){
+        printf("Pressed scene %s\n", (this == nullptr) ? "true" : "false");
+    });
+
+
+
+}
+
+void Scene::update()
+{
 
 }
 

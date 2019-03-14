@@ -24,7 +24,7 @@ void Renderer::init() {
 
     gl::glGenBuffers(1, &ubo_matrix_handle);
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
-    std::array<glm::mat4, 3u> matrices = { mat4(1.0), camera.view, camera.project};
+    std::array<glm::mat4, 3u> matrices = { mat4(1.0), mat4(1.0), mat4(1.0) };
     gl::glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), matrices.data(), gl::GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
@@ -82,7 +82,7 @@ void Renderer::setShaderProgram(GLuint shader_programme) const {
 void Renderer::updateMatrices(const StaticModel &model) const {
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
     gl::glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), nullptr, gl::GL_DYNAMIC_DRAW);
-    std::array<mat4, 3u> matrices = {model.getTransform(), camera.view, camera.project};
+    std::array<mat4, 3u> matrices = {model.getTransform(), camera->view, camera->project};
     if(void *result = gl::glMapBuffer(GL_UNIFORM_BUFFER, gl::GL_WRITE_ONLY)) {
             memcpy(result, matrices.data(), sizeof(mat4) * 3);
             glUnmapBuffer(GL_UNIFORM_BUFFER);
@@ -101,60 +101,60 @@ void Renderer::updateLightPosition() const {
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-void Renderer::key_callback_static(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    auto rendererSystem = reinterpret_cast<Renderer*>(glfwGetWindowUserPointer(window));
-    rendererSystem->key_callback(window, key, scancode, action, mods);
+void Renderer::setCamera(Camera* camera)
+{
+	this->camera = camera;
 }
 
-void Renderer::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    auto pos = this->camera.view;
-    mat4 newPos = pos;
-    switch (key) {
-        case GLFW_KEY_W:
-            newPos = glm::translate(pos, vec3(-0.2f, 0.0f, 0.0f));
-            break;
-        case GLFW_KEY_S:
-            newPos = glm::translate(pos, vec3(0.2f, 0.0f, 0.0));
-            break;
-        case GLFW_KEY_D:
-            newPos = glm::translate(pos, vec3(0.0f, 0.0f, -0.2f));
-            break;
-        case GLFW_KEY_A:
-            newPos = glm::translate(pos, vec3(0.0f, 0.0f, 0.2f));
-            break;
-        case GLFW_KEY_R:
-            newPos = glm::translate(pos, vec3(0.0f, -0.2f, 0.0f));
-            break;
-        case GLFW_KEY_F:
-            newPos = glm::translate(pos, vec3(0.0f, 0.2f, 0.0f));
-            break;
-    }
-
-    this->camera.view = newPos;
-
+//void Renderer::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+//    //auto pos = this->camera.view;
+//    //mat4 newPos = pos;
+//    //switch (key) {
+//    //    case GLFW_KEY_W:
+//    //        newPos = glm::translate(pos, vec3(-0.2f, 0.0f, 0.0f));
+//    //        break;
+//    //    case GLFW_KEY_S:
+//    //        newPos = glm::translate(pos, vec3(0.2f, 0.0f, 0.0));
+//    //        break;
+//    //    case GLFW_KEY_D:
+//    //        newPos = glm::translate(pos, vec3(0.0f, 0.0f, -0.2f));
+//    //        break;
+//    //    case GLFW_KEY_A:
+//    //        newPos = glm::translate(pos, vec3(0.0f, 0.0f, 0.2f));
+//    //        break;
+//    //    case GLFW_KEY_R:
+//    //        newPos = glm::translate(pos, vec3(0.0f, -0.2f, 0.0f));
+//    //        break;
+//    //    case GLFW_KEY_F:
+//    //        newPos = glm::translate(pos, vec3(0.0f, 0.2f, 0.0f));
+//    //        break;
+//    //}
 //
-//    switch (key) {
-//        case GLFW_KEY_W:
-//            lightPos += vec3(0.2f, 0.0f, 0.0f);
-//            break;
-//        case GLFW_KEY_S:
-//            lightPos += vec3(-0.2f, 0.0f, 0.0);
-//            break;
-//        case GLFW_KEY_D:
-//            lightPos += vec3(0.0f, 0.0f, 0.2f);
-//            break;
-//        case GLFW_KEY_A:
-//            lightPos += vec3(0.0f, 0.0f, -0.2f);
-//            break;
-//        case GLFW_KEY_R:
-//            lightPos += vec3(0.0f, 0.2f, 0.0f);
-//            break;
-//        case GLFW_KEY_F:
-//            lightPos += vec3(0.0f, -0.2f, 0.0f);
-//            break;
-//        default:
-//            break;
-//    }
-
-}
+//    //this->camera.view = newPos;
+//
+////
+////    switch (key) {
+////        case GLFW_KEY_W:
+////            lightPos += vec3(0.2f, 0.0f, 0.0f);
+////            break;
+////        case GLFW_KEY_S:
+////            lightPos += vec3(-0.2f, 0.0f, 0.0);
+////            break;
+////        case GLFW_KEY_D:
+////            lightPos += vec3(0.0f, 0.0f, 0.2f);
+////            break;
+////        case GLFW_KEY_A:
+////            lightPos += vec3(0.0f, 0.0f, -0.2f);
+////            break;
+////        case GLFW_KEY_R:
+////            lightPos += vec3(0.0f, 0.2f, 0.0f);
+////            break;
+////        case GLFW_KEY_F:
+////            lightPos += vec3(0.0f, -0.2f, 0.0f);
+////            break;
+////        default:
+////            break;
+////    }
+//
+//}
 

@@ -14,12 +14,14 @@ class Scene {
 
 public:
 
+
     RenderingQueue renderingQueue;
     TerrainTreeManager terrainTreeManager;
     ResourceManager* resourceManager;
 
     Scene();
     void init();
+	void update();
 
 };
 
