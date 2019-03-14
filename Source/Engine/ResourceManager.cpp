@@ -97,39 +97,31 @@ optional<Geometry> ResourceManager::loadOBJModel(const std::string& path) {
 
     file.close();
 
-    vector<GLfloat> vboData;
+    vector<glm::vec3> vboData;
     for(int i = 0; i < vertices.size(); i++) {
-        vboData.push_back(vertices[i].x);
-        vboData.push_back(vertices[i].y);
-        vboData.push_back(vertices[i].z);
-        vboData.push_back(normals[i].x);
-        vboData.push_back(normals[i].y);
-        vboData.push_back(normals[i].z);
+		vboData.push_back(vertices[i]);
+		vboData.push_back(normals[i]);
     }
-
-    gl::GLuint vbo = 0;
-	gl::glGenBuffers(1, &vbo);
-	gl::glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	gl::glBufferData(GL_ARRAY_BUFFER, vboData.size() * sizeof(glm::vec3), vboData.data(), GL_STATIC_DRAW);
-
-    gl::GLuint index_buffer = 0;
-	gl::glGenBuffers(1, &index_buffer);
-	gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
-	gl::glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(GLushort), elements.data(), GL_STATIC_DRAW);
-
-	gl::glBindBuffer(GL_ARRAY_BUFFER, 0);
-	gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     gl::GLuint vao = 0;
 	gl::glGenVertexArrays(1, &vao);
 	gl::glBindVertexArray(vao);
-	gl::glEnableVertexAttribArray(vertex_position_location);
-	gl::glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	gl::glVertexAttribPointer(vertex_position_location, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), nullptr);
 
-	gl::glEnableVertexAttribArray(vertex_normal_location);
-	gl::glVertexAttribPointer(vertex_normal_location, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(3*sizeof(GLfloat)));
-	gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
+		gl::GLuint vbo = 0;
+		gl::glGenBuffers(1, &vbo);
+		gl::glEnableVertexAttribArray(vertex_position_location);
+		gl::glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		gl::glBufferData(GL_ARRAY_BUFFER, vboData.size() * sizeof(glm::vec3), vboData.data(), GL_STATIC_DRAW);
+		gl::glVertexAttribPointer(vertex_position_location, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), nullptr);
+
+		gl::glEnableVertexAttribArray(vertex_normal_location);
+		gl::glVertexAttribPointer(vertex_normal_location, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
+
+		gl::GLuint index_buffer = 0;
+		gl::glGenBuffers(1, &index_buffer);
+		gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer);
+		gl::glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(GLushort), elements.data(), GL_STATIC_DRAW);
+
 	gl::glBindVertexArray(0u);
 
 	gl::glBindBuffer(GL_ARRAY_BUFFER, 0u);

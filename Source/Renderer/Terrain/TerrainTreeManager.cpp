@@ -22,7 +22,7 @@ std::vector<TerrainTreeNode> TerrainTreeManager::buildNodes(const short levels) 
     for(int level = (levels - 1); level >= 0; level--) {
 
         int elements = static_cast<int>(pow(4, level));
-        nextElementBaseIndex += elements;
+		nextElementBaseIndex += elements;
 
         int offset = nodes.size();
 
@@ -33,17 +33,19 @@ std::vector<TerrainTreeNode> TerrainTreeManager::buildNodes(const short levels) 
 
         for(int j = 0; j < elements; j++) {
 
-            int nodeIndex = nodes.size();
+            int nodeindex = nodes.size();
 
-            int parentIndex = nextElementBaseIndex + ((nodeIndex - offset) / 4);
+            int parentindex = nextElementBaseIndex + ((nodeindex - offset) / 4);
 
-            nodes.emplace_back(level, parentIndex);
+            nodes.emplace_back(level, parentindex);
         }
     }
 
 
     for(int z = 0; z < nodes.size(); z += 4 ) {
-        auto& parentNode = nodes[nodes[z].parentIndex];
+		const int parentIndex = nodes[z].parentIndex;
+		if (parentIndex < 0) continue;
+        auto& parentNode = nodes[parentIndex];
         parentNode.childIndexs[0] = z;
         parentNode.childIndexs[1] = z + 1;
         parentNode.childIndexs[2] = z + 2;
