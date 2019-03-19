@@ -5,6 +5,8 @@
 #include "Scene.h"
 #include "ResourceManager.h"
 #include "Input.h"
+#include "libs.h"
+#include "../Renderer/Camera.h"
 
 Scene::Scene(): terrainTreeManager(3, 20) {
 
@@ -27,11 +29,33 @@ void Scene::init() {
     deerModel.setPosition(glm::vec3(-3, 0, 2));
     deerModel.rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0));
 
-    Input::getInstance()->addFunction([this](int key, int scancode, int action, int mods){
-        printf("Pressed scene %s\n", (this == nullptr) ? "true" : "false");
+
+    Input::getInstance()->addFunction( [&camera = camera] (int key, int scancode, int action, int mods){
+		auto pos = camera.view;
+		mat4 newPos = pos;
+		switch (key) {
+			case GLFW_KEY_W:
+				newPos = glm::translate(pos, vec3(-0.2f, 0.0f, 0.0f));
+				break;
+			case GLFW_KEY_S:
+				newPos = glm::translate(pos, vec3(0.2f, 0.0f, 0.0));
+				break;
+			case GLFW_KEY_D:
+				newPos = glm::translate(pos, vec3(0.0f, 0.0f, -0.2f));
+				break;
+			case GLFW_KEY_A:
+				newPos = glm::translate(pos, vec3(0.0f, 0.0f, 0.2f));
+				break;
+			case GLFW_KEY_R:
+				newPos = glm::translate(pos, vec3(0.0f, -0.2f, 0.0f));
+				break;
+			case GLFW_KEY_F:
+				newPos = glm::translate(pos, vec3(0.0f, 0.2f, 0.0f));
+				break;
+		}
+
+		camera.view = newPos;
     });
-
-
 
 }
 

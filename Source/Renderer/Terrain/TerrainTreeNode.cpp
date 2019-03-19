@@ -16,4 +16,9 @@ void TerrainTreeNode::setPosition(const glm::vec3 position) {
 
 }
 
+const glm::vec3 TerrainTreeNode::getPosition() const
+{
+	return this->transform[3];
+}
+
 

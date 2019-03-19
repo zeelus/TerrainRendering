@@ -9,15 +9,16 @@
 #include "ResourceManager.h"
 #include "../Renderer/Terrain/TerrainTreeManager.h"
 #include "../Renderer/RenderingQueue.h"
+#include "../Renderer/Camera.h"
 
 class Scene {
 
 public:
 
-
     RenderingQueue renderingQueue;
     TerrainTreeManager terrainTreeManager;
     ResourceManager* resourceManager;
+	Camera camera;
 
     Scene();
     void init();

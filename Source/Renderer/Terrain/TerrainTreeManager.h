@@ -27,6 +27,8 @@ public:
 
     TerrainTreeManager(const short levels, const short maxSize);
 
+	void update(const glm::mat4& cameraPos);
+
 };
 
 

@@ -13,6 +13,18 @@ TerrainTreeManager::TerrainTreeManager(const short levels, const short maxSize):
     setNodesPositionAndSizes();
 }
 
+void TerrainTreeManager::update(const glm::mat4& cameraPos)
+{
+	const glm::vec3 cameraPosVec3 = cameraPos[3];
+
+	for (auto& node : this->nodes) {
+		const glm::vec3 nodePos = node.transform[3];
+		const float distance = glm::distance(nodePos, cameraPosVec3);
+
+		int x = 4;
+	}
+}
+
 std::vector<TerrainTreeNode> TerrainTreeManager::buildNodes(const short levels) {
 
     std::vector<TerrainTreeNode> nodes;

@@ -98,12 +98,13 @@ int EngineWindow::run(int argc, char **argv) {
     }
 
     scene.init();
-	renderer.setCamera(&camera);
     renderer.init();
+	renderer.setCamera(&scene.camera);
 
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		scene.terrainTreeManager.update(scene.camera.view);
         renderer.drawStaticModels(scene.renderingQueue.getStaticModels());
 
         glfwPollEvents();
