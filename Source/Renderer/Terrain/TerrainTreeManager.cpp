@@ -17,53 +17,37 @@ void TerrainTreeManager::update(const glm::mat4& cameraPos)
 {
 	const glm::vec3 cameraPosVec3 = cameraPos[3];
 
-	for (auto& node : this->nodes) {
-		const glm::vec3 nodePos = node.transform[3];
-		const float distance = glm::distance(nodePos, cameraPosVec3);
-
-		int x = 4;
+	if (!nodes.empty()) {
+		checkNodeVisibility(0, cameraPosVec3);
 	}
+
 }
 
 std::vector<TerrainTreeNode> TerrainTreeManager::buildNodes(const short levels) {
 
     std::vector<TerrainTreeNode> nodes;
 
-    int nextElementBaseIndex = 0;
+	int nextElementBaseIndex = 0;
 
-    for(int level = (levels - 1); level >= 0; level--) {
+	auto& rootNode = nodes.emplace_back(0);
+	rootNode.firstChildIndexs = 1;
 
-        int elements = static_cast<int>(pow(4, level));
-		nextElementBaseIndex += elements;
+	for (int level = 1; level < levels; level++) {
 
-        int offset = nodes.size();
+		const int elements = static_cast<int>(pow(4, level));
 
-        if(elements == 1) {
-            nodes.emplace_back(level, -1);
-            continue;
-        }
+		const int elementsInArray = nodes.size();
 
-        for(int j = 0; j < elements; j++) {
+		for(int j = 0; j < elements; j++) {
+          auto& newNode = nodes.emplace_back(level);
 
-            int nodeindex = nodes.size();
-
-            int parentindex = nextElementBaseIndex + ((nodeindex - offset) / 4);
-
-            nodes.emplace_back(level, parentindex);
-        }
-    }
-
-
-    for(int z = 0; z < nodes.size(); z += 4 ) {
-		const int parentIndex = nodes[z].parentIndex;
-		if (parentIndex < 0) continue;
-        auto& parentNode = nodes[parentIndex];
-        parentNode.childIndexs[0] = z;
-        parentNode.childIndexs[1] = z + 1;
-        parentNode.childIndexs[2] = z + 2;
-        parentNode.childIndexs[3] = z + 3;
-    }
-
+		  if ((level + 1) < levels) {
+			  const int offset = (nodes.size() - 1) - elementsInArray;
+			  const int childNodeIndex = elementsInArray + elements + (offset * 4);
+			  newNode.firstChildIndexs = childNodeIndex;
+		  }
+		}
+	}
 
     return nodes;
 }
@@ -74,11 +58,9 @@ void TerrainTreeManager::setNodesPositionAndSizes() {
         return;
     }
 
-    const unsigned int rootNodeIndex = this->nodes.size() - 1;
-
     glm::vec3 rootPosition(0.0f, 0.0f, 0.0f);
 
-    setNodesPositionAndSizes(rootNodeIndex, rootPosition);
+    setNodesPositionAndSizes(0, rootPosition);
 
 }
 
@@ -91,25 +73,52 @@ void TerrainTreeManager::setNodesPositionAndSizes(const unsigned int nodeIndex, 
 
     node.setPosition(position);
 
-    if(node.childIndexs[0] != -1) {
-        const glm::vec3 childPosition = position + glm::vec3(-childSizeFactor, 0.0f, -childSizeFactor);
-        setNodesPositionAndSizes(node.childIndexs[0], childPosition);
-    }
+	for (int i = 0; i < 4; i++) {
+		if (node.firstChildIndexs != -1) {
+			const glm::vec3 childPosition = position + glm::vec3(((i % 2)? -1 : 1) * childSizeFactor, 0.0f, ((i < 2) ? -1 : 1) * childSizeFactor);
+			setNodesPositionAndSizes(node.firstChildIndexs + i, childPosition);
+		}
+	}
+}
 
-    if(node.childIndexs[1] != -1) {
-        const glm::vec3 childPosition = position + glm::vec3(childSizeFactor, 0.0f, -childSizeFactor);
-        setNodesPositionAndSizes(node.childIndexs[1], childPosition);
-    }
+void TerrainTreeManager::checkNodeVisibility(const int nodeIndex, const glm::vec3& cameraPosVec3)
+{
+	auto& node = this->nodes[nodeIndex];
+	
+	const glm::vec3 nodePos = node.transform[3];
+	const float distance = glm::distance(cameraPosVec3, nodePos);
 
-    if(node.childIndexs[2] != -1) {
-        const glm::vec3 childPosition = position + glm::vec3(-childSizeFactor, 0.0f, childSizeFactor);
-        setNodesPositionAndSizes(node.childIndexs[2], childPosition);
-    }
+	if (distance < (maxDistance / (node.level + 1))) {
+		node.isShowing = false;
 
-    if(node.childIndexs[3] != -1) {
-        const glm::vec3 childPosition = position + glm::vec3(childSizeFactor, 0.0f, childSizeFactor);
-        setNodesPositionAndSizes(node.childIndexs[3], childPosition);
-    }
+		for (int i = 0; i < 4; i++) {
+			if (node.firstChildIndexs != -1) {
+				checkNodeVisibility(node.firstChildIndexs + i, cameraPosVec3);
+			}
+			else {
+				node.isShowing = true;
+			}
+		}
+	}
+	else {
+		node.isShowing = true;
+		for (int i = 0; i < 4; i++) {
+			if (node.firstChildIndexs != -1) {
+				hideNodeWithChildrens(node.firstChildIndexs + i);
+			}
+		}
+	}
+}
 
+void TerrainTreeManager::hideNodeWithChildrens(const int nodeIndex)
+{
+	auto& node = nodes[nodeIndex];
+	node.isShowing = false;
 
+	if (node.firstChildIndexs != -1) {
+		for (int i = 0; i < 4; i++) {
+			hideNodeWithChildrens(node.firstChildIndexs + i);
+		}
+	}
+	
 }

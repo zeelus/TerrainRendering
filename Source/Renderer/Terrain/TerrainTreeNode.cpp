@@ -6,7 +6,7 @@
 
 #include "../../Engine/libs.h"
 
-TerrainTreeNode::TerrainTreeNode(const short level, const int parentIndex): level(level), parentIndex(parentIndex) {
+TerrainTreeNode::TerrainTreeNode(const short level): level(level) {
 
 }
 

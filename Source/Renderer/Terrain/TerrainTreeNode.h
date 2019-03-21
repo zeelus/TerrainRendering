@@ -14,13 +14,15 @@ public:
 
     const short level;
 
-    const int parentIndex;
+    //const int parentIndex;
 
-    std::array<int, 4u> childIndexs = {-1, -1, -1, -1};
+	glm::mat4 transform = glm::mat4(1.0f);
 
-    TerrainTreeNode(const short level, const int parentIndex);
+	bool isShowing = false;
 
-    glm::mat4 transform = glm::mat4(1.0f);
+    int firstChildIndexs = -1;
+
+    TerrainTreeNode(const short level);
 
     void setPosition(const glm::vec3 position);
 
