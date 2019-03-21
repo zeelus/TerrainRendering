@@ -29,6 +29,7 @@ class EngineWindow {
 private:
     int setupWindow();
     void showOpenGLInformation() const;
+	void drowStaticModelQueue() const;
 
 public:
     EngineWindow(int width, int height, std::string &name, Scene& scene);

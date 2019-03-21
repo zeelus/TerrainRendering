@@ -90,6 +90,13 @@ void EngineWindow::showOpenGLInformation() const {
     printf("OpenGL version supported %s\n", version);
 }
 
+void EngineWindow::drowStaticModelQueue() const
+{
+	for (auto& model : this->scene.renderingQueue.getStaticModels()) {
+		renderer.drawStaticModel(model.getIndexGeometryIndex(), model.getTransform());
+	}
+}
+
 int EngineWindow::run(int argc, char **argv) {
 
     if (this->setupWindow() == -1) {
@@ -105,10 +112,12 @@ int EngineWindow::run(int argc, char **argv) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		scene.terrainTreeManager.update(scene.camera.view);
-        renderer.drawStaticModels(scene.renderingQueue.getStaticModels());
 
+		renderer.updateLightPosition();
+		drowStaticModelQueue();
+
+        
         glfwPollEvents();
-
 		scene.update();
 
         glfwSwapBuffers(window);

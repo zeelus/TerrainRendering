@@ -33,17 +33,18 @@ private:
 
 private:
 
-    void updateLightPosition() const;
-
-    void updateMatrices(const StaticModel &model) const;
+    void updateMatrices(const glm::mat4 & model) const;
 
     inline void setShaderProgram(GLuint shader_programme) const;
 
 public:
 
     void init();
+	
+	
+    void drawStaticModel(const unsigned int geometryIndex, const glm::mat4& modelMatrix) const;
 
-    void drawStaticModels(const std::vector<StaticModel> &staticModels) const;
+	void updateLightPosition() const;
 
     Renderer();
 

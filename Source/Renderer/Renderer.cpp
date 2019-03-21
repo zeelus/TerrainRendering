@@ -37,40 +37,35 @@ void Renderer::init() {
     resourceManager = ResourceManager::getInstance();
 }
 
-void Renderer::drawStaticModels(const std::vector<StaticModel> &staticModels) const {
+void Renderer::drawStaticModel(const unsigned int geometryIndex, const glm::mat4& modelMatrix) const {
     static short lastUsedTechnique = -2;
     static int lastUsedModelIndex = -2;
     static const Geometry* geometry;
 
-    for(const auto& model: staticModels) {
+    if(geometryIndex < 0) return;
 
-        const unsigned int geometryIndex = model.getIndexGeometryIndex();
+    if(geometryIndex != lastUsedModelIndex) {
+        lastUsedModelIndex = geometryIndex;
+        geometry = &resourceManager->getGeometry(geometryIndex);
 
-        if(geometryIndex < 0) continue;
-
-        if(geometryIndex != lastUsedModelIndex) {
-            lastUsedModelIndex = geometryIndex;
-            geometry = &resourceManager->getGeometry(geometryIndex);
-
-            const short techniqueIndex = geometry->getTechniqueIndex();
-            if(lastUsedTechnique != techniqueIndex) {
-                lastUsedTechnique = techniqueIndex;
-                const auto& technique = this->resourceManager->loadTechnique(techniqueIndex);
-                const auto shader_programme = technique.getShader_programme();
-                this->setShaderProgram(shader_programme);
-            }
-
-            glBindVertexArray(0u);
-            glBindVertexArray(geometry->getVao());
-
+        const short techniqueIndex = geometry->getTechniqueIndex();
+        if(lastUsedTechnique != techniqueIndex) {
+            lastUsedTechnique = techniqueIndex;
+            const auto& technique = this->resourceManager->loadTechnique(techniqueIndex);
+            const auto shader_programme = technique.getShader_programme();
+            this->setShaderProgram(shader_programme);
         }
 
-        this->updateLightPosition();
-        this->updateMatrices(model);
-
-        glDrawElements(GL_TRIANGLES, geometry->getElementsSize() * sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
+        glBindVertexArray(0u);
+        glBindVertexArray(geometry->getVao());
 
     }
+
+    this->updateMatrices(modelMatrix);
+
+	glDrawElements(GL_TRIANGLES, geometry->getElementsSize() * sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
+
+    
 }
 
 void Renderer::setShaderProgram(GLuint shader_programme) const {
@@ -79,10 +74,10 @@ void Renderer::setShaderProgram(GLuint shader_programme) const {
     glBindBufferBase(GL_UNIFORM_BUFFER, pointLightBinding, ubo_light_handle);
 }
 
-void Renderer::updateMatrices(const StaticModel &model) const {
+void Renderer::updateMatrices(const glm::mat4 & model) const {
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix_handle);
     gl::glBufferData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::mat4), nullptr, gl::GL_DYNAMIC_DRAW);
-    std::array<mat4, 3u> matrices = {model.getTransform(), camera->view, camera->project};
+    std::array<mat4, 3u> matrices = {model, camera->view, camera->project};
     if(void *result = gl::glMapBuffer(GL_UNIFORM_BUFFER, gl::GL_WRITE_ONLY)) {
             memcpy(result, matrices.data(), sizeof(mat4) * 3);
             glUnmapBuffer(GL_UNIFORM_BUFFER);
