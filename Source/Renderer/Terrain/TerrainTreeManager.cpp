@@ -6,21 +6,36 @@
 #include "TerrainTreeNode.h"
 
 #include <vector>
+#include <string>
 #include <glm/glm.hpp>
+#include "../../Engine/ResourceManager.h"
 
-TerrainTreeManager::TerrainTreeManager(const short levels, const short maxSize): levels(levels), maxSize(maxSize) {
+TerrainTreeManager::TerrainTreeManager(const short levels, const short maxSize): 
+	levels(levels), 
+	maxSize(maxSize)
+{
     nodes = buildNodes(levels);
     setNodesPositionAndSizes();
 }
 
 void TerrainTreeManager::update(const glm::mat4& cameraPos)
 {
-	const glm::vec3 cameraPosVec3 = cameraPos[3];
-
+	const glm::vec3 cameraPosVec3 = glm::vec3(cameraPos[3]) * glm::vec3(-1.0f, -1.0f, -1.0f);
+	
 	if (!nodes.empty()) {
 		checkNodeVisibility(0, cameraPosVec3);
 	}
 
+}
+
+void TerrainTreeManager::setGeomentryIndex(const int index)
+{
+	this->geometryIndex = index;
+}
+
+int TerrainTreeManager::getGeometryIndex() const
+{
+	return geometryIndex;
 }
 
 std::vector<TerrainTreeNode> TerrainTreeManager::buildNodes(const short levels) {

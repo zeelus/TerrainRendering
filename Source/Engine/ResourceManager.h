@@ -37,7 +37,7 @@ public:
 
     static ResourceManager* getInstance();
 
-    StaticModel loadModel(const std::string& path);
+    const int loadModel(const std::string& path);
 
     const Technique& loadTechnique(const unsigned int index) const;
 

@@ -130,7 +130,7 @@ optional<Geometry> ResourceManager::loadOBJModel(const std::string& path) {
     return Geometry(vao, vbo, index_buffer, static_cast<unsigned int>(elements.size()), getIndexTechnique(TechniqueType::PhongBline));
 }
 
-StaticModel ResourceManager::loadModel(const std::string &path) {
+const int ResourceManager::loadModel(const std::string &path) {
     int index = -1;
     auto modelIndexInVector = modelIndexs.find(path);
     if(modelIndexInVector == modelIndexs.end()) {
@@ -147,7 +147,7 @@ StaticModel ResourceManager::loadModel(const std::string &path) {
         index = modelIndexInVector->second;
     }
 
-    return StaticModel(index);
+    return index;
 }
 
 

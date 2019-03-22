@@ -97,6 +97,18 @@ void EngineWindow::drowStaticModelQueue() const
 	}
 }
 
+void EngineWindow::drowTerrainTree() const
+{
+	auto& terrainTreeManger = this->scene.terrainTreeManager;
+	int geometry = terrainTreeManger.getGeometryIndex();
+
+	for (auto& node : terrainTreeManger.nodes) {
+		if (node.isShowing) {
+			renderer.drawStaticModel(geometry, node.transform);
+		}
+	}
+}
+
 int EngineWindow::run(int argc, char **argv) {
 
     if (this->setupWindow() == -1) {
@@ -115,6 +127,7 @@ int EngineWindow::run(int argc, char **argv) {
 
 		renderer.updateLightPosition();
 		drowStaticModelQueue();
+		drowTerrainTree();
 
         
         glfwPollEvents();

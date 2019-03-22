@@ -6,16 +6,18 @@
 #define TERRENRENDERING_TERRAINTREEMANAGER_H
 
 #include <vector>
+#include <string>
 #include <glm/glm.hpp>
 
 #include "TerrainTreeNode.h"
 
 class TerrainTreeManager {
 
-private:
     const short levels;
     const short maxSize;
 	const short maxDistance = 50;
+
+	int geometryIndex = -1;
 
     std::vector<TerrainTreeNode> buildNodes(const short levels);
 
@@ -27,9 +29,13 @@ private:
 public:
     std::vector<TerrainTreeNode> nodes;
 
-    TerrainTreeManager(const short levels, const short maxSize);
+    TerrainTreeManager(short levels, const short maxSize);
 
 	void update(const glm::mat4& cameraPos);
+
+	void setGeomentryIndex(const int index);
+
+	int getGeometryIndex() const;
 
 };
 

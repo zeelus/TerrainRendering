@@ -15,7 +15,7 @@ public:
 
     const std::vector<StaticModel> &getStaticModels() const;
 
-    StaticModel& addStaticModel(const StaticModel& staticModel);
+    StaticModel& addStaticModel(const int modelIndex);
 
 
 };

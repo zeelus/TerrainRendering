@@ -42,7 +42,7 @@ public:
     void init();
 	
 	
-    void drawStaticModel(const unsigned int geometryIndex, const glm::mat4& modelMatrix) const;
+    void drawStaticModel(const int geometryIndex, const glm::mat4& modelMatrix) const;
 
 	void updateLightPosition() const;
 

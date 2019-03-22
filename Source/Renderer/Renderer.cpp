@@ -37,7 +37,7 @@ void Renderer::init() {
     resourceManager = ResourceManager::getInstance();
 }
 
-void Renderer::drawStaticModel(const unsigned int geometryIndex, const glm::mat4& modelMatrix) const {
+void Renderer::drawStaticModel(const int geometryIndex, const glm::mat4& modelMatrix) const {
     static short lastUsedTechnique = -2;
     static int lastUsedModelIndex = -2;
     static const Geometry* geometry;

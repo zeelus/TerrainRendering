@@ -37,20 +37,9 @@ const int StaticModel::getIndexGeometryIndex() const {
     return indexMashPtr;
 }
 
-StaticModel &StaticModel::operator=(const StaticModel &&staticModel) noexcept{
-    this->indexMashPtr = staticModel.indexMashPtr;
-    this->transform = staticModel.transform;
-    return *this;
-}
-
-StaticModel::StaticModel(const StaticModel &&staticModel) noexcept{
-    this->indexMashPtr = staticModel.indexMashPtr;
-    this->transform = staticModel.transform;
-}
-
-StaticModel::StaticModel(const StaticModel &staticModel) noexcept{
-    this->indexMashPtr = staticModel.indexMashPtr;
-    this->transform = staticModel.transform;
+StaticModel::StaticModel(const StaticModel &staticModel) noexcept {
+	this->indexMashPtr = staticModel.indexMashPtr;
+	this->transform = staticModel.transform;
 }
 
 StaticModel &StaticModel::operator=(const StaticModel &staticModel) noexcept{

@@ -13,11 +13,11 @@ const std::vector<StaticModel> &RenderingQueue::getStaticModels() const {
     return staticModels;
 }
 
-StaticModel& RenderingQueue::addStaticModel(const StaticModel &staticModel) {
-    auto& staticModelOnVector = this->staticModels.emplace_back(move(staticModel));
-    sort(this->staticModels.begin(), this->staticModels.end(), [] (const StaticModel& staticModel1, const StaticModel& staticModel2) {
-        return staticModel1.getIndexGeometryIndex() < staticModel2.getIndexGeometryIndex();
-    });
+StaticModel& RenderingQueue::addStaticModel(const int modelIndex) {
+    auto& staticModelOnVector = this->staticModels.emplace_back(StaticModel(modelIndex));
+    /*sort(this->staticModels.begin(), this->staticModels.end(), [] (const StaticModel& staticModel1, const StaticModel& staticModel2) {
+        return staticModel1.getIndexGeometryIndex() > staticModel2.getIndexGeometryIndex();
+    });*/
 
     return staticModelOnVector;
 }

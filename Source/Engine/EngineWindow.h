@@ -30,6 +30,7 @@ private:
     int setupWindow();
     void showOpenGLInformation() const;
 	void drowStaticModelQueue() const;
+	void drowTerrainTree() const;
 
 public:
     EngineWindow(int width, int height, std::string &name, Scene& scene);
