@@ -8,14 +8,14 @@
 #include "libs.h"
 #include "../Renderer/Camera.h"
 
-Scene::Scene(): terrainTreeManager(5, 20) {
+Scene::Scene(): terrainTreeManager(4, 40) {
 
 }
 
 void Scene::init() {
     resourceManager = ResourceManager::getInstance();
 
-	this->terrainTreeManager.setGeomentryIndex(resourceManager->loadModel("Resources/Models/Suzanne.obj"));
+	this->terrainTreeManager.setGeomentryIndex(resourceManager->loadModel("Resources/Models/nodePlate.obj"));
 
  //   auto& model = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/tetrahedron.obj"));
  //   model.setPosition(glm::vec3(2, 0, 2));
@@ -30,6 +30,8 @@ void Scene::init() {
  //   auto& deerModel = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/deer.obj"));
  //   deerModel.setPosition(glm::vec3(-3, 0, 2));
  //   deerModel.rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0));
+
+ 	//auto& planeModel = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/nodePlate.obj"));
 
 
     Input::getInstance()->addFunction( [&camera = camera] (int key, int scancode, int action, int mods){

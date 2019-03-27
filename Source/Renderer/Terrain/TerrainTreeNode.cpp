@@ -21,4 +21,12 @@ const glm::vec3 TerrainTreeNode::getPosition() const
 	return this->transform[3];
 }
 
+void TerrainTreeNode::setScale(const glm::vec3 scale) {
+    this->transform = glm::scale(this->transform, scale);
+}
+
+void TerrainTreeNode::setScale(const float scale) {
+    this->setScale(glm::vec3(scale, scale, scale));
+}
+
 

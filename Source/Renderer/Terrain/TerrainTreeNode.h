@@ -25,6 +25,8 @@ public:
     TerrainTreeNode(const short level);
 
     void setPosition(const glm::vec3 position);
+    void setScale(const glm::vec3 scale);
+    void setScale(const float scale);
 
 	const glm::vec3 getPosition() const;
 
