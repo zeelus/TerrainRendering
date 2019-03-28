@@ -25,7 +25,7 @@ class ResourceManager {
 
     std::vector<Technique> loadsTechnique;
 
-    std::optional<Geometry> loadOBJModel(const std::string& path);
+    std::optional<Geometry> loadOBJModel(const std::string& path, const TechniqueType techniqueType);
 
     constexpr short getIndexTechnique(TechniqueType techniqueType);
 
@@ -37,7 +37,7 @@ public:
 
     static ResourceManager* getInstance();
 
-    const int loadModel(const std::string& path);
+    const int loadModel(const std::string& path, const TechniqueType techniqueType = TechniqueType::PhongBline);
 
     const Technique& loadTechnique(const unsigned int index) const;
 

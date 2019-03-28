@@ -21,7 +21,7 @@ using namespace std;
 
 ResourceManager::ResourceManager() { }
 
-optional<Geometry> ResourceManager::loadOBJModel(const std::string& path) {
+optional<Geometry> ResourceManager::loadOBJModel(const std::string& path, const TechniqueType techniqueType) {
 
     vector<glm::vec3> vertices;
     vector<glm::vec3> normals;
@@ -127,15 +127,15 @@ optional<Geometry> ResourceManager::loadOBJModel(const std::string& path) {
 	gl::glBindBuffer(GL_ARRAY_BUFFER, 0u);
 	gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
 
-    return Geometry(vao, vbo, index_buffer, static_cast<unsigned int>(elements.size()), getIndexTechnique(TechniqueType::PhongBline));
+    return Geometry(vao, vbo, index_buffer, static_cast<unsigned int>(elements.size()), getIndexTechnique(techniqueType));
 }
 
-const int ResourceManager::loadModel(const std::string &path) {
+const int ResourceManager::loadModel(const std::string &path, const TechniqueType techniqueType) {
     int index = -1;
     auto modelIndexInVector = modelIndexs.find(path);
     if(modelIndexInVector == modelIndexs.end()) {
 
-        optional<Geometry> modelMashOpt = loadOBJModel(path);
+        optional<Geometry> modelMashOpt = loadOBJModel(path, techniqueType);
         if(modelMashOpt) {
             Geometry modelMash = *modelMashOpt;
             loadsModel.push_back(modelMash);
