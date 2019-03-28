@@ -8,7 +8,7 @@
 #include "libs.h"
 #include "../Renderer/Camera.h"
 
-Scene::Scene(): terrainTreeManager(4, 40) {
+Scene::Scene(): terrainTreeManager(5, 40) {
 
 }
 

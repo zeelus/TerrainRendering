@@ -83,22 +83,15 @@ void TerrainTreeManager::setNodesPositionAndSizes(const unsigned int nodeIndex, 
 
     auto& node = this->nodes[nodeIndex];
 
-    const int sizeFactor = this->maxSize / (pow(2,node.level));
-    const int childSizeFactor = sizeFactor / 2;
-
-    float scale = this->maxSize;
-
-    if(node.level != 0 ) {
-    	scale = scale / (node.level * 2.0f);
-    }
-
+    float scale = this->maxSize * pow(0.5, node.level);
+	float moveFactor = scale / 4.0f;
 
     node.setPosition(position);
 	node.setScale(scale);
 
 	for (int i = 0; i < 4; i++) {
 		if (node.firstChildIndexs != -1) {
-			const glm::vec3 childPosition = position + glm::vec3(((i % 2)? -1 : 1) * childSizeFactor * 0.5f, 0.0f, ((i < 2) ? -1 : 1) * childSizeFactor * 0.5f);
+			const glm::vec3 childPosition = position + glm::vec3(((i % 2)? -1 : 1) * moveFactor, 0.0f, ((i < 2) ? -1 : 1) * moveFactor);
 			setNodesPositionAndSizes(node.firstChildIndexs + i, childPosition);
 		}
 	}
