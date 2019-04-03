@@ -27,6 +27,8 @@ public:
 
     Technique(Shader vertex, Shader fragment);
 
+	Technique(Shader vertex, Shader fragment, Shader geometry);
+
 };
 
 

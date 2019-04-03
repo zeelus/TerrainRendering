@@ -60,6 +60,17 @@ void Shader::compilateShader() {
     if(!isCompiled)
     {
         std::string name("Compied error");
+
+		GLint maxLength = 0;
+		glGetShaderiv(handler, GL_INFO_LOG_LENGTH, &maxLength);
+
+		std::vector<GLchar> infoLog(maxLength);
+		glGetShaderInfoLog(handler, maxLength, &maxLength, &infoLog[0]);
+
+		printf("Error: %s\n", infoLog.data());
+
+		glDeleteShader(handler);
+
         throw ShadersLoadingException(name);
     }
 
