@@ -163,11 +163,17 @@ ResourceManager *ResourceManager::getInstance() {
 }
 
 void ResourceManager::loadTechniques() {
+    {
+        Shader vertex(VertexShader, "Resources/Shaders/VertexShader.vert");
+        Shader fragment(FragmentShader, "Resources/Shaders/FragmentShader.frag");
+        this->loadsTechnique.emplace_back(vertex, fragment);
+    }
 
-    Shader vertex(Vertex, "Resources/Shaders/VertexShader.vert");
-    Shader fragment(Fragment, "Resources/Shaders/FragmentShader.frag");
-    this->loadsTechnique.emplace_back(vertex, fragment);
-
+    {
+        Shader vertex(VertexShader, "Resources/Shaders/TerrainVertexShader.vert");
+        Shader fragment(FragmentShader, "Resources/Shaders/TerrainFragmentShader.frag");
+        this->loadsTechnique.emplace_back(vertex, fragment);
+    }
 }
 
 const Technique& ResourceManager::loadTechnique(const unsigned int index) const {
@@ -182,6 +188,8 @@ constexpr short ResourceManager::getIndexTechnique(TechniqueType techniqueType) 
     switch (techniqueType) {
         case TechniqueType::PhongBline:
             return 0;
+        case TechniqueType::TerrainPhongBline:
+            return 1;
         default:
             return -1;
     }

@@ -15,11 +15,11 @@ Scene::Scene(): terrainTreeManager(5, 40) {
 void Scene::init() {
     resourceManager = ResourceManager::getInstance();
 
-	this->terrainTreeManager.setGeomentryIndex(resourceManager->loadModel("Resources/Models/nodePlate.obj"));
+	this->terrainTreeManager.setGeomentryIndex(resourceManager->loadModel("Resources/Models/nodePlate.obj", TechniqueType::TerrainPhongBline));
 
- //   auto& model = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/tetrahedron.obj"));
- //   model.setPosition(glm::vec3(2, 0, 2));
- //   model.rotate(30.0f, glm::vec3(0.0f, 1.0f, 0.0));
+    auto& model = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/tetrahedron.obj"));
+    model.setPosition(glm::vec3(2, 0, 2));
+    model.rotate(30.0f, glm::vec3(0.0f, 1.0f, 0.0));
 
  //   auto& model2 = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/cube.obj"));
  //   model2.setPosition(glm::vec3(0, 0, -2));

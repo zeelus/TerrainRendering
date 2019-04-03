@@ -12,8 +12,8 @@
 using namespace gl;
 
 
-enum ShaderType { Vertex,
-    Fragment };
+enum ShaderType { VertexShader,
+    FragmentShader, GeometryShader };
 
 class ShadersLoadingException: public std::runtime_error {
 

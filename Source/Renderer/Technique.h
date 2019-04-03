@@ -13,7 +13,8 @@ const GLuint matricesBlockBinding = 0u;
 const GLuint pointLightBinding = 1u;
 
 enum class TechniqueType {
-    PhongBline
+    PhongBline,
+    TerrainPhongBline
 };
 
 class Technique {

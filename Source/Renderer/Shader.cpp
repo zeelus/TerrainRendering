@@ -41,12 +41,14 @@ void Shader::loadShaders(std::string &path) {
 
 void Shader::compilateShader() {
     switch(type) {
-        case Vertex:
+        case VertexShader:
             handler = glCreateShader(gl::GL_VERTEX_SHADER);
             break;
-        case Fragment:
+        case FragmentShader:
             handler = glCreateShader(gl::GL_FRAGMENT_SHADER);
             break;
+        case GeometryShader:
+            handler = glCreateShader(gl::GL_GEOMETRY_SHADER);
     }
 //    handler = glCreateShader(type);
     char* shaderSource = const_cast<char*>(shaderCode.c_str());
