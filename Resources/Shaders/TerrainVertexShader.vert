@@ -10,11 +10,12 @@ layout (std140) uniform Matrices
     mat4 projection;
 } matrices;
 
-out vec3 Normal;
-out vec3 FragPos;
+out vData
+{
+    vec3 FragPos;
+} vertex;
 
 void main() {
     gl_Position = matrices.projection * matrices.view * matrices.model * vec4(vp, 1.0);
-    FragPos = vec3(matrices.model * vec4(vp, 1.0));
-    Normal = normal;
+    vertex.FragPos = vec3(matrices.model * vec4(vp, 1.0));
 }

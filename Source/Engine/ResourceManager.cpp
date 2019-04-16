@@ -173,7 +173,7 @@ void ResourceManager::loadTechniques() {
         Shader vertex(VertexShader, "Resources/Shaders/TerrainVertexShader.vert");
 		Shader geometry(GeometryShader, "Resources/Shaders/TerrainGeometryShader.geom");
         Shader fragment(FragmentShader, "Resources/Shaders/TerrainFragmentShader.frag");
-        this->loadsTechnique.emplace_back(vertex, fragment, geometry);
+		this->loadsTechnique.emplace_back(vertex, fragment, geometry);
     }
 }
 
