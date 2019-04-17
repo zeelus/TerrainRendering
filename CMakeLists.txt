@@ -21,6 +21,10 @@ else()
     set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
 endif()
 
+include_directories("${PROJECT_SOURCE_DIR}/Libs/glm/include"
+        "${PROJECT_SOURCE_DIR}/Libs/gli/include"
+)
+
 add_executable(TerrenRendering Source/main.cpp)
 
 add_subdirectory(Source/Engine)
