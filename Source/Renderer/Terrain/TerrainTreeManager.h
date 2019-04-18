@@ -18,6 +18,7 @@ class TerrainTreeManager {
 	const short maxDistance = 50;
 
 	int geometryIndex = -1;
+	int heightMapIndex = -1;
 
     std::vector<TerrainTreeNode> buildNodes(const short levels);
 
@@ -34,6 +35,8 @@ public:
 	void update(const glm::mat4& cameraPos);
 
 	void setGeomentryIndex(const int index);
+
+	void setHeightMapIndex(const int index);
 
 	int getGeometryIndex() const;
 

@@ -10,6 +10,7 @@
 #include "../Renderer/Geometry.h"
 #include "../Renderer/StaticModel.h"
 #include "../Renderer/Technique.h"
+#include "../Renderer/Texture.h"
 #include <optional>
 #include <vector>
 
@@ -25,7 +26,12 @@ class ResourceManager {
 
     std::vector<Technique> loadsTechnique;
 
+    std::vector<Texture> loadsTexture;
+    std::map<std::string, int> textureIndexs;
+
     std::optional<Geometry> loadOBJModel(const std::string& path, const TechniqueType techniqueType);
+
+	gl::GLuint loadTexFromFileAndCreateTO(const std::string &file_path);
 
     constexpr short getIndexTechnique(TechniqueType techniqueType);
 
@@ -38,6 +44,8 @@ public:
     static ResourceManager* getInstance();
 
     const int loadModel(const std::string& path, const TechniqueType techniqueType = TechniqueType::PhongBline);
+
+	const int loadTexture(const std::string& path);
 
     const Technique& loadTechnique(const unsigned int index) const;
 

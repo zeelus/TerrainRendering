@@ -19,4 +19,4 @@ add_library(TerrenRenderingRenderer
         Terrain/TerrainTreeManager.cpp
         Terrain/TerrainTreeManager.h
         Terrain/TerrainTreeNode.cpp
-        Terrain/TerrainTreeNode.h)
+        Terrain/TerrainTreeNode.h Texture.cpp Texture.h)

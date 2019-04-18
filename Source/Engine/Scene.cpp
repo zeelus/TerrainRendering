@@ -16,6 +16,7 @@ void Scene::init() {
     resourceManager = ResourceManager::getInstance();
 
 	this->terrainTreeManager.setGeomentryIndex(resourceManager->loadModel("Resources/Models/nodePlate.obj", TechniqueType::TerrainPhongBline));
+	this->terrainTreeManager.setHeightMapIndex(resourceManager->loadTexture("Resources/Texture/Heightmap.dds"));
 
     auto& model = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/tetrahedron.obj"));
     model.setPosition(glm::vec3(2, 0, 2));

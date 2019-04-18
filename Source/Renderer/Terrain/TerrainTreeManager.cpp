@@ -33,6 +33,11 @@ void TerrainTreeManager::setGeomentryIndex(const int index)
 	this->geometryIndex = index;
 }
 
+void TerrainTreeManager::setHeightMapIndex(const int index)
+{
+	this->heightMapIndex = index;
+}
+
 int TerrainTreeManager::getGeometryIndex() const
 {
 	return geometryIndex;

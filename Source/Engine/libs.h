@@ -22,4 +22,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/constants.hpp>
 
+#include <gli/gli.hpp>
+
 #endif //TERRENRENDERING_LIBS_H
