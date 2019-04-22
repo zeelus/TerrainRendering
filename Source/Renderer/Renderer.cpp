@@ -20,6 +20,8 @@ Renderer::Renderer(): lightPos(-8.0f, 4.0f, 0.0f) {
 
 void Renderer::init() {
 
+	initSO();
+
     glGenVertexArrays(1, &vao);
 
     gl::glGenBuffers(1, &ubo_matrix_handle);
@@ -37,12 +39,30 @@ void Renderer::init() {
     resourceManager = ResourceManager::getInstance();
 }
 
-void Renderer::drawStaticModel(const int geometryIndex, const glm::mat4& modelMatrix) const {
+void Renderer::drawStaticModel(const int geometryIndex, const glm::mat4& modelMatrix, const int textureIndex) const {
     static short lastUsedTechnique = -2;
     static int lastUsedModelIndex = -2;
+	static int lastUsedTextureIndex = -2;
     static const Geometry* geometry;
 
     if(geometryIndex < 0) return;
+
+	if (lastUsedTextureIndex != textureIndex) {
+
+		lastUsedTextureIndex = textureIndex;
+
+		if (textureIndex < 0) {
+			gl::glBindSampler(0, 0u);
+			gl::glBindTexture(gl::GL_TEXTURE_2D, 0u);
+		}
+		else {
+			gl::glBindSampler(0, sampler_handle);
+			gl::glActiveTexture(gl::GL_TEXTURE0);
+
+			auto& texture = this->resourceManager->getTexture(textureIndex);
+			gl::glBindTexture(gl::GL_TEXTURE_2D, texture.getTextureHandler());
+		}
+	}
 
     if(geometryIndex != lastUsedModelIndex) {
         lastUsedModelIndex = geometryIndex;
@@ -65,13 +85,25 @@ void Renderer::drawStaticModel(const int geometryIndex, const glm::mat4& modelMa
 
 	glDrawElements(GL_TRIANGLES, geometry->getElementsSize() * sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
 
-    
 }
 
 void Renderer::setShaderProgram(GLuint shader_programme) const {
     glUseProgram(shader_programme);
-    glBindBufferBase(GL_UNIFORM_BUFFER, matricesBlockBinding, ubo_matrix_handle);
-    glBindBufferBase(GL_UNIFORM_BUFFER, pointLightBinding, ubo_light_handle);
+    glBindBufferBase(GL_UNIFORM_BUFFER, MatricesBlockBinding, ubo_matrix_handle);
+    glBindBufferBase(GL_UNIFORM_BUFFER, PointLightBinding, ubo_light_handle);
+	glBindBufferBase(GL_UNIFORM_BUFFER, TerrainBinding, ubo_terrain_handle);
+	
+}
+
+inline void Renderer::initSO(void)
+{
+	gl::glGenSamplers(1, &sampler_handle);
+
+	gl::glSamplerParameteri(sampler_handle, gl::GL_TEXTURE_WRAP_S, gl::GL_REPEAT);
+	gl::glSamplerParameteri(sampler_handle, gl::GL_TEXTURE_WRAP_T, gl::GL_REPEAT);
+	gl::glSamplerParameteri(sampler_handle, gl::GL_TEXTURE_WRAP_R, gl::GL_REPEAT);
+	gl::glSamplerParameteri(sampler_handle, gl::GL_TEXTURE_MIN_FILTER, gl::GL_LINEAR_MIPMAP_LINEAR);
+	gl::glSamplerParameteri(sampler_handle, gl::GL_TEXTURE_MAG_FILTER, gl::GL_LINEAR);
 }
 
 void Renderer::updateMatrices(const glm::mat4 & model) const {
@@ -99,4 +131,9 @@ void Renderer::updateLightPosition() const {
 void Renderer::setCamera(Camera* camera)
 {
 	this->camera = camera;
+}
+
+void Renderer::setUbo_terrain_handle(const gl::GLint ubo_terrain_handle)
+{
+	this->ubo_terrain_handle = ubo_terrain_handle;
 }

@@ -9,8 +9,9 @@
 #include "Shader.h"
 using namespace gl;
 
-const GLuint matricesBlockBinding = 0u;
-const GLuint pointLightBinding = 1u;
+const GLuint MatricesBlockBinding = 0u;
+const GLuint PointLightBinding = 1u;
+const GLuint TerrainBinding = 2u;
 
 enum class TechniqueType {
     PhongBline,

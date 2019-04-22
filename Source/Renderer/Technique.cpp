@@ -36,7 +36,7 @@ Technique::Technique(Shader vertex, Shader fragment) {
 
 	if (uniformMatricesBlockIndex != GL_INVALID_INDEX)
 	{
-		glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, matricesBlockBinding);
+		glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, MatricesBlockBinding);
 	}
 	else
 	{
@@ -45,7 +45,7 @@ Technique::Technique(Shader vertex, Shader fragment) {
 
 	if (uniformPointLightIndex != GL_INVALID_INDEX)
 	{
-		glUniformBlockBinding(shader_programme, uniformPointLightIndex, pointLightBinding);
+		glUniformBlockBinding(shader_programme, uniformPointLightIndex, PointLightBinding);
 	}
 	else
 	{
@@ -81,10 +81,11 @@ Technique::Technique(Shader vertex, Shader fragment, Shader geometry) {
 
 	unsigned int uniformMatricesBlockIndex = gl::glGetUniformBlockIndex(shader_programme, "Matrices");
 	unsigned int uniformPointLightIndex = gl::glGetUniformBlockIndex(shader_programme, "PointLight");
+	unsigned int unifirmTerrainIndex = gl::glGetUniformBlockIndex(shader_programme, "Terrain");
 
 	if (uniformMatricesBlockIndex != GL_INVALID_INDEX)
 	{
-		glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, matricesBlockBinding);
+		glUniformBlockBinding(shader_programme, uniformMatricesBlockIndex, MatricesBlockBinding);
 	}
 	else
 	{
@@ -93,11 +94,20 @@ Technique::Technique(Shader vertex, Shader fragment, Shader geometry) {
 
 	if (uniformPointLightIndex != GL_INVALID_INDEX)
 	{
-		glUniformBlockBinding(shader_programme, uniformPointLightIndex, pointLightBinding);
+		glUniformBlockBinding(shader_programme, uniformPointLightIndex, PointLightBinding);
 	}
 	else
 	{
 		printf("Error: the uniform block \"%s\" doesn't exist in program\n", "PointLight");
+	}
+
+	if (unifirmTerrainIndex != GL_INVALID_INDEX)
+	{
+		glUniformBlockBinding(shader_programme, unifirmTerrainIndex, TerrainBinding);
+	}
+	else
+	{
+		printf("The uniform block \"%s\" doesn't exist in program\n", "TerrainBinding");
 	}
 }
 

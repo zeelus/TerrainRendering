@@ -16,14 +16,14 @@
 #include "StaticModel.h"
 #include "../Engine/ResourceManager.h"
 
-using namespace gl;
-
 class Renderer {
 private:
 
-    GLuint vao = 0;
-    GLuint ubo_matrix_handle;
-    GLuint ubo_light_handle;
+	gl::GLuint vao = 0;
+	gl::GLuint ubo_matrix_handle;
+	gl::GLuint ubo_light_handle;
+	gl::GLint ubo_terrain_handle = -1u;
+	gl::GLuint sampler_handle;
 
     glm::vec3 lightPos;
 
@@ -37,12 +37,13 @@ private:
 
     inline void setShaderProgram(GLuint shader_programme) const;
 
+	inline void initSO(void);
+
 public:
 
     void init();
 	
-	
-    void drawStaticModel(const int geometryIndex, const glm::mat4& modelMatrix) const;
+    void drawStaticModel(const int geometryIndex, const glm::mat4& modelMatrix, const int textureIndex) const;
 
 	void updateLightPosition() const;
 
@@ -52,6 +53,7 @@ public:
 
 	void setCamera(Camera* camera);
 
+	void setUbo_terrain_handle(const gl::GLint ubo_terrain_handle);
 
 };
 

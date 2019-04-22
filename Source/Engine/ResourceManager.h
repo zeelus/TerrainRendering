@@ -51,6 +51,8 @@ public:
 
     const Geometry& getGeometry(const unsigned int index) const;
 
+	const Texture& getTexture(const unsigned int index) const;
+
     ~ResourceManager() = default;
 
 };

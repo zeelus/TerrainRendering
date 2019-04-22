@@ -8,17 +8,18 @@
 #include "libs.h"
 #include "../Renderer/Camera.h"
 
-Scene::Scene(): terrainTreeManager(5, 40) {
+Scene::Scene(): terrainTreeManager(3.0f, 5, 40) {
 
 }
 
 void Scene::init() {
     resourceManager = ResourceManager::getInstance();
 
+	this->terrainTreeManager.initTerrenVBO();
 	this->terrainTreeManager.setGeomentryIndex(resourceManager->loadModel("Resources/Models/nodePlate.obj", TechniqueType::TerrainPhongBline));
 	this->terrainTreeManager.setHeightMapIndex(resourceManager->loadTexture("Resources/Texture/Heightmap.dds"));
 
-    auto& model = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/tetrahedron.obj"));
+    auto& model = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/deer.obj"));
     model.setPosition(glm::vec3(2, 0, 2));
     model.rotate(30.0f, glm::vec3(0.0f, 1.0f, 0.0));
 

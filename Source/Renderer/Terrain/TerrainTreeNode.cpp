@@ -29,4 +29,9 @@ void TerrainTreeNode::setScale(const float scale) {
     this->setScale(glm::vec3(scale, scale, scale));
 }
 
+void TerrainTreeNode::setPlaneScale(const float planeScale)
+{
+	this->setScale(glm::vec3(planeScale, 1.0f, planeScale));
+}
+
 

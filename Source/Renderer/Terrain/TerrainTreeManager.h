@@ -9,6 +9,8 @@
 #include <string>
 #include <glm/glm.hpp>
 
+#include "../Renderer.h"
+
 #include "TerrainTreeNode.h"
 
 class TerrainTreeManager {
@@ -16,6 +18,9 @@ class TerrainTreeManager {
     const short levels;
     const short maxSize;
 	const short maxDistance = 50;
+	const float terrenScale;
+
+	gl::GLuint ubo_terrain_handle;
 
 	int geometryIndex = -1;
 	int heightMapIndex = -1;
@@ -30,7 +35,7 @@ class TerrainTreeManager {
 public:
     std::vector<TerrainTreeNode> nodes;
 
-    TerrainTreeManager(short levels, const short maxSize);
+    TerrainTreeManager(const float terrenScale, const short levels, const short maxSize);
 
 	void update(const glm::mat4& cameraPos);
 
@@ -38,7 +43,13 @@ public:
 
 	void setHeightMapIndex(const int index);
 
-	int getGeometryIndex() const;
+	const int getGeometryIndex() const;
+
+	const int getHeightMapTextureIndex() const;
+
+	void initTerrenVBO();
+
+	const gl::GLuint getTerrain_handle_ubo() const;
 
 };
 

@@ -36,7 +36,8 @@ void main() {
 
         vec3 ambient = vec3(0.1);
         vec3 diffuse = (brightness * light.r) * light.lightColor;
-        vec3 modelColor = vec3(1.0);
+
+        vec3 modelColor = vec3(1.0f);
 
         vec3 viewDir = normalize(-(fragData.FragPos));
         vec3 halfDir = normalize(lightDir + viewDir);

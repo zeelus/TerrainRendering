@@ -13,6 +13,7 @@
 #include "../Renderer/Terrain/TerrainTreeManager.h"
 #include "Scene.h"
 
+const int NO_TEXTURE = -1;
 
 class EngineWindow {
 

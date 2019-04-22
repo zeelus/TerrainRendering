@@ -10,7 +10,8 @@
 #include <glm/glm.hpp>
 #include "../../Engine/ResourceManager.h"
 
-TerrainTreeManager::TerrainTreeManager(const short levels, const short maxSize): 
+TerrainTreeManager::TerrainTreeManager(const float terrenScale, const short levels, const short maxSize):
+	terrenScale(terrenScale),
 	levels(levels), 
 	maxSize(maxSize)
 {
@@ -38,9 +39,19 @@ void TerrainTreeManager::setHeightMapIndex(const int index)
 	this->heightMapIndex = index;
 }
 
-int TerrainTreeManager::getGeometryIndex() const
+const int TerrainTreeManager::getGeometryIndex() const
 {
 	return geometryIndex;
+}
+
+const int TerrainTreeManager::getHeightMapTextureIndex() const
+{
+	return this->heightMapIndex;
+}
+
+const gl::GLuint TerrainTreeManager::getTerrain_handle_ubo() const
+{
+	return this->ubo_terrain_handle;
 }
 
 std::vector<TerrainTreeNode> TerrainTreeManager::buildNodes(const short levels) {
@@ -72,6 +83,16 @@ std::vector<TerrainTreeNode> TerrainTreeManager::buildNodes(const short levels) 
     return nodes;
 }
 
+void TerrainTreeManager::initTerrenVBO()
+{
+	gl::glGenBuffers(1, &ubo_terrain_handle);
+	glBindBuffer(GL_UNIFORM_BUFFER, ubo_terrain_handle);
+	std::array<glm::vec4, 1u> light = { glm::vec4(this->maxSize, this->terrenScale, 1.0f, 1.0f) };
+	gl::glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec4), light.data(), gl::GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0u);
+
+}
+
 void TerrainTreeManager::setNodesPositionAndSizes() {
 
     if(this->nodes.empty()) {
@@ -92,7 +113,7 @@ void TerrainTreeManager::setNodesPositionAndSizes(const unsigned int nodeIndex, 
 	float moveFactor = scale / 4.0f;
 
     node.setPosition(position);
-	node.setScale(scale);
+	node.setPlaneScale(scale);
 
 	for (int i = 0; i < 4; i++) {
 		if (node.firstChildIndexs != -1) {

@@ -93,18 +93,19 @@ void EngineWindow::showOpenGLInformation() const {
 void EngineWindow::drowStaticModelQueue() const
 {
 	for (auto& model : this->scene.renderingQueue.getStaticModels()) {
-		renderer.drawStaticModel(model.getIndexGeometryIndex(), model.getTransform());
+		renderer.drawStaticModel(model.getIndexGeometryIndex(), model.getTransform(), NO_TEXTURE);
 	}
 }
 
 void EngineWindow::drowTerrainTree() const
 {
 	auto& terrainTreeManger = this->scene.terrainTreeManager;
-	int geometry = terrainTreeManger.getGeometryIndex();
+	const int geometry = terrainTreeManger.getGeometryIndex();
+	const int heightMapTextureIndex = terrainTreeManger.getHeightMapTextureIndex();
 
 	for (auto& node : terrainTreeManger.nodes) {
 		if (node.isShowing) {
-			renderer.drawStaticModel(geometry, node.transform);
+			renderer.drawStaticModel(geometry, node.transform, heightMapTextureIndex);
 		}
 	}
 }
@@ -119,6 +120,7 @@ int EngineWindow::run(int argc, char **argv) {
     scene.init();
     renderer.init();
 	renderer.setCamera(&scene.camera);
+	renderer.setUbo_terrain_handle(scene.terrainTreeManager.getTerrain_handle_ubo());
 
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

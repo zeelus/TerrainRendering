@@ -322,6 +322,11 @@ const Geometry& ResourceManager::getGeometry(const unsigned int index) const {
     return loadsModel[index];
 }
 
+const Texture & ResourceManager::getTexture(const unsigned int index) const
+{
+	return this->loadsTexture[index];
+}
+
 constexpr short ResourceManager::getIndexTechnique(TechniqueType techniqueType) {
     switch (techniqueType) {
         case TechniqueType::PhongBline:
