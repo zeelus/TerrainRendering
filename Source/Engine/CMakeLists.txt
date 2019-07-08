@@ -8,5 +8,5 @@ add_library(TerrenRenderingEngine
         ResourceManager.cpp
         libs.h
         Scene.cpp
-        Scene.h Input.cpp Input.h)
+        Scene.h Input.cpp Input.h Statistic.cpp Statistic.h)
 
