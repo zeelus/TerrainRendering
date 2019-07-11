@@ -12,8 +12,12 @@
 #include "ResourceManager.h"
 #include "../Renderer/Terrain/TerrainTreeManager.h"
 #include "Scene.h"
+#include "../Statistic/Statistic.h"
+#include "../Statistic/StatisticEvent.h"
 
 const int NO_TEXTURE = -1;
+const bool CALCULATE_STATISTIC = true;
+const bool SHOW_MASH = false;
 
 class EngineWindow {
 
@@ -27,11 +31,21 @@ class EngineWindow {
 
     GLFWwindow* window;
 
+    Statistic<StatisticEvent> *statistic = nullptr;
+
+    double lastTime = 0.0;
+    double lastTimeStatistic = 0.0;
+    int nbFrames = 0;
+
+    bool isNvidia = false;
+
 private:
     int setupWindow();
-    void showOpenGLInformation() const;
+    void showOpenGLInformation();
 	void drowStaticModelQueue() const;
 	void drowTerrainTree() const;
+	void calculateStatistic(double currentTime);
+	const GLint calculateGPUMemoryUsage() const;
 
 public:
     EngineWindow(int width, int height, std::string &name, Scene& scene);

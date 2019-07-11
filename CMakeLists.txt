@@ -29,8 +29,9 @@ add_executable(TerrenRendering Source/main.cpp)
 
 add_subdirectory(Source/Engine)
 add_subdirectory(Source/Renderer)
+add_subdirectory(Source/Statistic)
 
-target_link_libraries(TerrenRendering TerrenRenderingEngine TerrenRenderingRenderer ${${PROJECT_NAME}_LIBS} ${${PROJECT_NAME}_LIBS_DEBUG} ${LINKER_FLAGS} ${CONAN_LIBS})
+target_link_libraries(TerrenRendering TerrenRenderingEngine TerrenRenderingRenderer TerrenRenderingStatistic ${${PROJECT_NAME}_LIBS} ${${PROJECT_NAME}_LIBS_DEBUG} ${LINKER_FLAGS} ${CONAN_LIBS})
 
 file( COPY Resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin )
 

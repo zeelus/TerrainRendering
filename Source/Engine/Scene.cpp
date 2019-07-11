@@ -7,6 +7,8 @@
 #include "Input.h"
 #include "libs.h"
 #include "../Renderer/Camera.h"
+#include "../Statistic/Statistic.h"
+#include "../Statistic/StatisticEvent.h"
 
 Scene::Scene(): terrainTreeManager(3.0f, 5, 40) {
 
@@ -58,6 +60,10 @@ void Scene::init() {
 			case GLFW_KEY_F:
 				newPos = glm::translate(pos, vec3(0.0f, 0.2f, 0.0f));
 				break;
+		    case GLFW_KEY_O:
+		        Statistic<StatisticEvent>::shareInstance()->createStatistic();
+		        newPos = pos;
+                break;
 		}
 
 		camera.view = newPos;

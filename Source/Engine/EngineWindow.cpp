@@ -4,12 +4,15 @@
 
 #include "EngineWindow.h"
 #include <iostream>
+#include <stdio.h>
+#include <string.h>
 #include "libs.h"
 
 #include "../Renderer/Terrain/TerrainTreeManager.h"
 #include "Input.h"
 
 using namespace gl;
+
 
 EngineWindow::EngineWindow(int width, int height, std::string &name, Scene& scene): width(width), height(height), name(name), scene(scene) {
 
@@ -20,6 +23,7 @@ int EngineWindow::setupWindow() {
         fprintf(stderr, "ERROR: could not start GLFW3\n");
         return -1;
     }
+    statistic = Statistic<StatisticEvent>::shareInstance();
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
@@ -83,11 +87,16 @@ void EngineWindow::setupErrorCallback() const {
                                 });
 }
 
-void EngineWindow::showOpenGLInformation() const {
+void EngineWindow::showOpenGLInformation() {
+    const char* vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
     const GLubyte* renderer = glGetString(GL_RENDERER);
     const GLubyte* version = glGetString(GL_VERSION);
+    printf("Vendor: %s\n", vendor);
     printf("Renderer: %s\n", renderer);
     printf("OpenGL version supported %s\n", version);
+
+    isNvidia = (strcmp(vendor, "NVIDIA Corporation") == 0);
+
 }
 
 void EngineWindow::drowStaticModelQueue() const
@@ -116,30 +125,70 @@ int EngineWindow::run(int argc, char **argv) {
         fprintf(stderr, "Setup window error! \n");
         return -1;
     }
+    glfwSwapInterval(0);
+
+    lastTime = glfwGetTime();
+    lastTimeStatistic = glfwGetTime();
 
     scene.init();
     renderer.init();
 	renderer.setCamera(&scene.camera);
 	renderer.setUbo_terrain_handle(scene.terrainTreeManager.getTerrain_handle_ubo());
 
+
+
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        double currentTime = glfwGetTime();
+        double dTime = currentTime - lastTime;
+
 		scene.terrainTreeManager.update(scene.camera.view);
-        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+        if constexpr (SHOW_MASH) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		renderer.updateLightPosition();
 		drowStaticModelQueue();
 		drowTerrainTree();
 
-        //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        
         glfwPollEvents();
 		scene.update();
 
         glfwSwapBuffers(window);
+
+        if constexpr (CALCULATE_STATISTIC) calculateStatistic(currentTime);
     }
 
     return 0;
+}
+
+void EngineWindow::calculateStatistic(double currentTime) {
+    nbFrames++;
+    if ( currentTime - lastTimeStatistic >= 1.0) {
+        double msFr = 1000.0 / double(nbFrames);
+        //printf("%f ms/frame\n", msFr);
+        nbFrames = 0;
+        lastTimeStatistic += 1.0;
+
+        const GLint memUsage = calculateGPUMemoryUsage();
+
+        StatisticEvent event(msFr, memUsage);
+        statistic->addElement(std::move(event));
+    }
+}
+
+const GLint EngineWindow::calculateGPUMemoryUsage() const{
+
+    if(isNvidia) {
+        GLint total_mem_kb = 0;
+        glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &total_mem_kb);
+
+        GLint cur_avail_mem_kb = 0;
+        glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &cur_avail_mem_kb);
+
+        return total_mem_kb - cur_avail_mem_kb;
+    }
+
+    return -1;
 }
 

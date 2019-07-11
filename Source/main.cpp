@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
 
     std::string windowName = "Terrain rendererSystem";
     Scene scene;
-    EngineWindow engineApplication(800, 600, windowName, scene);
+    EngineWindow engineApplication(1280, 960, windowName, scene);
 
     int exitCode = engineApplication.run(argc, argv);
 
