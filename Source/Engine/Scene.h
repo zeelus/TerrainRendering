@@ -7,7 +7,6 @@
 
 
 #include "ResourceManager.h"
-#include "../Renderer/Terrain/TerrainTreeManager.h"
 #include "../Renderer/RenderingQueue.h"
 #include "../Renderer/Camera.h"
 #include "../Renderer/Renderer.h"
@@ -18,7 +17,6 @@ class Scene {
 public:
 
     RenderingQueue renderingQueue;
-    TerrainTreeManager terrainTreeManager;
     ResourceManager* resourceManager;
 	Camera camera;
 	Input* input;

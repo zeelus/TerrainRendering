@@ -3,7 +3,7 @@
 //
 
 #include "Scene.h"
-#include "ResourceManager.h""
+#include "ResourceManager.h"
 #include "libs.h"
 #include "../Renderer/Camera.h"
 #include "../Statistic/Statistic.h"
@@ -11,16 +11,18 @@
 
 const float MOVING_FORCE = 6.0f;
 
-Scene::Scene(): terrainTreeManager(3.0f, 5, 40) {
+Scene::Scene() {
 	input = Input::getInstance();
 }
 
 void Scene::init() {
     resourceManager = ResourceManager::getInstance();
 
-	this->terrainTreeManager.initTerrenVBO();
-	this->terrainTreeManager.setGeomentryIndex(resourceManager->loadModel("Resources/Models/nodePlate.obj", TechniqueType::TerrainPhongBline));
-	this->terrainTreeManager.setHeightMapIndex(resourceManager->loadTexture("Resources/Texture/Heightmap.dds"));
+    auto terrainTreeManager = new TerrainTreeManager(3.0f, 5, 40);
+	terrainTreeManager->initTerrenVBO();
+	terrainTreeManager->setGeomentryIndex(resourceManager->loadModel("Resources/Models/nodePlate.obj", TechniqueType::TerrainPhongBline));
+	terrainTreeManager->setHeightMapIndex(resourceManager->loadTexture("Resources/Texture/Heightmap.dds"));
+	renderingQueue.addTerrainTreeManager(terrainTreeManager);
 
     auto& model = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/deer.obj"));
     model.setPosition(glm::vec3(2, 0, 2));

@@ -108,11 +108,11 @@ void EngineWindow::drowStaticModelQueue() const
 
 void EngineWindow::drowTerrainTree() const
 {
-	auto& terrainTreeManger = this->scene.terrainTreeManager;
-	const int geometry = terrainTreeManger.getGeometryIndex();
-	const int heightMapTextureIndex = terrainTreeManger.getHeightMapTextureIndex();
+	auto& terrainTreeManger = this->scene.renderingQueue.terrainTreeManager;
+	const int geometry = terrainTreeManger->getGeometryIndex();
+	const int heightMapTextureIndex = terrainTreeManger->getHeightMapTextureIndex();
 
-	for (auto& node : terrainTreeManger.nodes) {
+	for (auto& node : terrainTreeManger->nodes) {
 		if (node.isShowing) {
 			renderer.drawStaticModel(geometry, node.transform, heightMapTextureIndex);
 		}
@@ -133,7 +133,7 @@ int EngineWindow::run(int argc, char **argv) {
     scene.init();
     renderer.init();
 	renderer.setCamera(&scene.camera);
-	renderer.setUbo_terrain_handle(scene.terrainTreeManager.getTerrain_handle_ubo());
+	renderer.setUbo_terrain_handle(scene.renderingQueue.terrainTreeManager->getTerrain_handle_ubo());
 
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -142,7 +142,7 @@ int EngineWindow::run(int argc, char **argv) {
         double dTime = currentTime - lastTime;
 		lastTime = currentTime;
 
-		scene.terrainTreeManager.update(scene.camera.view);
+		scene.renderingQueue.terrainTreeManager->update(scene.camera.view);
 
         if constexpr (SHOW_MASH) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 

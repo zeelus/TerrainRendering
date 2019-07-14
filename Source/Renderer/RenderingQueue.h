@@ -6,6 +6,7 @@
 #define TERRENRENDERING_RENDERINGQUEUE_H
 
 #include "StaticModel.h"
+#include "Terrain/TerrainTreeManager.h"
 
 class RenderingQueue {
 
@@ -13,10 +14,13 @@ class RenderingQueue {
 
 public:
 
+    std::unique_ptr<TerrainTreeManager> terrainTreeManager;
+
     const std::vector<StaticModel> &getStaticModels() const;
 
     StaticModel& addStaticModel(const int modelIndex);
 
+    void addTerrainTreeManager(TerrainTreeManager* terrainTreeManager);
 
 };
 
