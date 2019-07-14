@@ -11,6 +11,7 @@
 #include "../Renderer/RenderingQueue.h"
 #include "../Renderer/Camera.h"
 #include "../Renderer/Renderer.h"
+#include "Input.h"
 
 class Scene {
 
@@ -20,10 +21,11 @@ public:
     TerrainTreeManager terrainTreeManager;
     ResourceManager* resourceManager;
 	Camera camera;
+	Input* input;
 
     Scene();
     void init();
-	void update();
+	void update(double dTime);
 
 };
 

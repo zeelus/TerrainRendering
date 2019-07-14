@@ -15,9 +15,14 @@ Input *Input::getInstance() {
 }
 
 void Input::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    for(auto& func: functions) {
-        func(key, scancode, action, mods);
-    }
+
+	if (action == GLFW_PRESS) {
+		this->pressedButton.insert(key);
+	}
+	if (action == GLFW_RELEASE){
+		this->pressedButton.erase(key);
+	}
+
 }
 
 void Input::key_callback_static(GLFWwindow *window, int key, int scancode, int action, int mods) {
@@ -25,6 +30,14 @@ void Input::key_callback_static(GLFWwindow *window, int key, int scancode, int a
     inputSystem->key_callback(window, key, scancode, action, mods);
 }
 
-void Input::addFunction(const std::function<void(int, int, int, int)> function) {
-    this->functions.push_back(function);
+const bool Input::isPreeed(const int& key) const
+{
+
+	if (pressedButton.find(key) == pressedButton.end()) {
+		return false;
+	} else {
+		return true;
+	}
+
 }
+

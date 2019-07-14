@@ -14,6 +14,7 @@
 #include "Scene.h"
 #include "../Statistic/Statistic.h"
 #include "../Statistic/StatisticEvent.h"
+#include "Input.h"
 
 const int NO_TEXTURE = -1;
 const bool CALCULATE_STATISTIC = true;
@@ -32,6 +33,7 @@ class EngineWindow {
     GLFWwindow* window;
 
     Statistic<StatisticEvent> *statistic = nullptr;
+	Input* input;
 
     double lastTime = 0.0;
     double lastTimeStatistic = 0.0;

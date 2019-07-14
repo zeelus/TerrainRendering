@@ -15,7 +15,7 @@ using namespace gl;
 
 
 EngineWindow::EngineWindow(int width, int height, std::string &name, Scene& scene): width(width), height(height), name(name), scene(scene) {
-
+	input = Input::getInstance();
 }
 
 int EngineWindow::setupWindow() {
@@ -55,7 +55,7 @@ int EngineWindow::setupWindow() {
 
     setupErrorCallback();
 
-    glfwSetWindowUserPointer(window, Input::getInstance());
+    glfwSetWindowUserPointer(window, input);
     glfwSetKeyCallback(window, Input::key_callback_static);
 
     return 0;
@@ -135,13 +135,12 @@ int EngineWindow::run(int argc, char **argv) {
 	renderer.setCamera(&scene.camera);
 	renderer.setUbo_terrain_handle(scene.terrainTreeManager.getTerrain_handle_ubo());
 
-
-
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         double currentTime = glfwGetTime();
         double dTime = currentTime - lastTime;
+		lastTime = currentTime;
 
 		scene.terrainTreeManager.update(scene.camera.view);
 
@@ -152,21 +151,22 @@ int EngineWindow::run(int argc, char **argv) {
 		drowTerrainTree();
 
         glfwPollEvents();
-		scene.update();
+		scene.update(dTime);
 
         glfwSwapBuffers(window);
 
         if constexpr (CALCULATE_STATISTIC) calculateStatistic(currentTime);
+
     }
 
     return 0;
 }
 
-void EngineWindow::calculateStatistic(double currentTime) {
+void EngineWindow::calculateStatistic(double currentTime) { 
     nbFrames++;
     if ( currentTime - lastTimeStatistic >= 1.0) {
         double msFr = 1000.0 / double(nbFrames);
-        //printf("%f ms/frame\n", msFr);
+        printf("%f ms/frame\n", msFr);
         nbFrames = 0;
         lastTimeStatistic += 1.0;
 
@@ -180,13 +180,17 @@ void EngineWindow::calculateStatistic(double currentTime) {
 const GLint EngineWindow::calculateGPUMemoryUsage() const{
 
     if(isNvidia) {
-        GLint total_mem_kb = 0;
-        glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &total_mem_kb);
 
-        GLint cur_avail_mem_kb = 0;
-        glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &cur_avail_mem_kb);
+	#ifdef _WIN32
+			GLint total_mem_kb = 0;
+			glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &total_mem_kb);
 
-        return total_mem_kb - cur_avail_mem_kb;
+			GLint cur_avail_mem_kb = 0;
+			glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &cur_avail_mem_kb);
+
+			return total_mem_kb - cur_avail_mem_kb;
+	#endif // _WIN32
+
     }
 
     return -1;
