@@ -7,6 +7,7 @@
 
 #include <deque>
 #include <iostream>
+#include <fstream>
 
 template<typename T>
 class Statistic {
@@ -36,6 +37,20 @@ public:
         for(const T& element: deque) {
             std::cout << element << std::endl;
         }
+    }
+
+    void createStatisticFile(const char* fileName) const {
+        std::fstream file;
+        file.open(fileName, std::ios::out);
+        int num = 0;
+        if(file.is_open()) {
+            for(const T& element: deque) {
+                file << num << "," << element << std::endl;
+                num++;
+            }
+        }
+
+        file.close();
     }
 
 };

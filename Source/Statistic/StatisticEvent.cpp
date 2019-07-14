@@ -9,6 +9,6 @@ StatisticEvent::StatisticEvent(double msFr, gl::GLint memUsage) : msFr(msFr), me
 }
 
 std::ostream &operator<<(std::ostream &os, const StatisticEvent &event) {
-    os << "msFr: " << event.msFr << " memUsage: " << event.memUsage;
+    os << (1000 / event.msFr) << "," << event.memUsage;
     return os;
 }

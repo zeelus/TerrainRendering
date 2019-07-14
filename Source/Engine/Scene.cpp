@@ -3,6 +3,9 @@
 //
 
 #include "Scene.h"
+
+#include <string>
+
 #include "ResourceManager.h"
 #include "libs.h"
 #include "../Renderer/Camera.h"
@@ -10,6 +13,7 @@
 #include "../Statistic/StatisticEvent.h"
 
 const float MOVING_FORCE = 6.0f;
+const float TEST_MOVING = true;
 
 Scene::Scene() {
 	input = Input::getInstance();
@@ -46,31 +50,42 @@ void Scene::update(double dTime)
 {
 	mat4 newPos = camera.view;
 
-	if (input->isPreeed(GLFW_KEY_W)) {
-		newPos = glm::translate(newPos, vec3(0.0f, 0.0f, MOVING_FORCE * dTime));
+	if(TEST_MOVING) {
+		static double totalTime = 0.0;
+		totalTime += dTime;
+		if (totalTime >= 30.0) {
+			Statistic<StatisticEvent>::shareInstance()->createStatisticFile("statistic.csv");
+			return;
+		}
+		newPos = glm::translate(newPos, vec3(0.3f * dTime, 0.1f * dTime, 1.f * dTime));
 	}
+	else {
+		if (input->isPreeed(GLFW_KEY_W)) {
+			newPos = glm::translate(newPos, vec3(0.0f, 0.0f, MOVING_FORCE * dTime));
+		}
 
-	if (input->isPreeed(GLFW_KEY_S)) {
-		newPos = glm::translate(newPos, vec3(0.0f, 0.0f, -MOVING_FORCE * dTime));
-	}
+		if (input->isPreeed(GLFW_KEY_S)) {
+			newPos = glm::translate(newPos, vec3(0.0f, 0.0f, -MOVING_FORCE * dTime));
+		}
 
-	if (input->isPreeed(GLFW_KEY_D)) {
-		newPos = glm::translate(newPos, vec3(-MOVING_FORCE * dTime, 0.0f, 0.0f));
-	}
+		if (input->isPreeed(GLFW_KEY_D)) {
+			newPos = glm::translate(newPos, vec3(-MOVING_FORCE * dTime, 0.0f, 0.0f));
+		}
 
-	if (input->isPreeed(GLFW_KEY_A)) {
-		newPos = glm::translate(newPos, vec3(MOVING_FORCE * dTime, 0.0f, 0.0f));
-	}
+		if (input->isPreeed(GLFW_KEY_A)) {
+			newPos = glm::translate(newPos, vec3(MOVING_FORCE * dTime, 0.0f, 0.0f));
+		}
 
-	if (input->isPreeed(GLFW_KEY_R)) {
-		newPos = glm::translate(newPos, vec3(0.0f, -MOVING_FORCE * dTime, 0.0f));
-	}
+		if (input->isPreeed(GLFW_KEY_R)) {
+			newPos = glm::translate(newPos, vec3(0.0f, -MOVING_FORCE * dTime, 0.0f));
+		}
 
-	if (input->isPreeed(GLFW_KEY_F)) {
-		newPos = glm::translate(newPos, vec3(0.0f, MOVING_FORCE * dTime, 0.0f));
-	}
-	if (input->isPreeed(GLFW_KEY_O)) {
-		Statistic<StatisticEvent>::shareInstance()->createStatistic();
+		if (input->isPreeed(GLFW_KEY_F)) {
+			newPos = glm::translate(newPos, vec3(0.0f, MOVING_FORCE * dTime, 0.0f));
+		}
+		if (input->isPreeed(GLFW_KEY_O)) {
+			Statistic<StatisticEvent>::shareInstance()->createStatistic();
+		}
 	}
 
 	camera.view = newPos;
