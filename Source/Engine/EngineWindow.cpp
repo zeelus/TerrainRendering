@@ -142,7 +142,7 @@ int EngineWindow::run(int argc, char **argv) {
         double dTime = currentTime - lastTime;
 		lastTime = currentTime;
 
-		scene.renderingQueue.terrainTreeManager->update(scene.camera.view);
+		if constexpr (REDERING_QUAD_TREE) scene.renderingQueue.terrainTreeManager->update(scene.camera.view);
 
         if constexpr (SHOW_MASH) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 

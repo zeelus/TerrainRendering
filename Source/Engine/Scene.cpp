@@ -22,7 +22,7 @@ Scene::Scene() {
 void Scene::init() {
     resourceManager = ResourceManager::getInstance();
 
-    auto terrainTreeManager = new TerrainTreeManager(3.0f, 5, 40);
+    auto terrainTreeManager = new TerrainTreeManager(3.0f, 7, 40);
 	terrainTreeManager->initTerrenVBO();
 	terrainTreeManager->setGeomentryIndex(resourceManager->loadModel("Resources/Models/nodePlate.obj", TechniqueType::TerrainPhongBline));
 	terrainTreeManager->setHeightMapIndex(resourceManager->loadTexture("Resources/Texture/Heightmap.dds"));
@@ -31,6 +31,9 @@ void Scene::init() {
     auto& model = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/deer.obj"));
     model.setPosition(glm::vec3(2, 0, 2));
     model.rotate(30.0f, glm::vec3(0.0f, 1.0f, 0.0));
+
+    auto& terrenNaiveModel = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/naiveTerren.obj"));
+    terrenNaiveModel.setPosition(glm::vec3(0,0,0));
 
  //   auto& model2 = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/cube.obj"));
  //   model2.setPosition(glm::vec3(0, 0, -2));
@@ -52,11 +55,15 @@ void Scene::update(double dTime)
 
 	if(TEST_MOVING) {
 		static double totalTime = 0.0;
+		static bool testEnd = false;
 		totalTime += dTime;
-		if (totalTime >= 30.0) {
-			Statistic<StatisticEvent>::shareInstance()->createStatisticFile("statistic.csv");
-			return;
+		if (totalTime >= 30.0 && !testEnd) {
+		    testEnd = true;
+			Statistic<StatisticEvent>::shareInstance()->createStatisticFile();
+            printf("Create statistic file\n");
 		}
+		if(testEnd)return;
+
 		newPos = glm::translate(newPos, vec3(0.3f * dTime, 0.1f * dTime, 1.f * dTime));
 	}
 	else {

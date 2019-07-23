@@ -20,6 +20,18 @@ class Statistic {
 
     }
 
+    const std::string currentDateTime() const {
+
+        time_t     now = time(0);
+        struct tm  tstruct;
+        char       buf[80];
+        tstruct = *localtime(&now);
+        strftime(buf, sizeof(buf), "%FT%TZ", &tstruct);
+
+        return std::string(buf);
+
+    }
+
 public:
 
     void addElement(T&& element) {
@@ -39,9 +51,11 @@ public:
         }
     }
 
-    void createStatisticFile(const char* fileName) const {
+    void createStatisticFile() const {
+
+        std::string fileNameString = std::string("statistic_") + currentDateTime() + std::string(".csv");
         std::fstream file;
-        file.open(fileName, std::ios::out);
+        file.open(fileNameString.c_str(), std::ios::out);
         int num = 0;
         if(file.is_open()) {
             for(const T& element: deque) {
@@ -52,6 +66,8 @@ public:
 
         file.close();
     }
+
+
 
 };
 
