@@ -13,7 +13,7 @@
 #include "../Statistic/StatisticEvent.h"
 
 const float MOVING_FORCE = 6.0f;
-const float TEST_MOVING = true;
+const float TEST_MOVING = false;
 
 Scene::Scene() {
 	input = Input::getInstance();
@@ -22,7 +22,7 @@ Scene::Scene() {
 void Scene::init() {
     resourceManager = ResourceManager::getInstance();
 
-    auto terrainTreeManager = new TerrainTreeManager(3.0f, 7, 40);
+    auto terrainTreeManager = new TerrainQuadTreeManager(3.0f, 7, 40);
 	terrainTreeManager->initTerrenVBO();
 	terrainTreeManager->setGeomentryIndex(resourceManager->loadModel("Resources/Models/nodePlate.obj", TechniqueType::TerrainPhongBline));
 	terrainTreeManager->setHeightMapIndex(resourceManager->loadTexture("Resources/Texture/Heightmap.dds"));
@@ -32,8 +32,8 @@ void Scene::init() {
     model.setPosition(glm::vec3(2, 0, 2));
     model.rotate(30.0f, glm::vec3(0.0f, 1.0f, 0.0));
 
-    auto& terrenNaiveModel = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/naiveTerren.obj"));
-    terrenNaiveModel.setPosition(glm::vec3(0,0,0));
+//    auto& terrenNaiveModel = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/naiveTerren.obj"));
+//    terrenNaiveModel.setPosition(glm::vec3(0,0,0));
 
  //   auto& model2 = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/cube.obj"));
  //   model2.setPosition(glm::vec3(0, 0, -2));

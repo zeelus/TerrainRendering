@@ -2,7 +2,7 @@
 // Created by Gilbert Gwizdala on 2019-03-09.
 //
 
-#include "TerrainTreeManager.h"
+#include "TerrainQuadTreeManager.h"
 #include "TerrainTreeNode.h"
 
 #include <vector>
@@ -10,7 +10,7 @@
 #include <glm/glm.hpp>
 #include "../../Engine/ResourceManager.h"
 
-TerrainTreeManager::TerrainTreeManager(const float terrenScale, const short levels, const short maxSize):
+TerrainQuadTreeManager::TerrainQuadTreeManager(const float terrenScale, const short levels, const short maxSize):
 	terrenScale(terrenScale),
 	levels(levels), 
 	maxSize(maxSize)
@@ -19,7 +19,7 @@ TerrainTreeManager::TerrainTreeManager(const float terrenScale, const short leve
     setNodesPositionAndSizes();
 }
 
-void TerrainTreeManager::update(const glm::mat4& cameraPos)
+void TerrainQuadTreeManager::update(const glm::mat4& cameraPos)
 {
 	const glm::vec3 cameraPosVec3 = glm::vec3(cameraPos[3]) * glm::vec3(-1.0f, -1.0f, -1.0f);
 	
@@ -29,32 +29,32 @@ void TerrainTreeManager::update(const glm::mat4& cameraPos)
 
 }
 
-void TerrainTreeManager::setGeomentryIndex(const int index)
+void TerrainQuadTreeManager::setGeomentryIndex(const int index)
 {
 	this->geometryIndex = index;
 }
 
-void TerrainTreeManager::setHeightMapIndex(const int index)
+void TerrainQuadTreeManager::setHeightMapIndex(const int index)
 {
 	this->heightMapIndex = index;
 }
 
-const int TerrainTreeManager::getGeometryIndex() const
+const int TerrainQuadTreeManager::getGeometryIndex() const
 {
 	return geometryIndex;
 }
 
-const int TerrainTreeManager::getHeightMapTextureIndex() const
+const int TerrainQuadTreeManager::getHeightMapTextureIndex() const
 {
 	return this->heightMapIndex;
 }
 
-const gl::GLuint TerrainTreeManager::getTerrain_handle_ubo() const
+const gl::GLuint TerrainQuadTreeManager::getTerrain_handle_ubo() const
 {
 	return this->ubo_terrain_handle;
 }
 
-std::vector<TerrainTreeNode> TerrainTreeManager::buildNodes(const short levels) {
+std::vector<TerrainTreeNode> TerrainQuadTreeManager::buildNodes(const short levels) {
 
     std::vector<TerrainTreeNode> nodes;
 
@@ -83,7 +83,7 @@ std::vector<TerrainTreeNode> TerrainTreeManager::buildNodes(const short levels) 
     return nodes;
 }
 
-void TerrainTreeManager::initTerrenVBO()
+void TerrainQuadTreeManager::initTerrenVBO()
 {
 	gl::glGenBuffers(1, &ubo_terrain_handle);
 	glBindBuffer(GL_UNIFORM_BUFFER, ubo_terrain_handle);
@@ -93,7 +93,7 @@ void TerrainTreeManager::initTerrenVBO()
 
 }
 
-void TerrainTreeManager::setNodesPositionAndSizes() {
+void TerrainQuadTreeManager::setNodesPositionAndSizes() {
 
     if(this->nodes.empty()) {
         return;
@@ -105,7 +105,7 @@ void TerrainTreeManager::setNodesPositionAndSizes() {
 
 }
 
-void TerrainTreeManager::setNodesPositionAndSizes(const unsigned int nodeIndex, const glm::vec3 position) {
+void TerrainQuadTreeManager::setNodesPositionAndSizes(const unsigned int nodeIndex, const glm::vec3 position) {
 
     auto& node = this->nodes[nodeIndex];
 
@@ -123,7 +123,7 @@ void TerrainTreeManager::setNodesPositionAndSizes(const unsigned int nodeIndex, 
 	}
 }
 
-void TerrainTreeManager::checkNodeVisibility(const int nodeIndex, const glm::vec3& cameraPosVec3)
+void TerrainQuadTreeManager::checkNodeVisibility(const int nodeIndex, const glm::vec3& cameraPosVec3)
 {
 	auto& node = this->nodes[nodeIndex];
 	
@@ -152,7 +152,7 @@ void TerrainTreeManager::checkNodeVisibility(const int nodeIndex, const glm::vec
 	}
 }
 
-void TerrainTreeManager::hideNodeWithChildrens(const int nodeIndex)
+void TerrainQuadTreeManager::hideNodeWithChildrens(const int nodeIndex)
 {
 	auto& node = nodes[nodeIndex];
 	node.isShowing = false;

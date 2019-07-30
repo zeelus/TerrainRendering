@@ -11,9 +11,13 @@
 
 using namespace gl;
 
-
-enum ShaderType { VertexShader,
-    FragmentShader, GeometryShader };
+enum ShaderType {
+    VertexShader,
+    FragmentShader,
+    GeometryShader,
+    TessellationControlShader,
+    TessellationEvalShader
+};
 
 class ShadersLoadingException: public std::runtime_error {
 
@@ -25,6 +29,7 @@ public:
 class Shader {
 
     ShaderType type;
+    std::string path;
 
     std::string shaderCode;
 

@@ -2,8 +2,8 @@
 // Created by Gilbert Gwizdala on 2019-03-09.
 //
 
-#ifndef TERRENRENDERING_TERRAINTREEMANAGER_H
-#define TERRENRENDERING_TERRAINTREEMANAGER_H
+#ifndef TERRENRENDERING_TERRAINQUADTREEMANAGER_H
+#define TERRENRENDERING_TERRAINQUADTREEMANAGER_H
 
 #include <vector>
 #include <string>
@@ -13,7 +13,7 @@
 
 #include "TerrainTreeNode.h"
 
-class TerrainTreeManager {
+class TerrainQuadTreeManager {
 
     const short levels;
     const short maxSize;
@@ -35,7 +35,7 @@ class TerrainTreeManager {
 public:
     std::vector<TerrainTreeNode> nodes;
 
-    TerrainTreeManager(const float terrenScale, const short levels, const short maxSize);
+    TerrainQuadTreeManager(const float terrenScale, const short levels, const short maxSize);
 
 	void update(const glm::mat4& cameraPos);
 
@@ -54,4 +54,4 @@ public:
 };
 
 
-#endif //TERRENRENDERING_TERRAINTREEMANAGER_H
+#endif //TERRENRENDERING_TERRAINQUADTREEMANAGER_H

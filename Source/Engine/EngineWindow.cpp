@@ -8,7 +8,7 @@
 #include <string.h>
 #include "libs.h"
 
-#include "../Renderer/Terrain/TerrainTreeManager.h"
+#include "../Renderer/Terrain/TerrainQuadTreeManager.h"
 #include "Input.h"
 
 using namespace gl;

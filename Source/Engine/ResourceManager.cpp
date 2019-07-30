@@ -312,6 +312,15 @@ void ResourceManager::loadTechniques() {
         Shader fragment(FragmentShader, "Resources/Shaders/TerrainFragmentShader.frag");
 		this->loadsTechnique.emplace_back(vertex, fragment, geometry);
     }
+
+    {
+        Shader vertex(VertexShader, "Resources/Shaders/TerrainTessellationVertexShader.vert");
+        Shader tesControl(TessellationControlShader, "Resources/Shaders/TerrainTessellationControlShader.tesc");
+        Shader tesEval(TessellationEvalShader, "Resources/Shaders/TerrainTessellationEvalShader.tese");
+        Shader geometry(GeometryShader, "Resources/Shaders/TerrainGeometryShader.geom");
+        Shader fragment(FragmentShader, "Resources/Shaders/TerrainFragmentShader.frag");
+        this->loadsTechnique.emplace_back(vertex, fragment, geometry, tesControl, tesEval);
+    }
 }
 
 const Technique& ResourceManager::loadTechnique(const unsigned int index) const {
@@ -333,6 +342,8 @@ constexpr short ResourceManager::getIndexTechnique(TechniqueType techniqueType) 
             return 0;
         case TechniqueType::TerrainPhongBline:
             return 1;
+        case TechniqueType::TerrainTessellation:
+            return 2;
         default:
             return -1;
     }

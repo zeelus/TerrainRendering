@@ -15,7 +15,8 @@ const GLuint TerrainBinding = 2u;
 
 enum class TechniqueType {
     PhongBline,
-    TerrainPhongBline
+    TerrainPhongBline,
+    TerrainTessellation
 };
 
 class Technique {
@@ -29,6 +30,8 @@ public:
     Technique(Shader vertex, Shader fragment);
 
 	Technique(Shader vertex, Shader fragment, Shader geometry);
+
+    Technique(Shader vertex, Shader fragment, Shader geometry, Shader tControl, Shader tEval);
 
 };
 

@@ -8,7 +8,7 @@
 
 using namespace gl;
 
-Shader::Shader(ShaderType type, std::string path) {
+Shader::Shader(ShaderType type, std::string path): path(path) {
     this->type = type;
     this->loadShaders(path);
     this->compilateShader();
@@ -49,8 +49,15 @@ void Shader::compilateShader() {
             break;
         case GeometryShader:
             handler = glCreateShader(gl::GL_GEOMETRY_SHADER);
+            break;
+        case TessellationControlShader:
+            handler = glCreateShader(gl::GL_TESS_CONTROL_SHADER);
+            break;
+        case TessellationEvalShader:
+            handler = glCreateShader(gl::GL_TESS_EVALUATION_SHADER);
+            break;
     }
-//    handler = glCreateShader(type);
+
     char* shaderSource = const_cast<char*>(shaderCode.c_str());
     gl::glShaderSource(handler, 1, &shaderSource, NULL);
     gl::glCompileShader(handler);
@@ -59,7 +66,8 @@ void Shader::compilateShader() {
     glGetShaderiv(handler, GL_COMPILE_STATUS, &isCompiled);
     if(!isCompiled)
     {
-        std::string name("Compied error");
+        std::string name("Compied error ");
+        name += path;
 
 		GLint maxLength = 0;
 		glGetShaderiv(handler, GL_INFO_LOG_LENGTH, &maxLength);
