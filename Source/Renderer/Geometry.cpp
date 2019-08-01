@@ -9,12 +9,14 @@ Geometry::Geometry(
         GLuint vbo,
         GLuint elements,
         unsigned int elementsSize,
-        short techniqueIndex):
+        short techniqueIndex,
+        RenderingType renderingType):
             vao(vao),
             vbo(vbo),
             elements(elements),
             elementsSize(elementsSize),
-            techniqueIndex(techniqueIndex)
+            techniqueIndex(techniqueIndex),
+            renderingType(renderingType)
             {}
 
 GLuint Geometry::getVao() const {
@@ -35,6 +37,15 @@ unsigned int Geometry::getElementsSize() const {
 
 short Geometry::getTechniqueIndex() const {
     return techniqueIndex;
+}
+
+const GLenum Geometry::getOpenGLRenderingType() const {
+    switch(renderingType) {
+        case RenderingType::Triangles:
+            return gl::GL_TRIANGLES;
+        case RenderingType::Plane:
+            return GL_PATCHES;
+    };
 }
 
 

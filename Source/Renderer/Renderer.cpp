@@ -83,7 +83,7 @@ void Renderer::drawStaticModel(const int geometryIndex, const glm::mat4& modelMa
 
     this->updateMatrices(modelMatrix);
 
-	glDrawElements(GL_TRIANGLES, geometry->getElementsSize() * sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
+	glDrawElements(geometry->getOpenGLRenderingType(), geometry->getElementsSize() * sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
 
 }
 

@@ -127,7 +127,7 @@ optional<Geometry> ResourceManager::loadOBJModel(const std::string& path, const 
 	gl::glBindBuffer(GL_ARRAY_BUFFER, 0u);
 	gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
 
-    return Geometry(vao, vbo, index_buffer, static_cast<unsigned int>(elements.size()), getIndexTechnique(techniqueType));
+    return Geometry(vao, vbo, index_buffer, static_cast<unsigned int>(elements.size()), getIndexTechnique(techniqueType), RenderingType::Triangles);
 }
 
 gl::GLuint ResourceManager::loadTexFromFileAndCreateTO(const std::string & file_path) {
