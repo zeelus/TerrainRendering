@@ -8,7 +8,7 @@
 #include <string.h>
 #include "libs.h"
 
-#include "../Renderer/Terrain/TerrainQuadTreeManager.h"
+#include "../Renderer/Terrain/QuadTree/TerrainQuadTreeManager.h"
 #include "Input.h"
 
 using namespace gl;
@@ -108,15 +108,18 @@ void EngineWindow::drowStaticModelQueue() const
 
 void EngineWindow::drowTerrainTree() const
 {
-	auto& terrainTreeManger = this->scene.renderingQueue.terrainTreeManager;
-	const int geometry = terrainTreeManger->getGeometryIndex();
-	const int heightMapTextureIndex = terrainTreeManger->getHeightMapTextureIndex();
+	auto& terrainTreeManger = this->scene.renderingQueue.terrainQuadTreeManager;
+	if(terrainTreeManger) {
+        const int geometry = terrainTreeManger->getGeometryIndex();
+        const int heightMapTextureIndex = terrainTreeManger->getHeightMapTextureIndex();
 
-	for (auto& node : terrainTreeManger->nodes) {
-		if (node.isShowing) {
-			renderer.drawStaticModel(geometry, node.transform, heightMapTextureIndex);
-		}
+        for (auto& node : terrainTreeManger->nodes) {
+            if (node.isShowing) {
+                renderer.drawStaticModel(geometry, node.transform, heightMapTextureIndex);
+            }
+        }
 	}
+
 }
 
 int EngineWindow::run(int argc, char **argv) {
@@ -133,7 +136,10 @@ int EngineWindow::run(int argc, char **argv) {
     scene.init();
     renderer.init();
 	renderer.setCamera(&scene.camera);
-	renderer.setUbo_terrain_handle(scene.renderingQueue.terrainTreeManager->getTerrain_handle_ubo());
+
+	if(scene.renderingQueue.terrainQuadTreeManager) {
+        renderer.setUbo_terrain_handle(scene.renderingQueue.terrainQuadTreeManager->getTerrain_handle_ubo());
+	}
 
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -142,7 +148,7 @@ int EngineWindow::run(int argc, char **argv) {
         double dTime = currentTime - lastTime;
 		lastTime = currentTime;
 
-		if constexpr (REDERING_QUAD_TREE) scene.renderingQueue.terrainTreeManager->update(scene.camera.view);
+		if constexpr (REDERING_QUAD_TREE) scene.renderingQueue.terrainQuadTreeManager->update(scene.camera.view);
 
         if constexpr (SHOW_MASH) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 

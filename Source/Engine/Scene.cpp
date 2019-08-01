@@ -26,7 +26,10 @@ void Scene::init() {
 	terrainTreeManager->initTerrenVBO();
 	terrainTreeManager->setGeomentryIndex(resourceManager->loadModel("Resources/Models/nodePlate.obj", TechniqueType::TerrainPhongBline));
 	terrainTreeManager->setHeightMapIndex(resourceManager->loadTexture("Resources/Texture/Heightmap.dds"));
-	renderingQueue.addTerrainTreeManager(terrainTreeManager);
+    renderingQueue.addTerrainQuadTreeManager(terrainTreeManager);
+
+    auto terrainTessellationManager = new TerrainTessellationManager();
+    renderingQueue.addTerrainTessellationManager(terrainTessellationManager);
 
     auto& model = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/deer.obj"));
     model.setPosition(glm::vec3(2, 0, 2));

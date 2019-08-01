@@ -10,7 +10,7 @@
 #include "../Renderer/Renderer.h"
 #include "../Renderer/RenderingQueue.h"
 #include "ResourceManager.h"
-#include "../Renderer/Terrain/TerrainQuadTreeManager.h"
+#include "../Renderer/Terrain/QuadTree/TerrainQuadTreeManager.h"
 #include "Scene.h"
 #include "../Statistic/Statistic.h"
 #include "../Statistic/StatisticEvent.h"

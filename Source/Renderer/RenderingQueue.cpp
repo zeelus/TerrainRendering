@@ -22,6 +22,10 @@ StaticModel& RenderingQueue::addStaticModel(const int modelIndex) {
     return staticModelOnVector;
 }
 
-void RenderingQueue::addTerrainTreeManager(TerrainQuadTreeManager* terrainTreeManager) {
-    this->terrainTreeManager.reset(terrainTreeManager);
+void RenderingQueue::addTerrainQuadTreeManager(TerrainQuadTreeManager *terrainTreeManager) {
+    this->terrainQuadTreeManager.reset(terrainTreeManager);
+}
+
+void RenderingQueue::addTerrainTessellationManager(TerrainTessellationManager *terrainTessellationManager) {
+    this->terrainTessellationManager.reset(terrainTessellationManager);
 }

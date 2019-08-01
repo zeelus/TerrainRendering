@@ -16,7 +16,7 @@ add_library(TerrenRenderingRenderer
         StaticModel.cpp
         RenderingQueue.cpp
         RenderingQueue.h
-        Terrain/TerrainQuadTreeManager.cpp
-        Terrain/TerrainQuadTreeManager.h
-        Terrain/TerrainTreeNode.cpp
-        Terrain/TerrainTreeNode.h Texture.cpp Texture.h Terrain/TerrainTessellationManager.cpp Terrain/TerrainTessellationManager.h)
+        Terrain/QuadTree/TerrainQuadTreeManager.cpp
+        Terrain/QuadTree/TerrainQuadTreeManager.h
+        Terrain/QuadTree/TerrainTreeNode.cpp
+        Terrain/QuadTree/TerrainTreeNode.h Texture.cpp Texture.h Terrain/TerrainTessellation/TerrainTessellationManager.cpp Terrain/TerrainTessellation/TerrainTessellationManager.h)

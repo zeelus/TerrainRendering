@@ -8,7 +8,7 @@
 #include <vector>
 #include <string>
 #include <glm/glm.hpp>
-#include "../../Engine/ResourceManager.h"
+#include "../../../Engine/ResourceManager.h"
 
 TerrainQuadTreeManager::TerrainQuadTreeManager(const float terrenScale, const short levels, const short maxSize):
 	terrenScale(terrenScale),
