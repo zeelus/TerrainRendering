@@ -349,4 +349,9 @@ constexpr short ResourceManager::getIndexTechnique(TechniqueType techniqueType) 
     }
 }
 
+int ResourceManager::setGeometry(Geometry &geometry) {
+    this->loadsModel.push_back(geometry);
+    return static_cast<int>(loadsTexture.size() - 1);
+}
+
 

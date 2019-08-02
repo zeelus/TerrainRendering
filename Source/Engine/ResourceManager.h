@@ -14,10 +14,10 @@
 #include <optional>
 #include <vector>
 
-class ResourceManager {
+const GLuint vertex_position_location = 0u;
+const GLuint vertex_normal_location = 1u;
 
-    const GLuint vertex_position_location = 0u;
-    const GLuint vertex_normal_location = 1u;
+class ResourceManager {
 
     static ResourceManager* instance;
 
@@ -50,6 +50,8 @@ public:
     const Technique& loadTechnique(const unsigned int index) const;
 
     const Geometry& getGeometry(const unsigned int index) const;
+
+    int setGeometry(Geometry &geometry);
 
 	const Texture& getTexture(const unsigned int index) const;
 

@@ -8,18 +8,29 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <utility>
+#include "../../StaticModel.h"
+#include "../../Renderer.h"
 
 class TerrainTessellationManager {
+
+    StaticModel *staticModel = nullptr;
+
+    const int textureIndex;
 
 public:
 
     TerrainTessellationManager();
 
+    ~TerrainTessellationManager();
+
+    void drowIn(const Renderer &renderer) const;
 private:
 
     void init();
 
     std::pair<std::vector<glm::vec3>, std::vector<int>> make_plane() const;
+
+
 
 };
 

@@ -1,6 +1,6 @@
 #version 410
 
-in vec4 position;
+layout(location = 0) in vec4 position;
 uniform sampler2D terrain;
 
 void main(void){

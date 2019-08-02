@@ -106,7 +106,7 @@ void EngineWindow::drowStaticModelQueue() const
 	}
 }
 
-void EngineWindow::drowTerrainTree() const
+void EngineWindow::drawTerrainTree() const
 {
 	auto& terrainTreeManger = this->scene.renderingQueue.terrainQuadTreeManager;
 	if(terrainTreeManger) {
@@ -118,6 +118,11 @@ void EngineWindow::drowTerrainTree() const
                 renderer.drawStaticModel(geometry, node.transform, heightMapTextureIndex);
             }
         }
+	}
+
+	auto& terrainTessellation = this->scene.renderingQueue.terrainTessellationManager;
+	if(terrainTessellation) {
+	    terrainTessellation->drowIn(this->renderer);
 	}
 
 }
@@ -154,7 +159,7 @@ int EngineWindow::run(int argc, char **argv) {
 
 		renderer.updateLightPosition();
 		drowStaticModelQueue();
-		drowTerrainTree();
+        drawTerrainTree();
 
         glfwPollEvents();
 		scene.update(dTime);

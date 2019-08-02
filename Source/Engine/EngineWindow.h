@@ -47,7 +47,7 @@ private:
     int setupWindow();
     void showOpenGLInformation();
 	void drowStaticModelQueue() const;
-	void drowTerrainTree() const;
+	void drawTerrainTree() const;
 	void calculateStatistic(double currentTime);
 	const GLint calculateGPUMemoryUsage() const;
 
