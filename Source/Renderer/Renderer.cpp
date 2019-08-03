@@ -77,12 +77,14 @@ void Renderer::drawStaticModel(const int geometryIndex, const glm::mat4& modelMa
         }
 
         glBindVertexArray(0u);
+
         glBindVertexArray(geometry->getVao());
 
     }
 
     this->updateMatrices(modelMatrix);
 
+    glPatchParameteri(GL_PATCH_VERTICES, 4);
 	glDrawElements(geometry->getOpenGLRenderingType(), geometry->getElementsSize() * sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
 
 }

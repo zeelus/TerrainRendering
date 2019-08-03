@@ -127,7 +127,8 @@ optional<Geometry> ResourceManager::loadOBJModel(const std::string& path, const 
 	gl::glBindBuffer(GL_ARRAY_BUFFER, 0u);
 	gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
 
-    return Geometry(vao, vbo, index_buffer, static_cast<unsigned int>(elements.size()), getIndexTechnique(techniqueType), RenderingType::Triangles);
+    return Geometry(path, vbo, index_buffer, static_cast<unsigned int>(elements.size()),
+                    getIndexTechnique(techniqueType), RenderingType::Triangles, vao);
 }
 
 gl::GLuint ResourceManager::loadTexFromFileAndCreateTO(const std::string & file_path) {
@@ -318,7 +319,7 @@ void ResourceManager::loadTechniques() {
         Shader tesControl(TessellationControlShader, "Resources/Shaders/TerrainTessellationControlShader.tesc");
         Shader tesEval(TessellationEvalShader, "Resources/Shaders/TerrainTessellationEvalShader.tese");
         Shader geometry(GeometryShader, "Resources/Shaders/TerrainGeometryShader.geom");
-        Shader fragment(FragmentShader, "Resources/Shaders/TerrainFragmentShader.frag");
+        Shader fragment(FragmentShader, "Resources/Shaders/TerrainTessellationFragmentShader.frag");
         this->loadsTechnique.emplace_back(vertex, fragment, geometry, tesControl, tesEval);
     }
 }
@@ -351,7 +352,7 @@ constexpr short ResourceManager::getIndexTechnique(TechniqueType techniqueType) 
 
 int ResourceManager::setGeometry(Geometry &geometry) {
     this->loadsModel.push_back(geometry);
-    return static_cast<int>(loadsTexture.size() - 1);
+    return static_cast<int>(loadsModel.size() - 1);
 }
 
 

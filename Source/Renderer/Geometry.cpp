@@ -4,20 +4,18 @@
 
 #include "Geometry.h"
 
-Geometry::Geometry(
-        GLuint vao,
-        GLuint vbo,
-        GLuint elements,
-        unsigned int elementsSize,
-        short techniqueIndex,
-        RenderingType renderingType):
-            vao(vao),
-            vbo(vbo),
-            elements(elements),
-            elementsSize(elementsSize),
-            techniqueIndex(techniqueIndex),
-            renderingType(renderingType)
-            {}
+Geometry::Geometry(std::string name, GLuint vbo, GLuint elements, unsigned int elementsSize, short techniqueIndex,
+                   RenderingType renderingType, GLuint vao) :
+                   name(name),
+                   vao(vao),
+                   vbo(vbo),
+                   elements(elements),
+                   elementsSize(elementsSize),
+                   techniqueIndex(techniqueIndex),
+                   renderingType(renderingType)
+                   {
+
+                   }
 
 GLuint Geometry::getVao() const {
     return vao;
@@ -44,8 +42,12 @@ const GLenum Geometry::getOpenGLRenderingType() const {
         case RenderingType::Triangles:
             return gl::GL_TRIANGLES;
         case RenderingType::Plane:
-            return GL_PATCHES;
+            return gl::GL_PATCHES;
     };
+}
+
+const std::string &Geometry::getName() const {
+    return name;
 }
 
 

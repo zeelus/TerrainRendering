@@ -19,6 +19,7 @@ enum class RenderingType{
 class Geometry {
 
 private:
+    std::string name;
     GLuint vao;
     GLuint vbo;
     GLuint elements;
@@ -28,7 +29,8 @@ private:
 
 public:
 
-    Geometry(GLuint vao, GLuint vbo, GLuint elements, unsigned int elementsSize, short techniqueIndex, RenderingType renderingType);
+    Geometry(std::string name, GLuint vbo, GLuint elements, unsigned int elementsSize, short techniqueIndex,
+             RenderingType renderingType, GLuint vao);
 
     GLuint getVao() const;
 
@@ -42,6 +44,7 @@ public:
 
     const GLenum getOpenGLRenderingType() const;
 
+    const std::string &getName() const;
 
 };
 

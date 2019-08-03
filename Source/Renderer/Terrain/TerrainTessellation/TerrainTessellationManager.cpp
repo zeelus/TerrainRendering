@@ -14,7 +14,7 @@ TerrainTessellationManager::TerrainTessellationManager(): textureIndex(ResourceM
 
 void TerrainTessellationManager::init() {
 
-    std::pair<std::vector<glm::vec3>, std::vector<int>> model = make_plane();
+    auto model = make_plane(1u, 1u);
 
     gl::GLuint vao = 0;
     gl::glGenVertexArrays(1, &vao);
@@ -25,7 +25,7 @@ void TerrainTessellationManager::init() {
     gl::glEnableVertexAttribArray(vertex_position_location);
     gl::glBindBuffer(GL_ARRAY_BUFFER, vbo);
     gl::glBufferData(GL_ARRAY_BUFFER, model.first.size() * sizeof(glm::vec3), model.first.data(), GL_STATIC_DRAW);
-    gl::glVertexAttribPointer(vertex_position_location, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), nullptr);
+    gl::glVertexAttribPointer(vertex_position_location, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), nullptr);
 
     gl::GLuint index_buffer = 0;
     gl::glGenBuffers(1, &index_buffer);
@@ -38,8 +38,8 @@ void TerrainTessellationManager::init() {
     gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
 
 
-
-    auto geometry = Geometry(vao, vbo, index_buffer, static_cast<unsigned int>(model.second.size()), 2, RenderingType::Plane);
+    auto geometry = Geometry("TerrainModel", vbo, index_buffer, static_cast<unsigned int>(model.second.size()), 2,
+                             RenderingType::Plane, vao);
 
     int geometryIndex = ResourceManager::getInstance()->setGeometry(geometry);
 
@@ -48,9 +48,31 @@ void TerrainTessellationManager::init() {
     staticModel->scale(glm::vec3(20.0, 1.0, 20.0));
 }
 
-std::pair<std::vector<glm::vec3>, std::vector<int>> TerrainTessellationManager::make_plane() const {
-    std::vector<glm::vec3> vertecs = {glm::vec3(0,0,0), glm::vec3(1,0,0), glm::vec3(1,1,0), glm::vec3(0,1,0)};
-    std::vector<int> elements = {0, 1, 2, 3};
+std::pair<std::vector<glm::vec3>, std::vector<GLushort>>
+TerrainTessellationManager::make_plane(const int dX, const int dY) const {
+    std::vector<glm::vec3> vertecs = {glm::vec3(0,0,0), glm::vec3(0, 1,0), glm::vec3(1,1,0), glm::vec3(1,0,0)};
+    std::vector<GLushort> elements = {0, 1, 2, 3};
+
+//    const double diX = 1.0 / dX;
+//    const double diY = 1.0 / dY;
+//
+//    for(unsigned int x = 0; x < dX; x++) {
+//        for(unsigned int y = 0; y < dY; y++) {
+//            const double startX = x * diX;
+//            const double startY = y * diY;
+//
+//            vertecs.emplace_back(glm::vec3(startX, startY, 0));
+//            vertecs.emplace_back(glm::vec3(startX + diX, startY, 0));
+//            vertecs.emplace_back(glm::vec3(startX + diX, startY + diY, 0));
+//            vertecs.emplace_back(glm::vec3(startX, startY + diY, 0));
+//        }
+//    }
+//
+//    int number = 0;
+//    for(auto& vertex: vertecs) {
+//        elements.push_back(number);
+//        number++;
+//    }
 
     return std::pair(vertecs, elements);
 }
