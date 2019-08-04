@@ -18,7 +18,7 @@
 
 const int NO_TEXTURE = -1;
 const bool CALCULATE_STATISTIC = true;
-const bool SHOW_MASH = false;
+const bool SHOW_MASH = true;
 
 const static bool REDERING_QUAD_TREE = false;
 

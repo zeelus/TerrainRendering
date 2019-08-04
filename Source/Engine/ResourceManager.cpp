@@ -322,6 +322,14 @@ void ResourceManager::loadTechniques() {
         Shader fragment(FragmentShader, "Resources/Shaders/TerrainTessellationFragmentShader.frag");
         this->loadsTechnique.emplace_back(vertex, fragment, geometry, tesControl, tesEval);
     }
+
+    {
+        Shader vertex(VertexShader, "Resources/Shaders/SampleTessellationVertexShader.vert");
+        Shader fragment(FragmentShader, "Resources/Shaders/SampleTessellationFragmentShader.frag");
+        Shader tesControl(TessellationControlShader, "Resources/Shaders/SampleTessellationControlShader.tesc");
+        Shader tesEval(TessellationEvalShader, "Resources/Shaders/SampleTessellationEvalShader.tese");
+        this->loadsTechnique.emplace_back(vertex, fragment, tesControl, tesEval);
+    }
 }
 
 const Technique& ResourceManager::loadTechnique(const unsigned int index) const {
@@ -345,6 +353,8 @@ constexpr short ResourceManager::getIndexTechnique(TechniqueType techniqueType) 
             return 1;
         case TechniqueType::TerrainTessellation:
             return 2;
+        case TechniqueType::SampleTessellation:
+            return 3;
         default:
             return -1;
     }

@@ -28,7 +28,7 @@ private:
 
     void init();
 
-    std::pair<std::vector<glm::vec3>, std::vector<GLushort>> make_plane(const int dX, const int dY) const;
+    std::pair<std::vector<glm::vec3>, std::vector<GLushort>> make_plane(const int dX, const int dZ) const;
 
 
 

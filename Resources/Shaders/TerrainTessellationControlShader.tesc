@@ -20,7 +20,7 @@ float lod_factor = 4.0;
     }
 
     vec4 project(vec4 vertex){
-        vec4 result = matrices.model * matrices.view * matrices.projection * vertex;
+        vec4 result = matrices.projection * matrices.view * matrices.model * vertex;
         result /= result.w;
         return result;
     }
