@@ -18,7 +18,7 @@
 
 const int NO_TEXTURE = -1;
 const bool CALCULATE_STATISTIC = true;
-const bool SHOW_MASH = true;
+const bool SHOW_MASH = false;
 
 const static bool REDERING_QUAD_TREE = false;
 
@@ -47,7 +47,7 @@ private:
     int setupWindow();
     void showOpenGLInformation();
 	void drowStaticModelQueue() const;
-	void drawTerrainTree() const;
+	void drawTerrainTree();
 	void calculateStatistic(double currentTime);
 	const GLint calculateGPUMemoryUsage() const;
 

@@ -106,7 +106,7 @@ void EngineWindow::drowStaticModelQueue() const
 	}
 }
 
-void EngineWindow::drawTerrainTree() const
+void EngineWindow::drawTerrainTree()
 {
 	auto& terrainTreeManger = this->scene.renderingQueue.terrainQuadTreeManager;
 	if(terrainTreeManger) {

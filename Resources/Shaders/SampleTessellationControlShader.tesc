@@ -1,21 +1,7 @@
 #version 410
 
 layout(vertices = 4) out;
-//
-////    void main(){
-////        if (gl_InvocationID == 0)
-////        {
-////            gl_TessLevelInner[0] = 9.0;
-////            gl_TessLevelInner[1] = 7.0;
-////            gl_TessLevelOuter[0] = 3.0;
-////            gl_TessLevelOuter[1] = 5.0;
-////            gl_TessLevelOuter[2] = 3.0;
-////            gl_TessLevelOuter[3] = 5.0;
-////        }
-////
-////        gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
-////    }
-//
+
 layout (std140) uniform Matrices
 {
     mat4 model;
@@ -23,7 +9,13 @@ layout (std140) uniform Matrices
     mat4 projection;
 } matrices;
 
-float lod_factor = 32.0;
+layout (std140) uniform TerrainTessellation
+{
+    float sWidth;
+    float sHeight;
+    float lod_factor;
+    float empty;
+} terrain;
 
 bool offscreen(vec4 vertex){
     if(vertex.z < -0.5){
@@ -40,12 +32,12 @@ vec4 project(vec4 vertex){
 }
 
 vec2 screen_space(vec4 vertex){
-    vec2 screen_size = vec2(1280.0, 960.0);
+    vec2 screen_size = vec2(terrain.sWidth, terrain.sHeight);
     return (clamp(vertex.xz, -1.3, 1.3)+1) * (screen_size * 0.5);
 }
 
 float level(vec2 v0, vec2 v1){
-    return clamp(distance(v0, v1)/lod_factor, 1, 64);
+    return clamp(distance(v0, v1)/(terrain.lod_factor), 1, 64);
 }
 
 void main(){
@@ -82,12 +74,6 @@ void main(){
             gl_TessLevelOuter[2] = e2;
             gl_TessLevelOuter[3] = e3;
 
-//                        gl_TessLevelInner[0] = 2.0;
-//                        gl_TessLevelInner[1] = 2.0;
-//                        gl_TessLevelOuter[0] = 3.0;
-//                        gl_TessLevelOuter[1] = 3.0;
-//                        gl_TessLevelOuter[2] = 3.0;
-//                        gl_TessLevelOuter[3] = 3.0;
         }
     }
     gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;

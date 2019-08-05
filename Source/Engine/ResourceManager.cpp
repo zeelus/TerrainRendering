@@ -315,20 +315,12 @@ void ResourceManager::loadTechniques() {
     }
 
     {
-        Shader vertex(VertexShader, "Resources/Shaders/TerrainTessellationVertexShader.vert");
-        Shader tesControl(TessellationControlShader, "Resources/Shaders/TerrainTessellationControlShader.tesc");
-        Shader tesEval(TessellationEvalShader, "Resources/Shaders/TerrainTessellationEvalShader.tese");
-        Shader geometry(GeometryShader, "Resources/Shaders/TerrainGeometryShader.geom");
-        Shader fragment(FragmentShader, "Resources/Shaders/TerrainTessellationFragmentShader.frag");
-        this->loadsTechnique.emplace_back(vertex, fragment, geometry, tesControl, tesEval);
-    }
-
-    {
         Shader vertex(VertexShader, "Resources/Shaders/SampleTessellationVertexShader.vert");
         Shader fragment(FragmentShader, "Resources/Shaders/SampleTessellationFragmentShader.frag");
         Shader tesControl(TessellationControlShader, "Resources/Shaders/SampleTessellationControlShader.tesc");
         Shader tesEval(TessellationEvalShader, "Resources/Shaders/SampleTessellationEvalShader.tese");
-        this->loadsTechnique.emplace_back(vertex, fragment, tesControl, tesEval);
+        Shader geometry(GeometryShader, "Resources/Shaders/SampleTessellationGeometryShader.geom");
+        this->loadsTechnique.emplace_back(vertex, fragment, geometry, tesControl, tesEval);
     }
 }
 

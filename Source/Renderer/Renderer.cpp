@@ -15,7 +15,7 @@
 using namespace gl;
 
 Renderer::Renderer(): lightPos(-8.0f, 4.0f, 0.0f) {
-
+    ubo_terrain_tessellation_handle = 0;
 }
 
 void Renderer::init() {
@@ -94,7 +94,9 @@ void Renderer::setShaderProgram(GLuint shader_programme) const {
     glBindBufferBase(GL_UNIFORM_BUFFER, MatricesBlockBinding, ubo_matrix_handle);
     glBindBufferBase(GL_UNIFORM_BUFFER, PointLightBinding, ubo_light_handle);
 	glBindBufferBase(GL_UNIFORM_BUFFER, TerrainBinding, ubo_terrain_handle);
-	
+	if(ubo_terrain_tessellation_handle > 0 ) {
+        glBindBufferBase(GL_UNIFORM_BUFFER, TerrainTessellationBinding, ubo_terrain_tessellation_handle);
+    }
 }
 
 inline void Renderer::initSO(void)
@@ -138,4 +140,8 @@ void Renderer::setCamera(Camera* camera)
 void Renderer::setUbo_terrain_handle(const gl::GLint ubo_terrain_handle)
 {
 	this->ubo_terrain_handle = ubo_terrain_handle;
+}
+
+void Renderer::setUboTerrainTessellationHandle(GLuint uboTerrainTessellationHandle) {
+    ubo_terrain_tessellation_handle = uboTerrainTessellationHandle;
 }

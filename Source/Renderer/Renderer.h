@@ -23,7 +23,13 @@ private:
 	gl::GLuint ubo_matrix_handle;
 	gl::GLuint ubo_light_handle;
 	gl::GLint ubo_terrain_handle = -1u;
-	gl::GLuint sampler_handle;
+    gl::GLuint ubo_terrain_tessellation_handle;
+
+public:
+
+
+private:
+    gl::GLuint sampler_handle;
 
     glm::vec3 lightPos;
 
@@ -54,6 +60,7 @@ public:
 	void setCamera(Camera* camera);
 
 	void setUbo_terrain_handle(const gl::GLint ubo_terrain_handle);
+    void setUboTerrainTessellationHandle(GLuint uboTerrainTessellationHandle);
 
 };
 

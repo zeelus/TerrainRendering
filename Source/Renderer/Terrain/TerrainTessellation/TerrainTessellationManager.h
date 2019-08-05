@@ -17,16 +17,28 @@ class TerrainTessellationManager {
 
     const int textureIndex;
 
+    gl::GLuint ubo_terrain_tessellation_handle;
+
+    float screenWidth;
+public:
+    TerrainTessellationManager(float screenWidth, float screenHeight, float lodFactor, const int textureIndex);
+
+private:
+    float screenHeight;
+    float lodFactor;
+
 public:
 
     TerrainTessellationManager();
 
     ~TerrainTessellationManager();
 
-    void drowIn(const Renderer &renderer) const;
+    void drowIn(Renderer &renderer) const;
 private:
 
     void init();
+
+    void initUBO();
 
     std::pair<std::vector<glm::vec3>, std::vector<GLushort>> make_plane(const int dX, const int dZ) const;
 

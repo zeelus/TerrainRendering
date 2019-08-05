@@ -19,4 +19,10 @@ add_library(TerrenRenderingRenderer
         Terrain/QuadTree/TerrainQuadTreeManager.cpp
         Terrain/QuadTree/TerrainQuadTreeManager.h
         Terrain/QuadTree/TerrainTreeNode.cpp
-        Terrain/QuadTree/TerrainTreeNode.h Texture.cpp Texture.h Terrain/TerrainTessellation/TerrainTessellationManager.cpp Terrain/TerrainTessellation/TerrainTessellationManager.h)
+        Terrain/QuadTree/TerrainTreeNode.h
+        Texture.cpp
+        Texture.h
+        Terrain/TerrainTessellation/TerrainTessellationManager.cpp
+        Terrain/TerrainTessellation/TerrainTessellationManager.h
+        UBO/UniformManager.cpp
+        UBO/UniformManager.h UBO/Uniform.cpp UBO/Uniform.h)

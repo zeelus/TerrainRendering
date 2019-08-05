@@ -28,7 +28,7 @@ void Scene::init() {
 	terrainTreeManager->setHeightMapIndex(resourceManager->loadTexture("Resources/Texture/Heightmap.dds"));
     renderingQueue.addTerrainQuadTreeManager(terrainTreeManager);
 
-    auto terrainTessellationManager = new TerrainTessellationManager();
+    auto terrainTessellationManager = new TerrainTessellationManager(1280.0, 960.0, 80.0, resourceManager->loadTexture("Resources/Texture/Heightmap.dds"));
     renderingQueue.addTerrainTessellationManager(terrainTessellationManager);
 
     auto& model = renderingQueue.addStaticModel(resourceManager->loadModel("Resources/Models/deer.obj"));

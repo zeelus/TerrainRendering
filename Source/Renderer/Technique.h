@@ -12,6 +12,7 @@ using namespace gl;
 const GLuint MatricesBlockBinding = 0u;
 const GLuint PointLightBinding = 1u;
 const GLuint TerrainBinding = 2u;
+const GLuint TerrainTessellationBinding = 3u;
 
 enum class TechniqueType {
     PhongBline,

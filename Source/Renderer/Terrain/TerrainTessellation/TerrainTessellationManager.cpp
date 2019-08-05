@@ -6,10 +6,11 @@
 #include "glbinding/gl/gl.h"
 #include "../../../Engine/ResourceManager.h"
 
-TerrainTessellationManager::TerrainTessellationManager(): textureIndex(ResourceManager::getInstance()->loadTexture("Resources/Texture/Heightmap.dds")) {
+TerrainTessellationManager::TerrainTessellationManager(float screenWidth, float screenHeight, float lodFactor, const int textureIndex)
+        : screenWidth(screenWidth), screenHeight(screenHeight), lodFactor(lodFactor), textureIndex(textureIndex) {
 
-    this->init();
-
+    init();
+    initUBO();
 }
 
 void TerrainTessellationManager::init() {
@@ -38,21 +39,21 @@ void TerrainTessellationManager::init() {
     gl::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
 
 
-    auto geometry = Geometry("TerrainModel", vbo, index_buffer, static_cast<unsigned int>(model.second.size()), 3,
+    auto geometry = Geometry("TerrainModel", vbo, index_buffer, static_cast<unsigned int>(model.second.size()), 2,
                              RenderingType::Plane, vao);
 
     int geometryIndex = ResourceManager::getInstance()->setGeometry(geometry);
 
     staticModel = new StaticModel(geometryIndex);
 
-    staticModel->scale(glm::vec3(20.0, 1.0, 20.0));
+    staticModel->scale(glm::vec3(20.0, 2.0, 20.0));
+    staticModel->setPosition(glm::vec3(-0.5, 0.0, -0.5));
 }
 
 std::pair<std::vector<glm::vec3>, std::vector<GLushort>>
 TerrainTessellationManager::make_plane(const int dX, const int dZ) const {
-    std::vector<glm::vec3> vertecs;// = {glm::vec3(0,0,0), glm::vec3(0,0,1), glm::vec3(1,0,0), glm::vec3(1,0,1)};
-//    //std::vector<GLushort> elements = {0, 1, 2, 1, 3, 2};
-    std::vector<GLushort> elements;// = {0, 1, 2, 3};
+    std::vector<glm::vec3> vertecs;
+    std::vector<GLushort> elements;
 
     const double diX = 1.0 / dX;
     const double diZ = 1.0 / dZ;
@@ -82,7 +83,19 @@ TerrainTessellationManager::~TerrainTessellationManager() {
     delete this->staticModel;
 }
 
-void TerrainTessellationManager::drowIn(const Renderer &renderer) const {
+void TerrainTessellationManager::drowIn(Renderer &renderer) const {
     gl::glPatchParameteri(GL_PATCH_VERTICES, 4u);
+    renderer.setUboTerrainTessellationHandle(ubo_terrain_tessellation_handle);
     renderer.drawStaticModel(this->staticModel->getIndexGeometryIndex(), this->staticModel->getTransform(), textureIndex);
+    renderer.setUboTerrainTessellationHandle(0);
 }
+
+void TerrainTessellationManager::initUBO() {
+    gl::glGenBuffers(1, &ubo_terrain_tessellation_handle);
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo_terrain_tessellation_handle);
+    std::array<glm::vec4, 1u> light = { glm::vec4(screenWidth, screenHeight, lodFactor, 0.0f) };
+    gl::glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec4), light.data(), gl::GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0u);
+}
+
+
