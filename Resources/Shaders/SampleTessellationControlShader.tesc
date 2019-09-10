@@ -21,7 +21,7 @@ bool offscreen(vec4 vertex){
     if(vertex.z < -0.5){
         return true;
     }
-    return any(lessThan(vertex.xy, vec2(-1.7))) || any(greaterThan(vertex.xy, vec2(1.7)));
+    return any(lessThan(vertex.xy, vec2(-1.3))) || any(greaterThan(vertex.xy, vec2(1.3)));
 
 }
 
